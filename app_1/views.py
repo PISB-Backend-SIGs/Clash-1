@@ -45,4 +45,4 @@ def result(request):
     }
     player = ExtraField.objects.get(username=request.user)
     context["player"]=player
-    return render(request,"app_1\esult.html",context)
+    return render(request,"app_1\\result.html",context)
