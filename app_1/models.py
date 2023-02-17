@@ -3,7 +3,8 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class ExtraField(AbstractUser):
     p_current_score = models.IntegerField(blank=True,default=0)
-    p_current_question = models.IntegerField(blank=True,default=0)
+    p_current_question = models.IntegerField(blank=True,default=1)
+    p_previous_question = models.IntegerField(blank=True,default=0)
     p_starting_time = models.DateTimeField(null=True,blank=True)
 
     def __str__(self) -> str:

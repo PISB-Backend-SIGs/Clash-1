@@ -1,0 +1,40 @@
+{% extends 'app_1\base.html' %}
+{% block "title" %}
+{{title}}
+{% endblock "title" %}
+
+
+{% block "codeblock" %}
+
+<form action=""method="POST">
+    {% csrf_token %}
+    <h2>{{question.question}}</h2>
+
+    <input type="radio" name="option" id="" value={{q_id}}>
+    <label for="opt1">
+        <h4>{{question.q_option_1}}</h4>
+    </label>
+    <input type="radio" name="option" id="" value={{q_id}}>
+    <label for="opt1">
+        <h4>{{question.q_option_2}}</h4>
+    </label>
+    <input type="radio" name="option" id="" value={{q_id}}>
+    <label for="opt1">
+        <h4>{{question.q_option_3}}</h4>
+    </label>
+    <input type="radio" name="option" id="" value={{q_id}}>
+    <label for="opt1">
+        <h4>{{question.q_option_4}}</h4>
+    </label>
+
+    {% if flag %}
+        <button   type="submit" name="next">Next</button>
+    {% else %}
+        <button   type="submit" name="nsubmit">Submit</button>
+    {% endif %}
+</form>
+
+
+
+
+{% endblock "codeblock" %}

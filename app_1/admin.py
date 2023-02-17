@@ -13,6 +13,7 @@ class ExtraFieldAdmin(UserAdmin):
                 "fields":(
                     "p_current_score",
                     "p_current_question",
+                    "p_previous_question",
                     "p_starting_time"
                 )
             }
