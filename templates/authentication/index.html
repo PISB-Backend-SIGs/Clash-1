@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication</title>
+</head>
+<body>
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissable fade show" role="alert">
+        <strong>Message:</strong>{{ message }}
+        <button type="submit" class="close" data-dismiss="alert" area-label="CLose">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+
+    <h3>Welcome to Credenz 2023</h3>    
+
+    {% if user.is_authenticated %}
+    <h3>Hello {{ fname }}</h3>
+    <h4>You are successfully logged in.</h4>
+    <button type="submit"><a href="/signout">SignOut</a></button>
+
+
+    {% else %}
+    <button type="submit"> <a href="/signup">SignUp</a></button>
+    <button type="submit"><a href="/signin">SignIn</a></button>
+    {% endif %}
+    
+
+
+
+    <script src="" async defer></script>
+</body>
+</html>

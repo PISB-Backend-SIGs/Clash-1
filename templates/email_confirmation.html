@@ -1,0 +1,12 @@
+{% autoescape off %}
+
+Welcome to credenz 2023 Login
+
+Hello {{ name }}!
+
+Please confirm the email by clicking on the following link.
+
+Confirmation Link: http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+
+{% endautoescape off %}
