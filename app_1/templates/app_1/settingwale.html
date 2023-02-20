@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Admin Pannel</title>
+</head>
+<body>
+    <div class="alert alert-primary  text-center " role="alert">
+        <h1>Admin pannel</h1> 
+      </div>
+    
+    <div class="d-flex justify-content-around">
+        <div>
+            <h1>Players</h1>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">player id</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">Player crt question</th>
+                    <th scope="col">Player prev question</th>
+                    <th scope="col">Starting time</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for player in players %}
+                <tr>
+                    <th scope="row">{{player.id}}</th>
+                    <td>{{player.username}}</td>
+                    <td>{{player.p_current_score}}</td>
+                    <td>{{player.p_current_question}}</td>
+                    <td>{{player.p_previous_question}}</td>
+                    <td>{{player.p_starting_time}}</td>
+                </tr>
+                {% endfor %}
+                
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
