@@ -23,7 +23,7 @@ admin.site.register(ExtraField,ExtraFieldAdmin)
 
 class QuestionAdmin(admin.ModelAdmin):
     list_display=[
-        "q_id"
+        "q_id","q_answer"
     ]
 admin.site.register(Question,QuestionAdmin)
 

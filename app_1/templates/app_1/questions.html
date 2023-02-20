@@ -10,20 +10,20 @@
     {% csrf_token %}
     <h2>{{question.question}}</h2>
 
-    <input type="radio" name="option" id="" value={{q_id}}>
+    <input type="radio" name="option" id="opt1" value=1>
     <label for="opt1">
         <h4>{{question.q_option_1}}</h4>
     </label>
-    <input type="radio" name="option" id="" value={{q_id}}>
-    <label for="opt1">
+    <input type="radio" name="option" id="opt2" value=2>
+    <label for="opt2">
         <h4>{{question.q_option_2}}</h4>
     </label>
-    <input type="radio" name="option" id="" value={{q_id}}>
-    <label for="opt1">
+    <input type="radio" name="option" id="opt3" value=3>
+    <label for="opt3">
         <h4>{{question.q_option_3}}</h4>
     </label>
-    <input type="radio" name="option" id="" value={{q_id}}>
-    <label for="opt1">
+    <input type="radio" name="option" id="opt4" value=4>
+    <label for="opt4">
         <h4>{{question.q_option_4}}</h4>
     </label>
 

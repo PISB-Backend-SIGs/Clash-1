@@ -26,4 +26,6 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('signout/', views.signout, name='signout'),
     path('settingwale/', views.settingwale, name='settingwale'),
-]
+] 
+ 
+ 
