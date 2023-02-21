@@ -6,7 +6,16 @@
 
 {% block "codeblock" %}
 
-<form action=""method="POST">
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissable fade show" role="alert">
+        <strong>Message:</strong>{{ message }}
+    </div>
+    {% endfor %}
+
+    <div>
+        <h1>marks : {{player.p_current_score}}</h1>
+    </div>
+<form action="" method="POST">
     {% csrf_token %}
     <h2>{{question.question}}</h2>
 

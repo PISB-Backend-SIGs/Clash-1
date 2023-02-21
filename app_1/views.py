@@ -18,6 +18,13 @@ def home(request):
         "title":"Home",
         "user":request.user
     }
+    if request.method == "POST":
+        checkbox = request.POST.get("checkbox")
+        if checkbox == "checked":
+            return redirect("questions")
+        else:
+            messages.error(request, "Checkbox not checked")
+            return redirect("home")
     return render(request,"app_1\home.html",context)
 
 @login_required(login_url="signin")
@@ -42,10 +49,24 @@ def questions(request):
     # else:
     #     player.p_current_score -=1
     # player.save()
-     
+
+    # print("enter in question")
     if "next" in request.POST:
         # print("next clicked")
-        u_option = request.POST.get("option")
+        try:
+            u_option = request.POST["option"]
+        except:
+            messages.error(request,"all questions are compelsary")
+            return redirect("questions")
+
+        question_ans = Question.objects.get(q_id = player.p_current_question)
+        # print(question_ans.q_answer)
+        if u_option and int(question_ans.q_answer) == int(u_option):
+            player.p_current_score +=1
+        else:
+            player.p_current_score -=1
+        print(u_option,question_ans.q_answer)
+
         submission = Submission(player=request.user,question_id=player.p_current_question,question_answer=u_option)
         submission.save()
 
@@ -57,16 +78,27 @@ def questions(request):
         # player.p_current_question += 1
         # player.p_previous_question += 1 
         # player.save()
-        u_option = request.POST.get("option")
+        u_option = request.POST["option"]
+
+        question_ans = Question.objects.get(q_id = player.p_current_question)
+        # print(question_ans.q_answer)
+        if u_option and int(question_ans.q_answer) == int(u_option):
+            player.p_current_score +=1
+        else:
+            player.p_current_score -=1
+        print(u_option,question_ans.q_answer)
+        player.save()
+
         submission = Submission(player=request.user,question_id=player.p_current_question,question_answer=u_option)
         submission.save()
         return redirect(result)
-
+    # print("enter in question after nsubmit and next")
     # print(len(question),"and",player.p_current_question)
     if player.p_current_question >=len(question):
         context["flag"]=False
     # print(request.user.p_current_question)   #working
     context["question"]=Question.objects.get(q_id=player.p_current_question)
+    context["player"]=player
     return render(request,"app_1\questions.html",context)
 
 
@@ -93,8 +125,8 @@ def signin(request):
             login(request, user)
             if request.user.is_superuser:
                 return redirect("settingwale")
-            fname = user.first_name
-            return render(request, "app_1/home.html",{'fname':fname} )
+            # fname = user.first_name
+            return redirect("home")
 
         else:  #If wrong credentials given
             messages.error(request, "Bad Credentials")
