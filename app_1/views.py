@@ -192,9 +192,9 @@ def signup(request):
                 messages.error(request, "Password must contain atleast one number, one  special character and one capital letter")
                 return redirect('signup')
                     
-    else:
-        messages.error(request,"User Registration Failed")
-        return redirect('signup')
+    # else:
+    #     messages.error(request,"User Registration Failed")
+    #     return redirect('signup')
 
     return render(request,"app_1/signup.html")
 
