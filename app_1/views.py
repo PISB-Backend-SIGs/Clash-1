@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import login_required
 import re
+from .utils import *
+
 # Create your views here.
 @login_required(login_url="signin")
 def home(request):
@@ -114,7 +116,8 @@ def result(request):
 
 
 def signin(request):
-
+    
+    check(Question.objects.all())
     if request.method == "POST":   #For signin page only username and pass1 taken
         username = request.POST['username']
         pass1 = request.POST['pass1']
@@ -150,7 +153,7 @@ def signout(request):
         return redirect('signin')
 
 def signup(request):
-
+    
     if request.method == "POST": #Create user details to take them input
         # username = request.POST.get('username')
         username = request.POST['username']
