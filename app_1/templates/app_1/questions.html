@@ -15,25 +15,29 @@
     <div>
         <h1>marks : {{player.p_current_score}}</h1>
     </div>
+     
+    <h1>crnt question number = {{question_number}}</h1>
+    <h1>marks add,reduce = {{marking_scheme.marks_add}}{{marking_scheme.marks_sub}}</h1>
+    
 <form action="" method="POST">
     {% csrf_token %}
-    <h2>{{question.question}}</h2>
+    <h2>{{question.q_id}}) &nbsp; {{question.question}}</h2>
 
     <input type="radio" name="option" id="opt1" value=1>
     <label for="opt1">
-        <h4>{{question.q_option_1}}</h4>
+        <span>{{question.q_option_1}}</span>
     </label>
     <input type="radio" name="option" id="opt2" value=2>
     <label for="opt2">
-        <h4>{{question.q_option_2}}</h4>
+        <span>{{question.q_option_2}}</span>
     </label>
     <input type="radio" name="option" id="opt3" value=3>
     <label for="opt3">
-        <h4>{{question.q_option_3}}</h4>
+        <span>{{question.q_option_3}}</span>
     </label>
     <input type="radio" name="option" id="opt4" value=4>
     <label for="opt4">
-        <h4>{{question.q_option_4}}</h4>
+        <span>{{question.q_option_4}}</span>
     </label>
 
     {% if flag %}

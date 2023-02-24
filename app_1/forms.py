@@ -1,10 +1,10 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from .models import *
+# from django.contrib.auth.forms import UserCreationForm
+# from .models import *
 
-class ExtraFieldForm(UserCreationForm):
-    class Meta:
-        model = ExtraField
-        fields = "__all__"
+# class UserForm(UserCreationForm):
+#     class Meta:
+#         model = User
+#         fields = "__all__"
           
           

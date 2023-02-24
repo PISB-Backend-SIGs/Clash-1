@@ -1,12 +1,17 @@
-// 21-02-2022
-+ Too many redirects error on signup page
-+ Add requirements.txt
+// 21-02-2023
+- Too many redirects error on signup page
+- Add requirements.txt
 + Give meaningful names to your apps :)
-+ User should not be able to go back to the Question page from the Result page (He is able to change the last answer)
-+ Add meaningful dummy questions. (Even funny questions will do :) )
-+ Change the marking scheme. +4 -2 (If prev question was correct), +2 -1(If prev question was wrong), -1(for skip)
-+ Implement Random Questions
+- User should not be able to go back to the Question page from the Result page (He is able to change the last answer)
+- Add meaningful dummy questions. (Even funny questions will do :) )
+- Change the marking scheme. +4 -2 (If prev question was correct), +2 -1(If prev question was wrong), -1(for skip)
+- Implement Random Questions
 + Implement a timer(28 mins)
 
+// 24-02-2023
++ Add skip button and disable the save and next button if option not selected
++ Add login messages
++ Remove Spelling mistakes
++ Finalize Lifelines
 
 (Note: Change '+' to '-' once the task is done)
