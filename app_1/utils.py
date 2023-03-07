@@ -1,7 +1,10 @@
 import json,random
-
+from datetime import datetime,timedelta
+from django.utils import timezone
+size = 10      #size of question display to user
+range = size+1 #size of question in database
 def create_random_list(crnt_ques):
-    que_list= random.sample(range(1,11),10)
+    que_list= random.sample(range(1,range),size)
     que_list.remove(crnt_ques)
     que_list = json.dumps(que_list)
     # print(type(que_list))
@@ -20,7 +23,7 @@ def get_number(random_question_list):
     
     else:
         dictonary["question_number"]=None
-        dictonary["ques_list"]=None
+        dictonary["ques_list"]=[]
 
     print("DFsdfsdf",dictonary)
     return dictonary
@@ -65,3 +68,13 @@ def check_answer(u_answer,actual_answer,marks_dict):
     return score
 
 
+def set_time():
+    # print(timezone.now())
+    # print("inside utils",timezone.now()+timedelta(minutes=28))
+    #datatime can be changed by timezone
+    start_time=timezone.now()
+    dict={
+        "start_time":start_time,
+        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=1),
+    }
+    return dict

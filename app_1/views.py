@@ -7,15 +7,16 @@ from django.contrib.auth.decorators import login_required
 import re
 from .utils import *
 from django.http import JsonResponse
-import datetime
-
+from datetime import datetime,timedelta
+from .decorators import *
 # Create your views here.
+
 @login_required(login_url="signin")
 def home(request):
     # s= User.objects.all()
     # # s=list(s)
     # print(s.p_current_score)
-    # player = User.objects.get(username="prasad")
+    # player = User.objects.filter(username="prasad").values()
     # print(player)
     # print(player.p_current_question)
     
@@ -26,8 +27,20 @@ def home(request):
         "user":request.user
     }
     if request.method == "POST":
+        user = User.objects.get(username=request.user)
+        player = Player.objects.get(user=user)
+
+
         checkbox = request.POST.get("checkbox")
-        if checkbox == "checked":
+        if (checkbox == "checked"):
+            if not(player.p_is_started):
+                player.p_is_started = True
+                player_time_detail = set_time()
+                player.p_starting_time = player_time_detail["start_time"]
+                player.p_end_time = player_time_detail["end_time"]
+                player.save()
+            if (player.p_is_ended):
+                return redirect("result")
             return redirect("questions")
         else:
             messages.error(request, "Checkbox not checked")
@@ -37,6 +50,7 @@ def home(request):
 # from django.views.decorators.cache import never_cache
 
 # @never_cache
+@check_time
 @login_required(login_url="signin")
 def questions(request):
 
@@ -46,28 +60,11 @@ def questions(request):
     }
     user = User.objects.get(username=request.user)
     player = Player.objects.get(user=user)
-
-    if player.p_is_started:
+    if player.p_is_ended:
         return redirect("result")
+    
 
-    # question = Question.objects.all() 
 
-    # print(player)
-    # user_ans = request.POST.get("option")
-    # print(user_ans)
-    # print(player.p_previous_question)
-    # print(player.p_current_question)
-    # question_ans = Question.objects.get(q_id = player.p_previous_question)
-    # print(question_ans.q_answer)
-    # if question_ans.q_answer == user_ans:
-    #     player.p_current_score +=1
-    # elif None == user_ans:
-    #     player.p_current_score +=0
-    # else:
-    #     player.p_current_score -=1
-    # player.save()
-
-    # print("enter in question")
     if "next" in request.POST:
         # print("next clicked")
         # try:
@@ -77,11 +74,12 @@ def questions(request):
         #     return redirect("questions")
         # question_ans = Question.objects.get(q_id = player.p_current_question)        
         u_option = request.POST.get("option")
+        # submission = Submission.objects.get(player=player,question_id=player.p_current_question)
         if len(Submission.objects.filter(player=player,question_id=player.p_current_question))>0:
 
-            submission = Submission.objects.get(player=player,question_id=player.p_current_question)
+            submission = Submission.objects.get(player=player,question_id=player.p_current_question) #shifted to up
             submission.question_answer = u_option
-            submission.save()
+            # submission.save()
             # return redirect("questions")
         else:
             submission = Submission(player=player,question_id=player.p_current_question,question_answer=u_option)
@@ -107,40 +105,42 @@ def questions(request):
         player.p_marks_add=user_answer_status["marks_add_to_player"]
         player.p_marks_sub=user_answer_status["marks_sub_to_player"]
         player.p_current_question_number +=1
+        submission.points = user_answer_status["score"]
+        submission.save()
         player.save()
         return redirect("questions")
 
     if "nsubmit" in request.POST:
+        return redirect("submit")
+        # u_option = request.POST.get("option")
+        # if len(Submission.objects.filter(player=player,question_id=player.p_current_question))>0:
+
+        #     submission = Submission.objects.get(player=player,question_id=player.p_current_question)
+        #     submission.question_answer = u_option
+        #     submission.save()
+        #     # return redirect("questions")
+        # else:
+        #     submission = Submission(player=player,question_id=player.p_current_question,question_answer=u_option)
+        #     submission.save()
+
+        # previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
+        # actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer
         
-        u_option = request.POST.get("option")
-        if len(Submission.objects.filter(player=player,question_id=player.p_current_question))>0:
-
-            submission = Submission.objects.get(player=player,question_id=player.p_current_question)
-            submission.question_answer = u_option
-            submission.save()
-            # return redirect("questions")
-        else:
-            submission = Submission(player=player,question_id=player.p_current_question,question_answer=u_option)
-            submission.save()
-
-        previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
-        actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer
-        
-        marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)
-        user_answer_status=check_answer(u_option,Question.objects.get(q_id=player.p_current_question),marks_dict)
-        player.p_current_score +=user_answer_status["score"]
-        # print(question_ans.q_answer)
+        # marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)
+        # user_answer_status=check_answer(u_option,Question.objects.get(q_id=player.p_current_question),marks_dict)
+        # player.p_current_score +=user_answer_status["score"]
+        # # print(question_ans.q_answer)
 
 
-        player.p_que_list=json.dumps(marks_dict["ques_list"])
-        player.p_previous_question =  player.p_current_question 
-        player.p_current_question = marks_dict["ques_number"]
+        # player.p_que_list=json.dumps(marks_dict["ques_list"])
+        # player.p_previous_question =  player.p_current_question 
+        # player.p_current_question = marks_dict["ques_number"]
 
-        player.p_is_started=True
+        # player.p_is_ended=True
 
-        player.save()
+        # player.save()
 
-        return redirect(result)
+        # return redirect(result)
 
 
 
@@ -177,7 +177,39 @@ def questions(request):
     
     context["player"]=player
     context["marking_scheme"]={"marks_add":player.p_marks_add,"marks_sub":player.p_marks_sub}
+    print("time going to f",player.p_end_time)
+    context['player_time']=str(player.p_end_time)
     return render(request,"app_1\questions.html",context)
+
+# @check_time
+def submit(request):
+    user = User.objects.get(username=request.user)
+    player = Player.objects.get(user=user)
+    if player.p_is_started:
+        if player.p_is_ended:
+            return redirect("result")
+        u_option = request.POST.get("option")
+        if len(Submission.objects.filter(player=player,question_id=player.p_current_question))>0:
+            submission = Submission.objects.get(player=player,question_id=player.p_current_question)
+            submission.question_answer = u_option
+            submission.save()
+            # return redirect("questions")
+        else:
+            submission = Submission(player=player,question_id=player.p_current_question,question_answer=u_option)
+            submission.save()
+        previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
+        actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer
+        
+        marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)
+        user_answer_status=check_answer(u_option,Question.objects.get(q_id=player.p_current_question),marks_dict)
+        player.p_current_score +=user_answer_status["score"]
+        # print(question_ans.q_answer)
+        player.p_que_list=json.dumps(marks_dict["ques_list"])
+        player.p_previous_question =  player.p_current_question 
+        player.p_current_question = marks_dict["ques_number"]
+        player.p_is_ended=True
+        player.save()
+        return redirect(result)
 
 
 @login_required(login_url="signin")
@@ -208,8 +240,8 @@ def signin(request):
                 player = Player(user=user)
                 player.save()
                 player = Player.objects.get(user=user)
-            # print(player,player.p_is_started)
-            if not(player.p_is_started) :
+            # print(player,player.p_is_ended)
+            if not(player.p_is_ended) :
                 login(request, user)
                 # player = User.objects.get(username=request.user)
                 # print(player.p_que_list)
@@ -313,3 +345,9 @@ def settingwale(request):
     context["players"]=players
     # context["users"]=users
     return render(request,"app_1/settingwale.html",context)
+
+
+
+#To handle 404 error if user try to access diff page
+def error_404(request, exception):
+    return render(request, 'errors\error_404.html')

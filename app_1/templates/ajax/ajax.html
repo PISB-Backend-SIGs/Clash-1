@@ -1,0 +1,38 @@
+<script>
+
+    $("#submit_btn").on( "click" ,function () {
+        console.log("btn click")        
+        var user_option = $("input[name=option]:checked").val();
+        {% comment %} console.log(user_option); {% endcomment %}
+
+        let csr = $("input[name=csrfmiddlewaretoken]").val();
+        // console.log(uname);
+
+        mydata ={user_option:user_option,csrfmiddlewaretoken:csr};
+        {% comment %} $.ajax({
+            url : "{% url 'next_question' %}",
+            method : "POST",
+            data:mydata,
+            success : function(data){
+                console.log(data.status);
+                if (uname !=""){
+                    if (data.status == 0){
+                        // $("#msg").text("Username is not available"); if input and commented small tag are each after each 
+                        display.innerHTML="<small style='color:red'>Username is not available</small>";
+                        
+                    }else{
+                        // $("#msg").text("Username is available");
+                        display.innerHTML="<small style='color:green'>Username is available</small>";
+
+                    }
+                }else{
+                    display.innerHTML="";
+
+                }
+            }
+        })  {% endcomment %}
+    })
+
+
+
+</script>

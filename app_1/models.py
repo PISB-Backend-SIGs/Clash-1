@@ -2,6 +2,7 @@ from django.db import models
 # from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 import random 
+
 # Create your models here.
 class Player(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE)
@@ -10,8 +11,10 @@ class Player(models.Model):
     p_current_question = models.IntegerField(default=random.randint(1,11),null=True,blank=True)  #random question number of player
     p_current_question_number = models.IntegerField(default=1)                                   #number visible to user sequentialy
     p_is_started=models.BooleanField(default=False)              #to check user started quizz or not 
+    p_is_ended=models.BooleanField(default=False)              #to check user started quizz or not 
     p_previous_question = models.IntegerField(blank=True,default=0)
     p_starting_time = models.DateTimeField(null=True,blank=True)  #actual starting time
+    p_end_time = models.DateTimeField(null=True,blank=True)  #game current time
     p_marks_add=models.IntegerField(null=True,blank=True,default=4)  #marks add
     p_marks_sub=models.IntegerField(null=True,blank=True,default=-2) #marks sub
 

@@ -32,7 +32,9 @@ class PlayerAdmin(admin.ModelAdmin):
         "p_current_question",
         "p_previous_question",
         "p_starting_time",
+        "p_end_time",
         "p_is_started",
+        "p_is_ended",
         "p_marks_add",
         "p_marks_sub",
     ]

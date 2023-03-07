@@ -5,6 +5,14 @@
 
 
 {% block "codeblock" %}
+<div class="navbar-brand navvi timer" href="#" style="margin-left: 20px;">
+    <div class="timer_container">
+        <div class=" w-100 d-flex p-0 flex-grow-1" id="countdown">
+            <span id="minutes" class="timeritems"></span> :
+            <span id="seconds" class="timeritems"></span>
+        </div>
+      </div>                     
+</div>
 
 {% for message in messages %}
     <div class="alert alert-{{ message.tags }} alert-dismissable fade show" role="alert">
@@ -19,35 +27,86 @@
     <h1>crnt question number = {{question_number}}</h1>
     <h1>marks add,reduce = {{marking_scheme.marks_add}}{{marking_scheme.marks_sub}}</h1>
     
-<form action="" method="POST">
+<form action="" method="POST" id="Question_form">
     {% csrf_token %}
     <h2>{{question.q_id}}) &nbsp; {{question.question}}</h2>
 
-    <input type="radio" name="option" id="opt1" value=1>
+    <input type="radio" name="option" id="opt1" class="option" value=1>
     <label for="opt1">
         <span>{{question.q_option_1}}</span>
     </label>
-    <input type="radio" name="option" id="opt2" value=2>
+    <input type="radio" name="option" id="opt2" class="option" value=2>
     <label for="opt2">
         <span>{{question.q_option_2}}</span>
     </label>
-    <input type="radio" name="option" id="opt3" value=3>
+    <input type="radio" name="option" id="opt3" class="option" value=3>
     <label for="opt3">
         <span>{{question.q_option_3}}</span>
     </label>
-    <input type="radio" name="option" id="opt4" value=4>
+    <input type="radio" name="option" id="opt4" class="option" value=4>
     <label for="opt4">
         <span>{{question.q_option_4}}</span>
     </label>
 
     {% if flag %}
-        <button   type="submit" name="next">Next</button>
+        <button   type="submit" name="next" id="submit_btn">Next</button>
     {% else %}
-        <button   type="submit" name="nsubmit">Submit</button>
+        <!-- <button   type="submit" name="nsubmit" id="submit_btn">Submit</button> -->
+        <button   type="submit" name="nsubmit" id="submit_btn">Submit</button>
     {% endif %}
 </form>
 
+<!-- <button id="sub">dfdf</button> -->
 
+<script>
+    // var submit_button = document.getElementById("submit_btn");
+    // submit_button.addEventListener("click",()=>{
 
+    // })
+    // var btn = document.getElementById("sub");
+    // btn.addEventListener("click",() => {
+    //     console.log("FDfsfs")
+    //     var form = document.getElementById("Question_form");
+    //     var sub_btn = document.getElementById("submit_btn");
+    //     sub_btn.name = "nsubmit";
+    //     sub_btn.click();
+    // })
+
+  
+        //   console.log("b time","{{player_time}}","f time", new Date() )
+    // const countDown = new Date('{{player_time}}').getTime();
+    x = setInterval(function() {    
+        
+        const countDown = new Date('{{player_time}}').getTime();
+            const now = new Date().getTime();
+            // console.log(new Date())
+            ms = countDown - now;
+            // console.log("b time",countDown,"f time", now )
+            // console.log(ms);
+  
+        //   document.getElementById("days").innerText = Math.floor(distance / (day)),
+            let seconds = Math.floor((ms / 1000) % 60);
+            let minutes = Math.floor((ms / (1000 * 60)) % 60);
+    // let hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+            // document.getElementById("hours").innerText = hours,
+            document.getElementById("minutes").innerText = minutes,
+            document.getElementById("seconds").innerText = seconds;
+            // document.getElementById("minutes").innerText = Math.floor((ms % (hour)) / (minute)),
+            // document.getElementById("seconds").innerText = Math.floor((ms % (minute)) / second);
+  
+          //do something later when date is reached
+          if (ms < 0) {
+            // document.getElementById("hours").innerText = 0;
+            document.getElementById("minutes").innerText = 0;
+            document.getElementById("seconds").innerText = 0;
+            var sub_btn = document.getElementById("submit_btn");
+            sub_btn.name = "nsubmit";
+            sub_btn.click();
+            clearInterval(x);
+            // window.location.reload();
+          }
+          //seconds
+        },0)
+</script>
 
 {% endblock "codeblock" %}

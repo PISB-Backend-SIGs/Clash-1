@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="countdown"></div>
+
+<script>
+function updateCountdown() {
+    $.ajax({
+        url: "{% url 'countdown_data' %}",
+        success: function(data) {
+            var seconds_remaining = data.seconds_remaining;
+            var days = Math.floor(seconds_remaining / 86400);
+            seconds_remaining -= days * 86400;
+            var hours = Math.floor(seconds_remaining / 3600);
+            seconds_remaining -= hours * 3600;
+            var minutes = Math.floor(seconds_remaining / 60);
+            seconds_remaining -= minutes * 60;
+            var seconds = Math.floor(seconds_remaining);
+            $('#countdown').html(days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's');
+        },
+    });
+}
+
+setInterval(updateCountdown, 1000);
+</script>
+
+
+</body>
+</html>
