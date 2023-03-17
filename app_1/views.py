@@ -1,4 +1,5 @@
-from django.shortcuts import render,HttpResponse,redirect
+from django.shortcuts import render,HttpResponse,redirect,HttpResponseRedirect
+# from django.http import HttpResponseRedirect
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -16,9 +17,10 @@ def home(request):
     # s= User.objects.all()
     # # s=list(s)
     # print(s.p_current_score)
-    # player = User.objects.filter(username="prasad").values()
-    # print(player)
-    # print(player.p_current_question)
+    user = User.objects.get(username=request.user)
+    player = Player.objects.get(user=user)
+    print(player)
+    print(player.p_que_list)
     
     
 
@@ -50,8 +52,9 @@ def home(request):
 # from django.views.decorators.cache import never_cache
 
 # @never_cache
+@check_test_ended
 @check_time
-@login_required(login_url="signin")
+
 def questions(request):
 
     context={
@@ -60,9 +63,27 @@ def questions(request):
     }
     user = User.objects.get(username=request.user)
     player = Player.objects.get(user=user)
-    if player.p_is_ended:
-        return redirect("result")
     
+    # if player.p_is_ended:
+    #     print("enterd in check!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    #     return redirect("result")
+    # if request.session.get('submit'):
+    #     # user has already visited this page, redirect to another page
+    #     return redirect('result')
+    
+    # shifted to down
+    # try:
+    #     previous_submitions = Submission.objects.filter(player=player).order_by("-id")[:3]
+    #     life_line_dict = check_lifeline_activate(player,previous_submitions,Question.objects.get(q_id=player.p_current_question))
+        
+    # except:
+    #     life_line_dict = check_lifeline_activate(player,previous_submitions,Question.objects.get(q_id=player.p_current_question))
+    # player.p_lifeline_activate = life_line_dict["activate"]
+    # context["life_line_dict"]=json.dumps(life_line_dict)
+
+    # life_line_dict= check_lifeline_activate(player,Question.objects.get(q_id=player.p_current_question))
+    # context["life_line_dict"]=json.dumps(life_line_dict)
+
 
 
     if "next" in request.POST:
@@ -79,6 +100,7 @@ def questions(request):
 
             submission = Submission.objects.get(player=player,question_id=player.p_current_question) #shifted to up
             submission.question_answer = u_option
+            
             # submission.save()
             # return redirect("questions")
         else:
@@ -94,10 +116,11 @@ def questions(request):
 
 
         marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)
-        user_answer_status=check_answer(u_option , Question.objects.get(q_id=player.p_current_question),marks_dict)
+        user_answer_status=check_answer(u_option , Question.objects.get(q_id=player.p_current_question),marks_dict,player)
         player.p_current_score += user_answer_status["score"]
         # print(question_ans.q_answer)
 
+        
 
         player.p_que_list=json.dumps(marks_dict["ques_list"])
         player.p_previous_question =  player.p_current_question 
@@ -106,6 +129,9 @@ def questions(request):
         player.p_marks_sub=user_answer_status["marks_sub_to_player"]
         player.p_current_question_number +=1
         submission.points = user_answer_status["score"]
+        if (player.p_lifeline_activate):
+            submission.lifeline_activated = True
+            player.p_lifeline_activate = False
         submission.save()
         player.save()
         return redirect("questions")
@@ -147,7 +173,8 @@ def questions(request):
     # print("enter in question after nsubmit and next")
     # print(len(question),"and",player.p_current_question)
     # print(len(Submission.objects.filter(player=request.user)))
-    print(Submission.objects.filter(player=player))
+
+    # print(Submission.objects.filter(player=player))    #show submission query
 
     # try:
     if len(Submission.objects.filter(player=player))>=9:
@@ -168,23 +195,43 @@ def questions(request):
     #     context["question"]=Question.objects.get(q_id=que_num["question_number"])
 
     #chance to give error
-    try:
 
-        context["question"]=Question.objects.get(q_id=player.p_current_question)
-        context["question_number"]=player.p_current_question_number
+    #to check lifeline
+    # lifeline_dict = check_lifeline_activate(player,Question.objects.get(q_id=player.p_current_question))
+    # if (lifeline_dict["activate"]):
+    #     context["life_line_to_frontend"]=lifeline_dict
+
+    # try:
+
+    #     context["question"]=Question.objects.get(q_id=player.p_current_question)
+    #     context["question_number"]=player.p_current_question_number
+    # except:
+    #     return redirect("result")
+    try:
+        previous_submitions = Submission.objects.filter(player=player).order_by("-id")[:3]
+        life_line_dict = check_lifeline_activate(player,previous_submitions,Question.objects.get(q_id=player.p_current_question))
     except:
-        return redirect("result")
+        life_line_dict = {"activate":False}
+    # player.p_lifeline_activate = life_line_dict["activate"]
+    context["life_line_dict"]=json.dumps(life_line_dict)
+
+    context["question"]=Question.objects.get(q_id=player.p_current_question)
+    context["question_number"]=player.p_current_question_number
     
     context["player"]=player
     context["marking_scheme"]={"marks_add":player.p_marks_add,"marks_sub":player.p_marks_sub}
-    print("time going to f",player.p_end_time)
-    context['player_time']=str(player.p_end_time)
+    print("time going to f",player.p_end_time.astimezone())
+    context['player_time']=str(player.p_end_time.astimezone())
     return render(request,"app_1\questions.html",context)
 
 # @check_time
+@check_test_ended
 def submit(request):
+    request.session['submit'] = True
     user = User.objects.get(username=request.user)
     player = Player.objects.get(user=user)
+    # if player.p_is_ended:
+    #     return redirect("result")
     if player.p_is_started:
         if player.p_is_ended:
             return redirect("result")
@@ -201,15 +248,24 @@ def submit(request):
         actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer
         
         marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)
-        user_answer_status=check_answer(u_option,Question.objects.get(q_id=player.p_current_question),marks_dict)
+        user_answer_status=check_answer(u_option,Question.objects.get(q_id=player.p_current_question),marks_dict,player)
         player.p_current_score +=user_answer_status["score"]
         # print(question_ans.q_answer)
         player.p_que_list=json.dumps(marks_dict["ques_list"])
         player.p_previous_question =  player.p_current_question 
         player.p_current_question = marks_dict["ques_number"]
         player.p_is_ended=True
+        submission.points = user_answer_status["score"]
+
+        if (player.p_lifeline_activate):
+            submission.lifeline_activated = True
+            player.p_lifeline_activate = False
+
         player.save()
-        return redirect(result)
+        submission.save()
+
+        # return redirect(result)
+        return HttpResponseRedirect("/result/")
 
 
 @login_required(login_url="signin")
@@ -245,13 +301,11 @@ def signin(request):
                 login(request, user)
                 # player = User.objects.get(username=request.user)
                 # print(player.p_que_list)
-                try:
-                    if not(player.p_que_list):
-                        # print("if inntrye")
-                        player.p_que_list = create_random_list(player.p_current_question)
-                        player.save()
-                except:
-                    pass
+               
+                if not(player.p_que_list) or (player.p_que_list=="")  :
+                    # print("if inntrye")
+                    player.p_que_list = create_random_list(player.p_current_question)
+                    player.save()
 
                 if request.user.is_superuser:
                     return redirect("settingwale")
@@ -350,4 +404,14 @@ def settingwale(request):
 
 #To handle 404 error if user try to access diff page
 def error_404(request, exception):
-    return render(request, 'errors\error_404.html')
+    return render(request, 'errors\error_404.html',{"exception":"404"})
+# def error_500(request, exception):
+#     return render(request, 'errors\error_404.html',{"exception":"500"})
+
+
+def test(request):
+    user= User.objects.get(username = "testuser94")
+    player = Player.objects.get(user=user)
+    submission=Submission.objects.filter(player=player).order_by("-id")[:3].values_list()
+    print(submission)
+    return render(request,"app_1/test.html")

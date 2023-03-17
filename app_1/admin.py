@@ -35,6 +35,7 @@ class PlayerAdmin(admin.ModelAdmin):
         "p_end_time",
         "p_is_started",
         "p_is_ended",
+        "p_lifeline_activate",
         "p_marks_add",
         "p_marks_sub",
     ]
@@ -50,6 +51,6 @@ admin.site.register(Question,QuestionAdmin)
 
 class SubmissionAdmin(admin.ModelAdmin):
     list_display=[
-        "player","question_id","question_answer","points"
+        "player","question_id","question_answer","points","lifeline_activated"
     ]
 admin.site.register(Submission,SubmissionAdmin)

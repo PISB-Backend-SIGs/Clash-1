@@ -27,6 +27,8 @@ DEBUG = True
 # DEBUG = False
 
 ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['192.168.209.139' , '127.0.0.1' , 'localhost']
+
 # ALLOWED_HOSTS = ['*']
 
 
@@ -107,8 +109,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
 

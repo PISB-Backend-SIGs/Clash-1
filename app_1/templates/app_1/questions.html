@@ -25,7 +25,7 @@
     </div>
      
     <h1>crnt question number = {{question_number}}</h1>
-    <h1>marks add,reduce = {{marking_scheme.marks_add}}{{marking_scheme.marks_sub}}</h1>
+    <h1>marks add,reduce = <span id="marks-add">{{marking_scheme.marks_add}}</span> <span id="marks-red"> </span></h1>
     
 <form action="" method="POST" id="Question_form">
     {% csrf_token %}
@@ -81,7 +81,7 @@
             const now = new Date().getTime();
             // console.log(new Date())
             ms = countDown - now;
-            // console.log("b time",countDown,"f time", now )
+            // console.log("b time",countDown,"f time", now ) 
             // console.log(ms);
   
         //   document.getElementById("days").innerText = Math.floor(distance / (day)),
@@ -89,13 +89,25 @@
             let minutes = Math.floor((ms / (1000 * 60)) % 60);
     // let hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
             // document.getElementById("hours").innerText = hours,
-            document.getElementById("minutes").innerText = minutes,
-            document.getElementById("seconds").innerText = seconds;
+            document.getElementById("minutes").innerText = minutes;
+            // sec = toString(seconds)
+            // console.log(val_sec)
+            if (seconds<10 ){
+                document.getElementById("seconds").innerText =  "0"+seconds ;
+            }else{
+                document.getElementById("seconds").innerText = seconds ;
+            }
+            // console.log(typeof(sec))
             // document.getElementById("minutes").innerText = Math.floor((ms % (hour)) / (minute)),
             // document.getElementById("seconds").innerText = Math.floor((ms % (minute)) / second);
   
           //do something later when date is reached
           if (ms < 0) {
+            const radioInputs = document.querySelectorAll('input[type="radio"]');
+            radioInputs.forEach((input) => {
+            input.required = false;
+            
+            });
             // document.getElementById("hours").innerText = 0;
             document.getElementById("minutes").innerText = 0;
             document.getElementById("seconds").innerText = 0;
@@ -107,6 +119,47 @@
           }
           //seconds
         },0)
+
+
+        // const data = '{{ life_line_dict }}';
+        var data = JSON.parse("{{life_line_dict|escapejs}}");
+        console.log(data);
+        if (data.activate){
+            document.getElementById("marks-red").innerText = data.marks_red;
+            for (let i = 0; i < 2; i++) {
+                var opt=document.getElementById("opt"+data.option_disable[i]);
+                opt.disabled=true;
+                // opt.style.display = 'none';
+                
+            }
+            // if (data.option_disable[0]){
+
+            //     var opt1=document.getElementById("opt1");
+            //     opt1.disabled=true;
+            //     opt1.style.display = 'none';
+            // }
+            // if (data.option_disable[1]){
+            //     var opt2=document.getElementById("opt2");
+            //     opt2.disabled=true;
+            //     opt2.style.display = 'none';            }
+            // if (data.option_disable[2]){
+            //     var opt3=document.getElementById("opt3");
+            //     opt3.disabled=true;
+            //     opt3.style.display = 'none';            }
+            // if (data.option_disable[3]){
+            //     var opt4=document.getElementById("opt4");
+            //     opt4.disabled=true;
+            //     opt4.style.display = 'none';            }
+            const radioInputs = document.querySelectorAll('input[type="radio"]');
+            radioInputs.forEach((input) => {
+            input.required = true;
+            
+            });
+
+        }else{
+            document.getElementById("marks-red").innerText = {{marking_scheme.marks_sub}};
+           
+        }
 </script>
 
 {% endblock "codeblock" %}
