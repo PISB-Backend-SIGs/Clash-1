@@ -10,16 +10,16 @@
 
 // 24-02-2023
 + Add skip button and disable the save and next button if option not selected
-+ Add login messages
+- Add login messages
 + Remove Spelling mistakes
-+ Finalize Lifelines
-
-(Note: Change '+' to '-' once the task is done)
-
-
+- Finalize Lifelines
+(1. 50/50         aprv
+2. time travel    aprv
+3. lifeline bar   pending)
 
 //9-03-2023
-+ Blackhole 2 options disable -5    (3streak) 
-+ randomly markscheme change 
+- Blackhole 2 options disable -5    (3streak) 
+- randomly markscheme change 
 + time travel user can change answer 
 + 
+(Note: Change '+' to '-' once the task is done)
