@@ -2,28 +2,27 @@
 {% extends 'app_1\base.html' %}
 
 {% block "codeblock" %}
-<div>
-    {% for message in messages %}
-    <div>
-       {{message}}
-      </div>
-    {% endfor %}
-</div>
+
 
 <h2>Welcome</h2>
-<h1>{{user.username}}</h1> &nbsp; <a href="/signout"><button>Logout</button></a>
+<h1>{{user.username}}</h1> &nbsp; <a href="/signout"><button class="btn btn-primary">Logout</button></a>
 {% comment %} <h1>{{request.user.first_name}}</h1> to get name of user {% endcomment %}
 
 {% comment %} <button><a href="/questions">Start</a></button> {% endcomment %}
 
-<h1>Instruction of page</h1>
-<form  method="POST">
-    {% csrf_token %}
+<div class="container">
+    <h1>Instruction of page</h1>
 
+    <form  method="POST">
+        {% csrf_token %}
+        
     <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem odio dolores, molestias odit voluptate modi ut aliquam nemo itaque! Error dolorem expedita hic. Molestiae dicta rerum sunt dolore numquam fugiat.</p>
-    <input type="checkbox" name="checkbox" value="checked"><br>
-    <input type="submit" >
+    <input type="checkbox" class="form-check-input" name="checkbox" value="checked"><br>
+    <input type="submit" class="btn btn-primary" >
+    
+    </form> 
+</div>
 
-</form> 
+
 
 {% endblock "codeblock" %}

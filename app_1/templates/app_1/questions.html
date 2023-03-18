@@ -24,12 +24,12 @@
         <h1>marks : {{player.p_current_score}}</h1>
     </div>
      
-    <h1>crnt question number = {{question_number}}</h1>
-    <h1>marks add,reduce = <span id="marks-add">{{marking_scheme.marks_add}}</span> <span id="marks-red"> </span></h1>
+    <h1>Randomly generated question number = {{question.q_id}}</h1>
+    <h1>marks = <span id="marks-add">+{{marking_scheme.marks_add}}</span> <span id="marks-red"> </span></h1>
     
 <form action="" method="POST" id="Question_form">
     {% csrf_token %}
-    <h2>{{question.q_id}}) &nbsp; {{question.question}}</h2>
+    <h2>{{question_number}}) &nbsp; {{question.question}}</h2>
 
     <input type="radio" name="option" id="opt1" class="option" value=1>
     <label for="opt1">
@@ -49,46 +49,29 @@
     </label>
 
     {% if flag %}
-        <button   type="submit" name="next" id="submit_btn">Next</button>
+        <button   type="submit" name="next" id="submit_btn" class="btn btn-primary">Next</button>
     {% else %}
         <!-- <button   type="submit" name="nsubmit" id="submit_btn">Submit</button> -->
-        <button   type="submit" name="nsubmit" id="submit_btn">Submit</button>
+        <button   type="submit" name="nsubmit" id="submit_btn" class="btn btn-primary">Submit</button>
     {% endif %}
 </form>
 
 <!-- <button id="sub">dfdf</button> -->
 
 <script>
-    // var submit_button = document.getElementById("submit_btn");
-    // submit_button.addEventListener("click",()=>{
-
-    // })
-    // var btn = document.getElementById("sub");
-    // btn.addEventListener("click",() => {
-    //     console.log("FDfsfs")
-    //     var form = document.getElementById("Question_form");
-    //     var sub_btn = document.getElementById("submit_btn");
-    //     sub_btn.name = "nsubmit";
-    //     sub_btn.click();
-    // })
-
-  
-        //   console.log("b time","{{player_time}}","f time", new Date() )
-    // const countDown = new Date('{{player_time}}').getTime();
+    
     x = setInterval(function() {    
         
         const countDown = new Date('{{player_time}}').getTime();
             const now = new Date().getTime();
             // console.log(new Date())
-            ms = countDown - now;
+            remain = countDown - now;
             // console.log("b time",countDown,"f time", now ) 
-            // console.log(ms);
+            // console.log(remain);
   
         //   document.getElementById("days").innerText = Math.floor(distance / (day)),
-            let seconds = Math.floor((ms / 1000) % 60);
-            let minutes = Math.floor((ms / (1000 * 60)) % 60);
-    // let hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
-            // document.getElementById("hours").innerText = hours,
+            let seconds = Math.floor((remain / 1000) % 60);
+            let minutes = Math.floor((remain / (1000 * 60)) % 60);
             document.getElementById("minutes").innerText = minutes;
             // sec = toString(seconds)
             // console.log(val_sec)
@@ -96,13 +79,8 @@
                 document.getElementById("seconds").innerText =  "0"+seconds ;
             }else{
                 document.getElementById("seconds").innerText = seconds ;
-            }
-            // console.log(typeof(sec))
-            // document.getElementById("minutes").innerText = Math.floor((ms % (hour)) / (minute)),
-            // document.getElementById("seconds").innerText = Math.floor((ms % (minute)) / second);
-  
-          //do something later when date is reached
-          if (ms < 0) {
+            }  
+          if (remain < 0) {
             const radioInputs = document.querySelectorAll('input[type="radio"]');
             radioInputs.forEach((input) => {
             input.required = false;

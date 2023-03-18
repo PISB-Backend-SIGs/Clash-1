@@ -85,7 +85,7 @@ def set_time():
     start_time=timezone.now()
     dict={
         "start_time":start_time,
-        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=1),
+        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=2),
     }
     return dict
 

@@ -1,5 +1,4 @@
 from django.shortcuts import render,HttpResponse,redirect,HttpResponseRedirect
-# from django.http import HttpResponseRedirect
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -12,18 +11,13 @@ from datetime import datetime,timedelta
 from .decorators import *
 # Create your views here.
 
+#Users home page after login
 @login_required(login_url="signin")
 def home(request):
-    # s= User.objects.all()
-    # # s=list(s)
-    # print(s.p_current_score)
     user = User.objects.get(username=request.user)
     player = Player.objects.get(user=user)
-    print(player)
-    print(player.p_que_list)
-    
-    
-
+    # print(player)
+    # print(player.p_que_list)
     context={
         "title":"Home",
         "user":request.user
@@ -50,7 +44,6 @@ def home(request):
     return render(request,"app_1\home.html",context)
 
 # from django.views.decorators.cache import never_cache
-
 # @never_cache
 @check_test_ended
 @check_time
@@ -64,49 +57,20 @@ def questions(request):
     user = User.objects.get(username=request.user)
     player = Player.objects.get(user=user)
     
-    # if player.p_is_ended:
-    #     print("enterd in check!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    #     return redirect("result")
-    # if request.session.get('submit'):
-    #     # user has already visited this page, redirect to another page
-    #     return redirect('result')
-    
-    # shifted to down
-    # try:
-    #     previous_submitions = Submission.objects.filter(player=player).order_by("-id")[:3]
-    #     life_line_dict = check_lifeline_activate(player,previous_submitions,Question.objects.get(q_id=player.p_current_question))
-        
-    # except:
-    #     life_line_dict = check_lifeline_activate(player,previous_submitions,Question.objects.get(q_id=player.p_current_question))
-    # player.p_lifeline_activate = life_line_dict["activate"]
-    # context["life_line_dict"]=json.dumps(life_line_dict)
-
-    # life_line_dict= check_lifeline_activate(player,Question.objects.get(q_id=player.p_current_question))
-    # context["life_line_dict"]=json.dumps(life_line_dict)
-
-
-
-    if "next" in request.POST:
-        # print("next clicked")
-        # try:
-        #     u_option = request.POST["option"]
-        # except:
-        #     messages.error(request,"all questions are compelsary")
-        #     return redirect("questions")
-        # question_ans = Question.objects.get(q_id = player.p_current_question)        
+    #it handles user next question
+    if "next" in request.POST:       
         u_option = request.POST.get("option")
-        # submission = Submission.objects.get(player=player,question_id=player.p_current_question)
+        print("user option on next",u_option)
+        #This is for if user get question which already done 
         if len(Submission.objects.filter(player=player,question_id=player.p_current_question))>0:
 
             submission = Submission.objects.get(player=player,question_id=player.p_current_question) #shifted to up
             submission.question_answer = u_option
-            
-            # submission.save()
-            # return redirect("questions")
         else:
             submission = Submission(player=player,question_id=player.p_current_question,question_answer=u_option)
             submission.save()
 
+        #To check marking scheme
         try:
             previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
             actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer  #to get actual anser of prev question
@@ -115,8 +79,8 @@ def questions(request):
             actual_ans_prev_que=None
 
 
-        marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)
-        user_answer_status=check_answer(u_option , Question.objects.get(q_id=player.p_current_question),marks_dict,player)
+        marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)   #it returns marks next question and question number
+        user_answer_status=check_answer(u_option , Question.objects.get(q_id=player.p_current_question),marks_dict,player)  #it checks ans of crnt question
         player.p_current_score += user_answer_status["score"]
         # print(question_ans.q_answer)
 
@@ -136,77 +100,28 @@ def questions(request):
         player.save()
         return redirect("questions")
 
+    #it handle users submit 
     if "nsubmit" in request.POST:
+        u_option = request.POST.get("option")
+        print("user option on time  ",u_option)
+        if len(Submission.objects.filter(player=player,question_id=player.p_current_question))>0:
+            submission = Submission.objects.get(player=player,question_id=player.p_current_question)
+            submission.question_answer = u_option
+            submission.save()
+            # return redirect("questions")
+        else:
+            submission = Submission(player=player,question_id=player.p_current_question,question_answer=u_option)
+            submission.save()
         return redirect("submit")
-        # u_option = request.POST.get("option")
-        # if len(Submission.objects.filter(player=player,question_id=player.p_current_question))>0:
-
-        #     submission = Submission.objects.get(player=player,question_id=player.p_current_question)
-        #     submission.question_answer = u_option
-        #     submission.save()
-        #     # return redirect("questions")
-        # else:
-        #     submission = Submission(player=player,question_id=player.p_current_question,question_answer=u_option)
-        #     submission.save()
-
-        # previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
-        # actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer
         
-        # marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)
-        # user_answer_status=check_answer(u_option,Question.objects.get(q_id=player.p_current_question),marks_dict)
-        # player.p_current_score +=user_answer_status["score"]
-        # # print(question_ans.q_answer)
-
-
-        # player.p_que_list=json.dumps(marks_dict["ques_list"])
-        # player.p_previous_question =  player.p_current_question 
-        # player.p_current_question = marks_dict["ques_number"]
-
-        # player.p_is_ended=True
-
-        # player.save()
-
-        # return redirect(result)
-
-
-
-    # print("enter in question after nsubmit and next")
-    # print(len(question),"and",player.p_current_question)
-    # print(len(Submission.objects.filter(player=request.user)))
-
-    # print(Submission.objects.filter(player=player))    #show submission query
-
-    # try:
     if len(Submission.objects.filter(player=player))>=9:
         print("printed when submission is at 10",len(Submission.objects.filter(player=player)))
         context["flag"]=False
-    # except:
-    #     print("flag si true")
-    #     context["flag"]=True
-    # print(request.user.p_current_question)   #working
-
-    # if player.p_current_question ==0:
-    #     que_num= get_number(json.loads(player.p_que_list))
-    #     print("generated jdhaskjfhkasjhf",que_num)
-    #     player.p_current_question=que_num["question_number"]
-    #     player.p_que_list=json.dumps(que_num["que_list"])
-    #     player.save()
-
-    #     context["question"]=Question.objects.get(q_id=que_num["question_number"])
-
-    #chance to give error
 
     #to check lifeline
     # lifeline_dict = check_lifeline_activate(player,Question.objects.get(q_id=player.p_current_question))
     # if (lifeline_dict["activate"]):
     #     context["life_line_to_frontend"]=lifeline_dict
-
-    # try:
-
-    #     context["question"]=Question.objects.get(q_id=player.p_current_question)
-    #     context["question_number"]=player.p_current_question_number
-    # except:
-    #     return redirect("result")
     try:
         previous_submitions = Submission.objects.filter(player=player).order_by("-id")[:3]
         life_line_dict = check_lifeline_activate(player,previous_submitions,Question.objects.get(q_id=player.p_current_question))
@@ -227,7 +142,6 @@ def questions(request):
 # @check_time
 @check_test_ended
 def submit(request):
-    request.session['submit'] = True
     user = User.objects.get(username=request.user)
     player = Player.objects.get(user=user)
     # if player.p_is_ended:
@@ -235,17 +149,22 @@ def submit(request):
     if player.p_is_started:
         if player.p_is_ended:
             return redirect("result")
-        u_option = request.POST.get("option")
-        if len(Submission.objects.filter(player=player,question_id=player.p_current_question))>0:
+        # u_option = request.POST.get("option")
+        try:
             submission = Submission.objects.get(player=player,question_id=player.p_current_question)
-            submission.question_answer = u_option
-            submission.save()
-            # return redirect("questions")
-        else:
-            submission = Submission(player=player,question_id=player.p_current_question,question_answer=u_option)
-            submission.save()
-        previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
-        actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer
+            u_option = submission.question_answer
+        except:
+            u_option=None
+
+        
+        try:
+            previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
+            actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer  #to get actual anser of prev question
+        except:
+            previous_answer=None
+            actual_ans_prev_que=None
+        # previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
+        # actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer
         
         marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)
         user_answer_status=check_answer(u_option,Question.objects.get(q_id=player.p_current_question),marks_dict,player)
@@ -303,16 +222,11 @@ def signin(request):
                 # print(player.p_que_list)
                
                 if not(player.p_que_list) or (player.p_que_list=="")  :
-                    # print("if inntrye")
                     player.p_que_list = create_random_list(player.p_current_question)
                     player.save()
-
-                if request.user.is_superuser:
-                    return redirect("settingwale")
-            # fname = user.first_name
                 return redirect("home")
             else:
-                messages.error(request,"You already give test")
+                messages.error(request,"You already given the test")
 
         else:  #If wrong credentials given
             messages.error(request, "Bad Credentials")
@@ -349,10 +263,6 @@ def signup(request):
         if User.objects.filter(username=username):
             messages.error(request,"Username already exists ! PLease try Different username")
             return redirect('home')
-
-        # if User.objects.filter(email=email):
-        #     messages.error(request,"Email Already Registered!")
-        #     return redirect('home')
 
         if len(username)<3:
             messages.error(request,"Username must be atleast 3 characters")

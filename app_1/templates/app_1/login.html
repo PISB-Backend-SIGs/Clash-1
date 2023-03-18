@@ -1,15 +1,8 @@
 {% extends 'app_1\base.html' %}
 
 {% block "codeblock" %}
-<h1>Prasad@123</h1>
-{% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissable fade show" role="alert">
-        <strong>Message:</strong>{{ message }}
-        <button type="submit" class="close" data-dismiss="alert" area-label="CLose">
-        <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endfor %}
+{% comment %} <h1>Prasad@123</h1> {% endcomment %}
+
 
     <h1>Sign In</h1>
 
@@ -25,7 +18,7 @@
 
         
 
-        <input type="submit" placeholder="Submit">
+        <input type="submit" placeholder="Submit" class="btn btn-primary">
     </form>
 
 {% endblock "codeblock" %}
