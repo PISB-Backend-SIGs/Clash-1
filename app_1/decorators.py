@@ -35,7 +35,6 @@ def check_test_ended(view_fun):
             if (player.p_is_ended):
                 print("game is ended")
                 print("iside decoratro to check going result in testcheck")
-
                 return app_1.views.result(request)
                 # return redirect('result')
             else:

@@ -25,6 +25,7 @@
     </div>
      
     <h1>Randomly generated question number = {{question.q_id}}</h1>
+    
     <h1>marks = <span id="marks-add">+{{marking_scheme.marks_add}}</span> <span id="marks-red"> </span></h1>
     
 <form action="" method="POST" id="Question_form">
@@ -58,6 +59,16 @@
 
 <!-- <button id="sub">dfdf</button> -->
 
+<div class="container">
+    <h3>Lifeline activation details</h3>
+    <button type="button" name="lifeline1" id="lifeline1btn" value=1 class="btn btn-primary" disabled>50/50 Lifeline1</button>
+    <button type="button" name="lifeline2" id="lifeline2btn" value=2 class="btn btn-primary" disabled>Lifeline2</button>
+    <button type="button" name="lifeline3" id="lifeline3btn" value=3 class="btn btn-primary" disabled>Lifeline3</button>
+    
+</div>
+
+<div id="question_modal">
+</div>
 <script>
     
     x = setInterval(function() {    
@@ -96,48 +107,147 @@
             // window.location.reload();
           }
           //seconds
-        },0)
+        },0)  
+</script>
 
 
-        // const data = '{{ life_line_dict }}';
-        var data = JSON.parse("{{life_line_dict|escapejs}}");
-        console.log(data);
-        if (data.activate){
-            document.getElementById("marks-red").innerText = data.marks_red;
-            for (let i = 0; i < 2; i++) {
-                var opt=document.getElementById("opt"+data.option_disable[i]);
-                opt.disabled=true;
-                // opt.style.display = 'none';
-                
-            }
-            // if (data.option_disable[0]){
 
-            //     var opt1=document.getElementById("opt1");
-            //     opt1.disabled=true;
-            //     opt1.style.display = 'none';
-            // }
-            // if (data.option_disable[1]){
-            //     var opt2=document.getElementById("opt2");
-            //     opt2.disabled=true;
-            //     opt2.style.display = 'none';            }
-            // if (data.option_disable[2]){
-            //     var opt3=document.getElementById("opt3");
-            //     opt3.disabled=true;
-            //     opt3.style.display = 'none';            }
-            // if (data.option_disable[3]){
-            //     var opt4=document.getElementById("opt4");
-            //     opt4.disabled=true;
-            //     opt4.style.display = 'none';            }
-            const radioInputs = document.querySelectorAll('input[type="radio"]');
-            radioInputs.forEach((input) => {
-            input.required = true;
-            
-            });
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        }else{
-            document.getElementById("marks-red").innerText = {{marking_scheme.marks_sub}};
-           
+<script>
+    
+    console.log('{{which_lifeline_is_active.lifeline_id}}')   //to get lifelien id
+    // const data = '{{ life_line_dict }}';
+    var data = JSON.parse("{{life_line_dict|escapejs}}");
+    console.log(data);
+    document.getElementById("marks-red").innerText = '{{marking_scheme.marks_sub}}';
+    if (data.activate){
+        for (let i = 0; i < data.lifeline_activate_number.length; i++) {
+            console.log("ddsddd","lifeline"+data.lifeline_activate_number[i]+"btn")
+            document.getElementById("lifeline"+data.lifeline_activate_number[i]+"btn").disabled = false;
         }
+        
+        //document.getElementById("marks-red").innerText = data.marks_red;
+    }else{
+        console.log("enter in else",'{{marking_scheme.marks_sub}}')
+        // document.getElementById("marks-red").innerText = {{marking_scheme.marks_sub}}; 
+    }
+
+    //for lifeline 1
+    if('{{which_lifeline_is_active.lifeline_id}}'==='1'){
+        console.log("enterd to deploy lifeline")
+        deploy_lifeline1();
+    }
+    document.getElementById("lifeline1btn").addEventListener("click",deploy_lifeline1);
+
+    function deploy_lifeline1() {
+        document.getElementById("lifeline1btn").classList.add('btn-success');
+        document.getElementById("lifeline1btn").disabled=true;
+
+        document.getElementById("lifeline1btn").classList.remove('btn-primary');
+        document.getElementById("marks-red").innerText = data.marks_red;
+
+        for (let i = 0; i < 2; i++){
+            var opt=document.getElementById("opt"+data.option_disable[i]);
+            opt.disabled = true ;
+            // opt.style.display = 'none';
+            
+        }
+        const radioInputs = document.querySelectorAll('input[type="radio"]');
+        radioInputs.forEach((input) => {
+        input.required = true;
+        
+        });
+    }
+
+    //for lifeline2
+    let arr = JSON.parse('{{wrong_question_list}}')
+    console.log(arr,"wrong questions")
+    if (arr.length<=0){
+        document.getElementById("lifeline2btn").disabled = true;
+    }
+    document.getElementById("lifeline2btn").addEventListener("click",()=>{
+        let questionmodal = document.getElementById("question_modal");
+        for (let i = 0;i< arr.length; i++) {
+            deploy_lifeline2()
+            var button = document.createElement("button");
+            button.innerHTML = arr[i];
+            button.classList.add("ques");
+            button.classList.add("btn");
+            button.classList.add("btn-primary");
+            button.value = arr[i];
+            questionmodal.appendChild(button);
+            
+        
+            button.addEventListener("click", function(event) {
+                console.log("Button " + this.value + " clicked");
+                var number = $('#lifeline2btn').val();
+                console.log(number,'{{request.user}}',"this.value",this.value);
+                $.ajax({
+                    method: 'POST',
+                    url: '/lifelineActivation/',
+                    data: {
+                        'number': number,
+                        "user":'{{request.user}}',
+                        "ques_num":this.value
+                    },
+                    success: function(data) {
+                        // Handle the response here
+                        console.log(data);
+                        // var radio = document.getElementsByName("option");
+                        // radio[data.user_answer-1].checked = true; 
+                        deploy_lifeline2(data)
+
+                    },
+                    error: function() {
+                        // Handle errors here
+                    }
+                });
+
+            });
+        }
+    });
+    if('{{which_lifeline_is_active.lifeline_id}}'==='2'){
+        console.log("enterd to deploy lifeline2")
+        deploy_lifeline2();
+    }
+    function deploy_lifeline2() {
+        document.getElementById("lifeline2btn").classList.add('btn-success');
+        document.getElementById("lifeline1btn").disabled = true;
+        document.getElementById("lifeline2btn").disabled = true;
+        document.getElementById("lifeline3btn").disabled = true;
+        document.getElementById("marks-red").innerText = '-6';
+
+    }
+    
+</script>
+
+<script type="text/javascript">
+    // {% comment %} for lifeline activation {% endcomment %}
+    
+        //for lifeline1
+        $('#lifeline1btn').click(function() {
+            var number = $('#lifeline1btn').val();
+            console.log(number,'{{request.user}}')
+            $.ajax({
+                method: 'POST',
+                url: '/lifelineActivation/',
+                data: {
+                    'number': number,
+                    "user":'{{request.user}}',
+                    
+                },
+                success: function(data) {
+                    // Handle the response here
+                    console.log(data);
+                },
+                error: function() {
+                    // Handle errors here
+                }
+            });
+        });
+        
+
 </script>
 
 {% endblock "codeblock" %}

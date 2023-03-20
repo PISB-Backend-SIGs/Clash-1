@@ -1,5 +1,5 @@
-
 {% extends 'app_1\base.html' %}
+{% load static %}  
 
 {% block "codeblock" %}
 
@@ -17,12 +17,25 @@
         {% csrf_token %}
         
     <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem odio dolores, molestias odit voluptate modi ut aliquam nemo itaque! Error dolorem expedita hic. Molestiae dicta rerum sunt dolore numquam fugiat.</p>
-    <input type="checkbox" class="form-check-input" name="checkbox" value="checked"><br>
-    <input type="submit" class="btn btn-primary" >
+    <input type="checkbox" class="form-check-input" name="checkbox" value="checked" id="instruction_checkbox"><br>
+    <input type="submit" class="btn btn-primary"  id="instruction_submit_btn" disabled>
     
     </form> 
 </div>
 
+<!-- <script>
+    // to handle button on instruction page
+    document.getElementById("instruction_checkbox").addEventListener("change",()=>{
+        let instruction_btn=document.getElementById("instruction_submit_btn");
+        if (instruction_btn.disabled === true){
+            instruction_btn.disabled = false;
+        }else{
+            instruction_btn.disabled =true;
+        }
+    })
+</script> -->
+
+<script src="{% static 'js/home.js' %}"></script>
 
 
 {% endblock "codeblock" %}

@@ -43,6 +43,12 @@ admin.site.register(Player,PlayerAdmin)
 
 
 
+class LifelineAdmin(admin.ModelAdmin):
+    list_display=[
+        "user","lifeline_id","is_active"
+    ]
+admin.site.register(Lifeline,LifelineAdmin)
+
 class QuestionAdmin(admin.ModelAdmin):
     list_display=[
         "q_id","q_answer"

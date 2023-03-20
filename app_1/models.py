@@ -15,7 +15,7 @@ class Player(models.Model):
     p_previous_question = models.IntegerField(blank=True,default=0)
     p_starting_time = models.DateTimeField(null=True,blank=True)  #actual starting time
     p_end_time = models.DateTimeField(null=True,blank=True)  #game current time
-    p_streak = models.IntegerField(blank=True,null=True,default=0)
+    p_lifeline_array = models.TextField(blank=True,null=True,default="[]")
     p_lifeline_activate = models.BooleanField(default=False)
     p_marks_add=models.IntegerField(null=True,blank=True,default=4)  #marks add
     p_marks_sub=models.IntegerField(null=True,blank=True,default=-2) #marks sub
@@ -23,11 +23,12 @@ class Player(models.Model):
     def __str__(self) -> str:
         return f"{self.user}"
     
-#if multiple lifeline 
-# class Lifeline(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     lifeline_id = models.IntegerField(default = 0)
-#     is_active = models.BooleanField(default=False)
+# if multiple lifeline 
+class Lifeline(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    lifeline_id = models.IntegerField(default = 0)
+    number_of_lifeline = models.IntegerField(default=0,blank=True)
+    is_active = models.BooleanField(default=False)
 
 
 class Question(models.Model):
@@ -47,9 +48,11 @@ class Question(models.Model):
 class Submission(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     question_id = models.IntegerField()
+    sequential_ques_id = models.IntegerField(default=0)
     question_answer = models.IntegerField(null=True)
     points = models.IntegerField(null=True,blank=True)
     lifeline_activated = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.player}"
+    

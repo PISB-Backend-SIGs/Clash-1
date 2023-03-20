@@ -1,4 +1,6 @@
 import random
+from django.core.cache import cache
+
 
 # print(random.randint(1,11))
 

@@ -5,8 +5,64 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-    <h1>test</h1>
+    
+   <!-- Button trigger modal -->
+<button type="button" id="modal-btn" class="btn btn-primary" >
+    Lifeline2
+  </button>
+    
+<div id="question_block" style="display: none;" class="container">
+    <button class="question-btn" value=1>1</button>
+    <button class="question-btn" value=2>2</button>
+    <button class="question-btn" value=3>3</button>
+    <button class="question-btn" value=4>4</button>
+
+</div>
+
+  <h1>test</h1>
+    <button id="life1" value=1>life1</button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+
+        $('#life1').click(function() {
+            var number = $('#life1').val();
+            console.log(number)
+            $.ajax({
+                method: 'POST',
+                url: '/test1/',
+                data: {
+                    'number': number
+                },
+                success: function(data) {
+                    // Handle the response here
+                    console.log(data);
+                },
+                error: function() {
+                    // Handle errors here
+                }
+            });
+        });
+</script>
+
+<script>
+    document.getElementById("modal-btn").addEventListener("click",()=>{
+        console.log("btn clicked")
+        document.getElementById("question_block").style.display="block";
+    })
+    $(".question-btn").click(function(){
+        console.log(this.value)
+        document.getElementById("question_block").style.display="none";
+        document.getElementById("modal-btn").disabled=true;
+        
+    })
+  </script>
+<!-- for modal -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
