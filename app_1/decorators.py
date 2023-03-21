@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import Player
 from datetime import date, timedelta, datetime
 from django.utils import timezone
-from django.shortcuts import redirect
+from django.shortcuts import redirect,HttpResponseRedirect
 
 def check_time(view_fun):
     def wrap(request,*args, **kwargs):
@@ -37,6 +37,7 @@ def check_test_ended(view_fun):
                 print("iside decoratro to check going result in testcheck")
                 return app_1.views.result(request)
                 # return redirect('result')
+                # return HttpResponseRedirect("result")
             else:
                 print("game is not ended")
 

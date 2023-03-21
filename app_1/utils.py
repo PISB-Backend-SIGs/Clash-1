@@ -2,6 +2,7 @@ import json,random
 from datetime import datetime,timedelta
 from django.utils import timezone
 from app_1.models import Lifeline
+import openai
 size = 10      #size of question display to user
 rang = size+1 #size of question in database
 def create_random_list(crnt_ques):
@@ -98,18 +99,20 @@ def set_time():
 
 
 
-
 def check_lifeline_activate(user,player,submission,question):
+    '''decide the lifeline and pass its data'''
     flag=0
     opt_list=[-1]
     streak = 0
     if (len(submission)>=3):
-        
+        lifeLine1Submissions = submission.order_by("-id")[:3]
+        print(lifeLine1Submissions.values())
         for i in range(3):
-            if (submission[i].points>0):
+            if (lifeLine1Submissions[i].points>0):
                 streak+=1
         # print("submission bool",submission[0].lifeline_activated,submission[0].lifeline_activated,submission[0].lifeline_activated)
-        if (streak == 3 and not(submission[0].lifeline_activated) and not(submission[1].lifeline_activated)  and not(submission[2].lifeline_activated)):
+        #condition for lifeline 1
+        if (streak == 3 and not(lifeLine1Submissions[0].lifeline_activated) and not(lifeLine1Submissions[1].lifeline_activated)  and not(lifeLine1Submissions[2].lifeline_activated)):
             # print("inside if of check lifeline")
             opt_list = [1,2,3,4]
             opt_list.remove(question.q_answer)
@@ -136,7 +139,7 @@ def check_lifeline_activate(user,player,submission,question):
             # lifeline_dict['lifeline_activation_flag']=lifeline.is_active
 
             flag+=1
-        
+     #condition for lifeline 2  
     if(player.p_current_score>7):
         try:
             lifeline = Lifeline.objects.get(user=user,lifeline_id =2)
@@ -155,9 +158,31 @@ def check_lifeline_activate(user,player,submission,question):
             # lifeline_dict["marks_red"]=-5,
             # lifeline_dict['lifeline_activation_flag']=lifeline.is_active
             flag+=1
-    print("sdsssssssssssssssssssssss",flag)
-    if (flag<=0):
+    #LifeLine3
+    if( len(submission) > 5 and accuracy(submission) > 50):
+        try:
+            lifeline = Lifeline.objects.get(user=user,lifeline_id =3)
+        except:
+            lifeline = Lifeline(user=user,lifeline_id=3)
+            lifeline.save()
+        if (lifeline.number_of_lifeline<2):
+            arr = json.loads(player.p_lifeline_array)
+            if not(2 in arr):
+                arr.append(2)
+            player.p_lifeline_array = json.dumps(arr)
+            # life_line_array = json.loads(player.p_lifeline_array)
+            player.save()
+            # lifeline_dict["lifeline_activate_number"]=json.loads(player.p_lifeline_array),
+            # lifeline_dict["activate"]=True,
+            # lifeline_dict["marks_red"]=-5,
+            # lifeline_dict['lifeline_activation_flag']=lifeline.is_active
+            flag+=1
         
+
+
+    print("sdsssssssssssssssssssssss",flag)
+
+    if (flag<=0):
         lifeline_dict={
             "activate":False,
             "streak ":streak
@@ -179,4 +204,29 @@ def check_lifeline_activate(user,player,submission,question):
             "streak ":streak
         }
         return lifeline_dict
+    
+
+
+
+openai.api_key = "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"
+def chatbot_response(user_input):
+    '''to give output from  CHATGPT'''
+    response = openai.Completion.create(
+        engine = "text-davinci-002",
+        prompt = user_input,
+        temperature = 0.5,
+        max_tokens = 1024 ,
+        top_p = 1,
+        frequency_penalty = 0,
+        presence_penalty = 0
+    )
+    return response["choices"][0]["text"]
+
+
+def accuracy(submissions):
+    noofRightAns = submissions.filter(isCorrect = True)
+    noOfQuestionsAttempted = len(submissions)
+    accuracy = (noofRightAns/noOfQuestionsAttempted)*100
+    return accuracy
+
 

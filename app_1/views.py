@@ -42,9 +42,9 @@ def home(request):
             messages.error(request, "Checkbox not checked")
             return redirect("home")
     return render(request,"app_1\home.html",context)
-
-# from django.views.decorators.cache import never_cache
-# @never_cache
+#for not allowing to access questins after submitting the test
+from django.views.decorators.cache import never_cache
+@never_cache
 @check_test_ended
 @check_time
 
@@ -146,7 +146,8 @@ def questions(request):
     # if (lifeline_dict["activate"]):
     #     context["life_line_to_frontend"]=lifeline_dict
     try:
-        previous_submitions = Submission.objects.filter(player=player).order_by("-id")[:3]
+        # previous_submitions = Submission.objects.filter(player=player).order_by("-id")[:3]
+        previous_submitions = Submission.objects.filter(player=player).all()
         life_line_dict = check_lifeline_activate(user,player,previous_submitions,Question.objects.get(q_id=player.p_current_question))
     except:
         life_line_dict = {"activate":False}
@@ -212,6 +213,7 @@ def lifelineActivation(request):
             lifeline.number_of_lifeline +=1
             lifeline.save()
             return JsonResponse({"status":1,"question":question_details,"user_answer":submission.question_answer})
+
     else:
         return JsonResponse({"status":0})
 

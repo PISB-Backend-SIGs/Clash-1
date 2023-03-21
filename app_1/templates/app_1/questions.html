@@ -30,27 +30,27 @@
     
 <form action="" method="POST" id="Question_form">
     {% csrf_token %}
-    <h2>{{question_number}}) &nbsp; {{question.question}}</h2>
+    {{question_number}}) <h2 id = "question_title">&nbsp; {{question.question}}</h2>
 
     <input type="radio" name="option" id="opt1" class="option" value=1>
-    <label for="opt1">
+    <label for="opt1" id = "option1">
         <span>{{question.q_option_1}}</span>
     </label>
     <input type="radio" name="option" id="opt2" class="option" value=2>
-    <label for="opt2">
+    <label for="opt2" id = "option2">
         <span>{{question.q_option_2}}</span>
     </label>
     <input type="radio" name="option" id="opt3" class="option" value=3>
-    <label for="opt3">
+    <label for="opt3" id = "option3">
         <span>{{question.q_option_3}}</span>
     </label>
     <input type="radio" name="option" id="opt4" class="option" value=4>
-    <label for="opt4">
+    <label for="opt4" id = "option4">
         <span>{{question.q_option_4}}</span>
     </label>
 
     {% if flag %}
-        <button   type="submit" name="next" id="submit_btn" class="btn btn-primary">Next</button>
+        <button   type="submit" name="next" id="submit_btn" class="btn btn-primary"  >Next</button>
     {% else %}
         <!-- <button   type="submit" name="nsubmit" id="submit_btn">Submit</button> -->
         <button   type="submit" name="nsubmit" id="submit_btn" class="btn btn-primary">Submit</button>
@@ -180,6 +180,7 @@
             
         
             button.addEventListener("click", function(event) {
+                document.getElementById("question_modal").style.display = "none";
                 console.log("Button " + this.value + " clicked");
                 var number = $('#lifeline2btn').val();
                 console.log(number,'{{request.user}}',"this.value",this.value);
@@ -193,10 +194,16 @@
                     },
                     success: function(data) {
                         // Handle the response here
-                        console.log(data);
+                
+                        console.log(data.question.question_title);
+                        // var tempVar = JSON.parse(data)
+                        console.log(typeof(data))
+                        // console.log(tempVar["question_title"]);
                         // var radio = document.getElementsByName("option");
                         // radio[data.user_answer-1].checked = true; 
                         deploy_lifeline2(data)
+                        displayQuestions(data.question)
+                    
 
                     },
                     error: function() {
@@ -217,6 +224,15 @@
         document.getElementById("lifeline2btn").disabled = true;
         document.getElementById("lifeline3btn").disabled = true;
         document.getElementById("marks-red").innerText = '-6';
+
+    }
+    function displayQuestions(data){
+        document.getElementById("question_title").innerHTML = data.question_title
+        document.getElementById("option1").innerHTML = data.opt1
+        document.getElementById("option2").innerHTML = data.opt2
+        document.getElementById("option3").innerHTML = data.opt3
+        document.getElementById("option4").innerHTML = data.opt4
+
 
     }
     
@@ -248,6 +264,15 @@
         });
         
 
+</script>
+<script>
+    var disableNextBtn = document.getElementById("submit_btn");
+    disableNextBtn.addEventListener("click" , ()=> {
+        
+        disableNextBtn.classList.add("btn-success")
+        console.log("button clicked once")
+        disableNextBtn.disabled = true;
+    })
 </script>
 
 {% endblock "codeblock" %}

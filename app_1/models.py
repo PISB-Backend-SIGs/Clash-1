@@ -48,10 +48,11 @@ class Question(models.Model):
 class Submission(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     question_id = models.IntegerField()
-    sequential_ques_id = models.IntegerField(default=0)
+    sequential_ques_id = models.IntegerField(default=0) #player's ques index
     question_answer = models.IntegerField(null=True)
     points = models.IntegerField(null=True,blank=True)
     lifeline_activated = models.BooleanField(default=False)
+    isCorrect = models.BooleanField(default= False)
 
     def __str__(self) -> str:
         return f"{self.player}"
