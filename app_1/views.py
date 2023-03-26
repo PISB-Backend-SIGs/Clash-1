@@ -16,38 +16,38 @@ from .decorators import *
 def home(request):
     user = User.objects.get(username=request.user)
     player = Player.objects.get(user=user)
-    # print(player)
-    # print(player.p_que_list)
     context={
         "title":"Home",
         "user":request.user
     }
+
+    #To check checkbox is clicked or not
     if request.method == "POST":
         user = User.objects.get(username=request.user)
         player = Player.objects.get(user=user)
-
-
-        checkbox = request.POST.get("checkbox")
+        checkbox = request.POST.get("checkbox") #It take value checked from frontend
         if (checkbox == "checked"):
-            if not(player.p_is_started):
-                player.p_is_started = True
+            if not(player.isStarted):
+                player.isStarted = True
                 player_time_detail = set_time()
-                player.p_starting_time = player_time_detail["start_time"]
-                player.p_end_time = player_time_detail["end_time"]
+                player.startTime = player_time_detail["start_time"]
+                player.EndTime = player_time_detail["end_time"]
                 player.save()
-            if (player.p_is_ended):
+            if (player.isEnded):
                 return redirect("result")
             return redirect("questions")
         else:
             messages.error(request, "Checkbox not checked")
             return redirect("home")
     return render(request,"app_1\home.html",context)
-#for not allowing to access questins after submitting the test
+
+
+
+#It restrict user to go back from result to question page 
 from django.views.decorators.cache import never_cache
 @never_cache
 @check_test_ended
 @check_time
-
 def questions(request):
 
     context={
@@ -57,66 +57,69 @@ def questions(request):
     user = User.objects.get(username=request.user)
     player = Player.objects.get(user=user)
     
-    #it handles user next question
+    #It handles user next question
     if "next" in request.POST:       
         u_option = request.POST.get("option")
-        print("user option on next",u_option)
-        #This is for if user get question which already done 
-        if len(Submission.objects.filter(player=player,question_id=player.p_current_question))>0:
 
-            submission = Submission.objects.get(player=player,question_id=player.p_current_question) #shifted to up
-            submission.question_answer = u_option
+        #This is for if submission is already given
+        if len(Submission.objects.filter(player=player,questionID=player.questionNumber))>0:
+
+            submission = Submission.objects.get(player=player,questionID=player.questionNumber) 
+            submission.userOption = u_option
         else:
-            submission = Submission(player=player,question_id=player.p_current_question,question_answer=u_option,sequential_ques_id=player.p_current_question_number)
+            submission = Submission(player=player,questionID=player.questionNumber,userOption=u_option,questionIndex=player.questionIndex)
             submission.save()
 
-        #To check marking scheme
+
+        #To get previous answer and its actual answer to give marks accordingly
         try:
-            previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
-            actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer  #to get actual anser of prev question
+            previous_answer = Submission.objects.get(player=player,questionID=player.previousQuestion).userOption
+            actual_ans_prev_que= Question.objects.get(questionID=player.previousQuestion).questionAnswer  #to get actual answer of prev question
         except:
             previous_answer=None
             actual_ans_prev_que=None
 
 
-        marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)   #it returns marks next question and question number
-        user_answer_status=check_answer(u_option , Question.objects.get(q_id=player.p_current_question),marks_dict,player,user)  #it checks ans of crnt question
-        player.p_current_score += user_answer_status["score"]
-        # print(question_ans.q_answer)
-
+        #To check marking scheme
+        #check in utils
+        marks_dict=get_question(json.loads(player.questionList),player.previousQuestion,previous_answer,actual_ans_prev_que)  
+        #check in utils 
+        user_answer_status=check_answer(u_option , Question.objects.get(questionID=player.questionNumber),marks_dict,player,user)  #it checks ans of crnt question
         
-
-        player.p_que_list=json.dumps(marks_dict["ques_list"])
-        player.p_previous_question =  player.p_current_question 
-        player.p_current_question = marks_dict["ques_number"]
-        player.p_marks_add=user_answer_status["marks_add_to_player"]
-        player.p_marks_sub=user_answer_status["marks_sub_to_player"]
-        player.p_current_question_number +=1
+        #To save in player object
+        player.playerScore += user_answer_status["score"]
+        player.questionList=json.dumps(marks_dict["ques_list"])
+        player.previousQuestion =  player.questionNumber 
+        player.questionNumber = marks_dict["ques_number"]
+        player.marksAdd=user_answer_status["marks_add_to_player"]
+        player.marksSubstract=user_answer_status["marks_sub_to_player"]
+        player.questionIndex +=1
         submission.points = user_answer_status["score"]
+        submission.isCorrect=user_answer_status["isCorrect"]
+
+        #To check if any lifeline is activate or not for that solved question 
         try:
-            lifeline = Lifeline.objects.get(user=user,is_active=True)
-            print(lifeline,"checking is activatd")
-            if (lifeline.is_active):
-                submission.lifeline_activated = True
-                lifeline.is_active = False
+            lifeline = Lifeline.objects.get(user=user,isActive=True)
+            print(lifeline,"lifeline is activated")
+            if (lifeline.isActive):
+                submission.lifelineActivated = True
+                lifeline.isActive = False
                 lifeline.save()
-                player.p_lifeline_activate = False
-                array=json.loads(player.p_lifeline_array )
+                player.lifelineActivationFlag = False
+                array=json.loads(player.lifelineArray )
                 print("player lifeline array",array)
-                # array.remove(lifeline.lifeline_id)
-                # if(1 in array):
-                #     array.remove(1)
+                #This is clear all array as we are redirecting it to again on question so in get request it check outside next and nsubmit
                 array.clear()
                 print("player lifeline array after deletion",array)
-                player.p_lifeline_array = json.dumps(array)
+                player.lifelineArray = json.dumps(array)
                 player.save()
         except:
-            array=json.loads(player.p_lifeline_array )
-            print(array,"kljdlkdjlkjlk")
+            #it is nessecory if user had not clicked any lifeline then for next lifeline lifeline 1 will be disable if it is activated
+            array=json.loads(player.lifelineArray )
             if (1 in array):
-                submission.lifeline_activated = True
+                submission.lifelineActivated = True
                 array.remove(1)
-            player.p_lifeline_array = json.dumps(array)
+            player.lifelineArray = json.dumps(array)
             player.save()
             
         submission.save()
@@ -126,49 +129,46 @@ def questions(request):
     #it handle users submit 
     if "nsubmit" in request.POST:
         u_option = request.POST.get("option")
-        print("user option on time  ",u_option)
-        if len(Submission.objects.filter(player=player,question_id=player.p_current_question))>0:
-            submission = Submission.objects.get(player=player,question_id=player.p_current_question)
-            submission.question_answer = u_option
+        if len(Submission.objects.filter(player=player,questionID=player.questionNumber))>0:
+            submission = Submission.objects.get(player=player,questionID=player.questionNumber)
+            submission.userOption = u_option
             submission.save()
-            # return redirect("questions")
         else:
-            submission = Submission(player=player,question_id=player.p_current_question,question_answer=u_option,sequential_ques_id=player.p_current_question_number)
+            submission = Submission(player=player,questionID=player.questionNumber,userOption=u_option,questionIndex=player.questionIndex)
             submission.save()
         return redirect("submit")
         
+        
+    #This may have to change as if the user used lifeline2 at last question btn visible to user is submit not next for last question
     if len(Submission.objects.filter(player=player))>=9:
         print("printed when submission is at 10",len(Submission.objects.filter(player=player)))
         context["flag"]=False
 
-    #to check lifeline
-    # lifeline_dict = check_lifeline_activate(player,Question.objects.get(q_id=player.p_current_question))
-    # if (lifeline_dict["activate"]):
-    #     context["life_line_to_frontend"]=lifeline_dict
     try:
-        # previous_submitions = Submission.objects.filter(player=player).order_by("-id")[:3]
         previous_submitions = Submission.objects.filter(player=player).all()
-        life_line_dict = check_lifeline_activate(user,player,previous_submitions,Question.objects.get(q_id=player.p_current_question))
+        life_line_dict = check_lifeline_activate(user,player,previous_submitions,Question.objects.get(questionID=player.questionNumber))
     except:
         life_line_dict = {"activate":False}
-    # player.p_lifeline_activate = life_line_dict["activate"]
+
+    #To show user which lifeline are activate now for them
     try:
-        context["which_lifeline_is_active"]=Lifeline.objects.get(user=user,is_active=True)
+        context["which_lifeline_is_active"]=Lifeline.objects.get(user=user,isActive=True)
     except:
         pass
-    print("ssssssssssssssssssssssssssssssssssss",life_line_dict)
     context["life_line_dict"]=json.dumps(life_line_dict)
     
-    context["wrong_question_list"]=[x.sequential_ques_id for x in Submission.objects.filter(player=player) if x.points<0]
-    print("jjjjjjjjjjjjjjjjjjjjjj",context["wrong_question_list"])
+    # context["wrong_question_list"]=[x.questionIndex for x in Submission.objects.filter(player=player) if x.points<0]
+    context["wrong_question_list"]=[x.questionIndex for x in Submission.objects.filter(player=player) if not(x.isCorrect)]
 
-    context["question"]=Question.objects.get(q_id=player.p_current_question)
-    context["question_number"]=player.p_current_question_number
+    print("Users Wrong questions ",context["wrong_question_list"])
+
+    context["question"]=Question.objects.get(questionID=player.questionNumber)
+    context["question_number"]=player.questionIndex
     
     context["player"]=player
-    context["marking_scheme"]={"marks_add":player.p_marks_add,"marks_sub":player.p_marks_sub}
-    print("time going to f",player.p_end_time.astimezone())
-    context['player_time']=str(player.p_end_time.astimezone())
+    context["marking_scheme"]={"marks_add":player.marksAdd,"marks_sub":player.marksSubstract}
+    context['player_time']=str(player.EndTime.astimezone())
+    print("EndTime of user going to frontend ",player.EndTime.astimezone())
     return render(request,"app_1\questions.html",context)
 
 
@@ -176,43 +176,43 @@ def questions(request):
 from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def lifelineActivation(request):
-    # print(user,"in checklifeline async")
     if request.method == "POST":
         lifeline_id_from_frontend = request.POST.get("number")
         userr =request.POST.get("user")
         user = User.objects.get(username=userr)
         print(lifeline_id_from_frontend,"in url async")
         if(int(lifeline_id_from_frontend)==1):
-            lifeline = Lifeline.objects.get(user=user,lifeline_id=lifeline_id_from_frontend)
-            lifeline.is_active = True
-            lifeline.number_of_lifeline +=1
+            lifeline = Lifeline.objects.get(user=user,lifelineID=lifeline_id_from_frontend)
+            lifeline.isActive = True
+            lifeline.lifelineCounter +=1
             lifeline.save()
             return JsonResponse({"status":1})
         elif(int(lifeline_id_from_frontend)==2):
             player=Player.objects.get(user=user)
-            arr = json.loads(player.p_que_list)
-            if not(player.p_current_question in arr):
-                arr.append(player.p_current_question)
-                player.p_que_list = json.dumps(arr)
+            arr = json.loads(player.questionList)
+            if not(player.questionNumber in arr):
+                arr.append(player.questionNumber)
+                player.questionList = json.dumps(arr)
             ques_num =int(request.POST.get("ques_num"))
-            print(type(ques_num),"Sssssssssssssssssskjh")
-            player.p_current_question_number -=1
-            submission = Submission.objects.get(player=player,sequential_ques_id=ques_num)
-            question = Question.objects.get(q_id=submission.question_id)
-            player.p_current_question=submission.question_id
+            print(type(ques_num)," Type of question number comming from frontend")
+            player.questionIndex -=1
+            submission = Submission.objects.get(player=player,questionIndex=ques_num)
+            question = Question.objects.get(questionID=submission.questionID)
+            player.questionNumber=submission.questionID
             player.save()
             question_details={
-                "question_title":question.question,
-                "opt1":question.q_option_1,
-                "opt2":question.q_option_2,
-                "opt3":question.q_option_3,
-                "opt4":question.q_option_4,
+                "question_title":question.questionText,
+                "opt1":question.questionOption1,
+                "opt2":question.questionOption2,
+                "opt3":question.questionOption3,
+                "opt4":question.questionOption4,
+                "question_number":submission.questionIndex,
             }
-            lifeline = Lifeline.objects.get(user=user,lifeline_id=lifeline_id_from_frontend)
-            lifeline.is_active = True
-            lifeline.number_of_lifeline +=1
+            lifeline = Lifeline.objects.get(user=user,lifelineID=lifeline_id_from_frontend)
+            lifeline.isActive = True
+            lifeline.lifelineCounter +=1
             lifeline.save()
-            return JsonResponse({"status":1,"question":question_details,"user_answer":submission.question_answer})
+            return JsonResponse({"status":1,"question":question_details})
 
     else:
         return JsonResponse({"status":0})
@@ -224,41 +224,38 @@ def lifelineActivation(request):
 def submit(request):
     user = User.objects.get(username=request.user)
     player = Player.objects.get(user=user)
-    # if player.p_is_ended:
-    #     return redirect("result")
-    if player.p_is_started:
-        if player.p_is_ended:
+    if player.isStarted:
+        if player.isEnded:
             return redirect("result")
         # u_option = request.POST.get("option")
+        #To save user's responce
         try:
-            submission = Submission.objects.get(player=player,question_id=player.p_current_question)
-            u_option = submission.question_answer
+            submission = Submission.objects.get(player=player,questionID=player.questionNumber)
+            u_option = submission.userOption
         except:
             u_option=None
 
         
         try:
-            previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
-            actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer  #to get actual anser of prev question
+            previous_answer = Submission.objects.get(player=player,questionID=player.previousQuestion).userOption
+            actual_ans_prev_que= Question.objects.get(questionID=player.previousQuestion).questionAnswer  #to get actual anser of prev question
         except:
             previous_answer=None
             actual_ans_prev_que=None
-        # previous_answer = Submission.objects.get(player=player,question_id=player.p_previous_question).question_answer
-        # actual_ans_prev_que= Question.objects.get(q_id=player.p_previous_question).q_answer
         
-        marks_dict=get_question(json.loads(player.p_que_list),player.p_previous_question,previous_answer,actual_ans_prev_que)
-        user_answer_status=check_answer(u_option,Question.objects.get(q_id=player.p_current_question),marks_dict,player,user)
-        player.p_current_score +=user_answer_status["score"]
-        # print(question_ans.q_answer)
-        player.p_que_list=json.dumps(marks_dict["ques_list"])
-        player.p_previous_question =  player.p_current_question 
-        player.p_current_question = marks_dict["ques_number"]
-        player.p_is_ended=True
+        marks_dict=get_question(json.loads(player.questionList),player.previousQuestion,previous_answer,actual_ans_prev_que)
+        user_answer_status=check_answer(u_option,Question.objects.get(questionID=player.questionNumber),marks_dict,player,user)
+        player.playerScore +=user_answer_status["score"]
+        player.questionList=json.dumps(marks_dict["ques_list"])
+        player.previousQuestion =  player.questionNumber 
+        player.questionNumber = marks_dict["ques_number"]
+        player.isEnded=True
         submission.points = user_answer_status["score"]
+        submission.isCorrect=user_answer_status["isCorrect"]
 
-        if (player.p_lifeline_activate):
-            submission.lifeline_activated = True
-            player.p_lifeline_activate = False
+        if (player.lifelineActivationFlag):
+            submission.lifelineActivated = True
+            player.lifelineActivationFlag = False
 
         player.save()
         submission.save()
@@ -279,7 +276,7 @@ def result(request):
 
 
 def signin(request):
-    # print(player.p_que_list)
+    # print(player.questionList)
     # check(Question.objects.all())
     if request.method == "POST":   #For signin page only username and pass1 taken
         username = request.POST['username']
@@ -295,14 +292,14 @@ def signin(request):
                 player = Player(user=user)
                 player.save()
                 player = Player.objects.get(user=user)
-            # print(player,player.p_is_ended)
-            if not(player.p_is_ended) :
+            # print(player,player.isEnded)
+            if not(player.isEnded) :
                 login(request, user)
                 # player = User.objects.get(username=request.user)
-                # print(player.p_que_list)
+                # print(player.questionList)
                
-                if not(player.p_que_list) or (player.p_que_list=="")  :
-                    player.p_que_list = create_random_list(player.p_current_question)
+                if not(player.questionList) or (player.questionList=="")  :
+                    player.questionList = create_random_list(player.questionNumber)
                     player.save()
                 return redirect("home")
             else:
@@ -399,10 +396,10 @@ def error_404(request, exception):
 def test(request):
     user= User.objects.get(username = "testfuck")
     player = Player.objects.get(user=user)
-    life_line_array = json.loads(player.p_lifeline_array)
+    life_line_array = json.loads(player.lifelineArray)
     
-    # player.p_lifeline_array = json.dumps([1,2])
-    # life_line_array = json.loads(player.p_lifeline_array)
+    # player.lifelineArray = json.dumps([1,2])
+    # life_line_array = json.loads(player.lifelineArray)
     print(life_line_array)
     print(type(life_line_array))
     print(type(life_line_array))

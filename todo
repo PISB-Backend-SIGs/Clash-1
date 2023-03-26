@@ -25,4 +25,9 @@
 21 March 2023 ERROR :
 + Multiple clicks lead to Question Jumps
 + hide api key
+
+//26-03-2023
++ If 1st question gets wrong after 3 questions get correct 1 2 lifeline gets activated if i choose 2nd then for next question 1st lifeline again activate which is bug this is due to 1 question is wrong and next3 right it check that questions activates 1st lifeline but it should not 
 (Note: Change '+' to '-' once the task is done)
+
+

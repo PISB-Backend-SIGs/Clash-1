@@ -11,33 +11,34 @@ from .forms import *
 #         *UserAdmin.fieldsets,(
 #             "Player",{
 #                 "fields":(
-#                     "p_current_score",
-#                     "p_que_list",
-#                     "p_current_question_number",
-#                     "p_current_question",
-#                     "p_previous_question",
-#                     "p_starting_time",
-#                     "p_is_started",
-#                     "p_marks_add",
-#                     "p_marks_sub",
+#                     "playerScore",
+#                     "questionList",
+#                     "questionIndex",
+#                     "questionNumber",
+#                     "previousQuestion",
+#                     "startTime",
+#                     "isStarted",
+#                     "marksAdd",
+#                     "marksSubstract",
 #                 )
 #             }
 #         )
 #     )
 class PlayerAdmin(admin.ModelAdmin):
     list_display=[
-        "user","p_current_score",
-        "p_que_list",
-        "p_current_question_number",
-        "p_current_question",
-        "p_previous_question",
-        "p_starting_time",
-        "p_end_time",
-        "p_is_started",
-        "p_is_ended",
-        "p_lifeline_activate",
-        "p_marks_add",
-        "p_marks_sub",
+        "user",
+        "playerScore",
+        "questionList",
+        "questionIndex",
+        "questionNumber",
+        "previousQuestion",
+        "startTime",
+        "EndTime",
+        "isStarted",
+        "isEnded",
+        "lifelineActivationFlag",
+        "marksAdd",
+        "marksSubstract",
     ]
 admin.site.register(Player,PlayerAdmin)
 
@@ -45,18 +46,18 @@ admin.site.register(Player,PlayerAdmin)
 
 class LifelineAdmin(admin.ModelAdmin):
     list_display=[
-        "user","lifeline_id","is_active"
+        "user","lifelineID","isActive"
     ]
 admin.site.register(Lifeline,LifelineAdmin)
 
 class QuestionAdmin(admin.ModelAdmin):
     list_display=[
-        "q_id","q_answer"
+        "questionID","questionAnswer"
     ]
 admin.site.register(Question,QuestionAdmin)
 
 class SubmissionAdmin(admin.ModelAdmin):
     list_display=[
-        "player","question_id","question_answer","points","lifeline_activated"
+        "player","questionID","userOption","points","lifelineActivated"
     ]
 admin.site.register(Submission,SubmissionAdmin)

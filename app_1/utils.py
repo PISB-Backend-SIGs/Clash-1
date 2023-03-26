@@ -32,6 +32,10 @@ def get_number(random_question_list):
     return dictonary
 
 def get_question(random_question_list,prev_que_num,pre_ans,pre_actual_ans):
+    '''
+    This function returns crnt question of user which is displayed to user
+    and marks add and sub to that crnt question and also returns remaining question list
+    '''
     marks_dict = {}
     # number = random.randint(1,10)
     question_number = get_number(random_question_list)
@@ -54,31 +58,43 @@ def get_question(random_question_list,prev_que_num,pre_ans,pre_actual_ans):
     print("marks pre",marks_dict["marks_add"],marks_dict["marks_redu"],"\n")
     return marks_dict
 
+# def isAnsCorrect(u_answer,actual_answer,marks_dict,player,user):
+
+    
 def check_answer(u_answer,actual_answer,marks_dict,player,user):
+    '''
+    This utils returns marks for the user's crntly solved question 
+    And if lifeline is activate it gives proper marks substract
+    And also return marking scheme for next question
+    
+    '''
     score ={}
-    print("Check crt question","\nactual ans",actual_answer.q_answer,"\nactual ans",u_answer,"\n")
+    print("Check crt question","\nactual ans",actual_answer.questionAnswer,"\nactual ans",u_answer,"\n")
     print("marks crt",marks_dict["marks_add"],marks_dict["marks_redu"],"\n")
     if u_answer== None:
         # score["streak"]=False
         score["score"]=-1
         score["marks_add_to_player"]= 2    #to get marks for next question
         score["marks_sub_to_player"]= -1
-    elif int(u_answer) == actual_answer.q_answer:
+        score["isCorrect"]=False
+    elif int(u_answer) == actual_answer.questionAnswer:
         # score["streak"]=True
         score["score"]=marks_dict["marks_add"]
         score["marks_add_to_player"]=4    #to get marks for next question
         score["marks_sub_to_player"]=-2
+        score["isCorrect"]=True
     else:
         # score["streak"]=False
         score["score"]=marks_dict["marks_redu"]
         score["marks_add_to_player"]= 2    #to get marks for next question
         score["marks_sub_to_player"]= -1
+        score["isCorrect"]=False
         try:
-            lifeline = Lifeline.objects.get(user=user,is_active=True)
-            if (lifeline.lifeline_id==1):
+            lifeline = Lifeline.objects.get(user=user,isActive=True)
+            if (lifeline.lifelineID==1):
                 # score["marks_sub_to_player"]= -5
                 score["score"]=-5
-            if (lifeline.lifeline_id==2):
+            if (lifeline.lifelineID==2):
                 # score["marks_sub_to_player"]= -5
                 score["score"]=-6
         except:
@@ -106,77 +122,65 @@ def check_lifeline_activate(user,player,submission,question):
     streak = 0
     if (len(submission)>=3):
         lifeLine1Submissions = submission.order_by("-id")[:3]
-        print(lifeLine1Submissions.values())
+        # print(lifeLine1Submissions.values())
         for i in range(3):
             if (lifeLine1Submissions[i].points>0):
                 streak+=1
-        # print("submission bool",submission[0].lifeline_activated,submission[0].lifeline_activated,submission[0].lifeline_activated)
+        # print("submission bool",submission[0].lifelineActivated,submission[0].lifelineActivated,submission[0].lifelineActivated)
         #condition for lifeline 1
-        if (streak == 3 and not(lifeLine1Submissions[0].lifeline_activated) and not(lifeLine1Submissions[1].lifeline_activated)  and not(lifeLine1Submissions[2].lifeline_activated)):
+        if (streak == 3 and not(lifeLine1Submissions[0].lifelineActivated) and not(lifeLine1Submissions[1].lifelineActivated)  and not(lifeLine1Submissions[2].lifelineActivated)):
             # print("inside if of check lifeline")
             opt_list = [1,2,3,4]
-            opt_list.remove(question.q_answer)
+            opt_list.remove(question.questionAnswer)
             opt_list.pop(1)
             try:
-                lifeline = Lifeline.objects.get(user=user,lifeline_id =1)
+                lifeline = Lifeline.objects.get(user=user,lifelineID =1)
             except:
-                lifeline = Lifeline(user=user,lifeline_id=1)
+                lifeline = Lifeline(user=user,lifelineID=1)
                 lifeline.save()
 
-            player.p_lifeline_activate = True
-            arr = json.loads(player.p_lifeline_array)
+            player.lifelineActivationFlag = True
+            arr = json.loads(player.lifelineArray)
             if not(1 in arr):
                 arr.append(1)
-            player.p_lifeline_array = json.dumps(arr)
-            # life_line_array = json.loads(player.p_lifeline_array)
+            player.lifelineArray = json.dumps(arr)
+            # life_line_array = json.loads(player.lifelineArray)
             player.save()
-            
-            # lifeline_dict["option_disable"]=opt_list,
-            # # "lifeline_activate_number":1,
-            # lifeline_dict["lifeline_activate_number"]=json.loads(player.p_lifeline_array),
-            # lifeline_dict["activate"]=True,
-            # lifeline_dict["marks_red"]=-5,
-            # lifeline_dict['lifeline_activation_flag']=lifeline.is_active
-
             flag+=1
      #condition for lifeline 2  
-    if(player.p_current_score>7):
+    if(player.playerScore>7):
         try:
-            lifeline = Lifeline.objects.get(user=user,lifeline_id =2)
+            lifeline = Lifeline.objects.get(user=user,lifelineID =2)
         except:
-            lifeline = Lifeline(user=user,lifeline_id=2)
+            lifeline = Lifeline(user=user,lifelineID=2)
             lifeline.save()
-        if (lifeline.number_of_lifeline<2):
-            arr = json.loads(player.p_lifeline_array)
+        if (lifeline.lifelineCounter<2):
+            arr = json.loads(player.lifelineArray)
             if not(2 in arr):
                 arr.append(2)
-            player.p_lifeline_array = json.dumps(arr)
-            # life_line_array = json.loads(player.p_lifeline_array)
+            player.lifelineArray = json.dumps(arr)
+            # life_line_array = json.loads(player.lifelineArray)
             player.save()
-            # lifeline_dict["lifeline_activate_number"]=json.loads(player.p_lifeline_array),
-            # lifeline_dict["activate"]=True,
-            # lifeline_dict["marks_red"]=-5,
-            # lifeline_dict['lifeline_activation_flag']=lifeline.is_active
             flag+=1
+
     #LifeLine3
-    if( len(submission) > 5 and accuracy(submission) > 50):
-        try:
-            lifeline = Lifeline.objects.get(user=user,lifeline_id =3)
-        except:
-            lifeline = Lifeline(user=user,lifeline_id=3)
-            lifeline.save()
-        if (lifeline.number_of_lifeline<2):
-            arr = json.loads(player.p_lifeline_array)
-            if not(2 in arr):
-                arr.append(2)
-            player.p_lifeline_array = json.dumps(arr)
-            # life_line_array = json.loads(player.p_lifeline_array)
-            player.save()
-            # lifeline_dict["lifeline_activate_number"]=json.loads(player.p_lifeline_array),
-            # lifeline_dict["activate"]=True,
-            # lifeline_dict["marks_red"]=-5,
-            # lifeline_dict['lifeline_activation_flag']=lifeline.is_active
-            flag+=1
+    # if( len(submission) > 5 and accuracy(submission) > 50):
+    #     try:
+    #         lifeline = Lifeline.objects.get(user=user,lifelineID =3)
+    #     except:
+    #         lifeline = Lifeline(user=user,lifelineID=3)
+    #         lifeline.save()
+    #     if (lifeline.lifelineCounter<2):
+    #         arr = json.loads(player.lifelineArray)
+    #         if not(3 in arr):
+    #             arr.append(3)
+    #         player.lifelineArray = json.dumps(arr)
+    #         # life_line_array = json.loads(player.lifelineArray)
+    #         player.save()
+    #         flag+=1
+
+
+
         
 
 
@@ -188,7 +192,7 @@ def check_lifeline_activate(user,player,submission,question):
             "streak ":streak
         }
         
-        player.p_lifeline_activate = False
+        player.lifelineActivationFlag = False
         player.save()
         return lifeline_dict
     else:
@@ -197,10 +201,10 @@ def check_lifeline_activate(user,player,submission,question):
         lifeline_dict={    
             "option_disable":opt_list,
             # "lifeline_activate_number":1,
-            "lifeline_activate_number":json.loads(player.p_lifeline_array),
+            "lifeline_activate_number":json.loads(player.lifelineArray),
             "activate":True,
             "marks_red":-5,
-            'lifeline_activation_flag':lifeline.is_active,
+            'lifeline_activation_flag':lifeline.isActive,
             "streak ":streak
         }
         return lifeline_dict
