@@ -109,7 +109,7 @@ def set_time():
     start_time=timezone.now()
     dict={
         "start_time":start_time,
-        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=10),
+        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=120),
     }
     return dict
 
@@ -163,35 +163,26 @@ def check_lifeline_activate(user,player,submission,question):
             player.save()
             flag+=1
 
-    #LifeLine3
-    # if( len(submission) > 5 and accuracy(submission) > 50):
-    #     try:
-    #         lifeline = Lifeline.objects.get(user=user,lifelineID =3)
-    #     except:
-    #         lifeline = Lifeline(user=user,lifelineID=3)
-    #         lifeline.save()
-    #     if (lifeline.lifelineCounter<2):
-    #         arr = json.loads(player.lifelineArray)
-    #         if not(3 in arr):
-    #             arr.append(3)
-    #         player.lifelineArray = json.dumps(arr)
-    #         # life_line_array = json.loads(player.lifelineArray)
-    #         player.save()
-    #         flag+=1
-
-
-
-        
-
-
-    print("sdsssssssssssssssssssssss",flag)
-
+    # LifeLine3
+    if( len(submission) > 5 and accuracy(submission) > 50):
+        try:
+            lifeline = Lifeline.objects.get(user=user,lifelineID =3)
+        except:
+            lifeline = Lifeline(user=user,lifelineID=3)
+            lifeline.save()
+        if (lifeline.lifelineCounter < 1):
+            arr = json.loads(player.lifelineArray)
+            if not(3 in arr):
+                arr.append(3)
+            player.lifelineArray = json.dumps(arr)
+            # life_line_array = json.loads(player.lifelineArray)
+            player.save()
+            flag+=1
     if (flag<=0):
         lifeline_dict={
             "activate":False,
             "streak ":streak
         }
-        
         player.lifelineActivationFlag = False
         player.save()
         return lifeline_dict
@@ -212,7 +203,7 @@ def check_lifeline_activate(user,player,submission,question):
 
 
 
-openai.api_key = "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"
+openai.api_key = "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"
 def chatbot_response(user_input):
     '''to give output from  CHATGPT'''
     response = openai.Completion.create(
@@ -226,11 +217,12 @@ def chatbot_response(user_input):
     )
     return response["choices"][0]["text"]
 
-
 def accuracy(submissions):
-    noofRightAns = submissions.filter(isCorrect = True)
+    '''to get accuracy of ans submitted'''
+    noofRightAns = len(submissions.filter(isCorrect = True))
     noOfQuestionsAttempted = len(submissions)
     accuracy = (noofRightAns/noOfQuestionsAttempted)*100
+    print(accuracy)
     return accuracy
 
 

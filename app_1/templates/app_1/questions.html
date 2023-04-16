@@ -3,7 +3,6 @@
 {{title}}
 {% endblock "title" %}
 
-
 {% block "codeblock" %}
 <div class="navbar-brand navvi timer" href="#" style="margin-left: 20px;">
     <div class="timer_container">
@@ -13,7 +12,6 @@
         </div>
       </div>                     
 </div>
-
 {% for message in messages %}
     <div class="alert alert-{{ message.tags }} alert-dismissable fade show" role="alert">
         <strong>Message:</strong>{{ message }}
@@ -63,12 +61,20 @@
     <h3>Lifeline activation details</h3>
     <button type="button" name="lifeline1" id="lifeline1btn" value=1 class="btn btn-primary" disabled>50/50 Lifeline1</button>
     <button type="button" name="lifeline2" id="lifeline2btn" value=2 class="btn btn-primary" disabled>Lifeline2</button>
-    <button type="button" name="lifeline3" id="lifeline3btn" value=3 class="btn btn-primary" disabled>Lifeline3</button>
-    
+    <button type="button" name="lifeline3" id="lifeline3btn" value=3 class="btn btn-primary" >Lifeline3</button> 
 </div>
-
+<div class = 'chatBotResponse' id = 'chatBotResponse' >
+    <label for="chatBotInput">Enter Question ?</label><br>
+    <input type="text" id="chatBotInput" name="chatBotInput"><br>
+    <input type="submit" value="Ask TARS ?" id = "chatBotBtn">
+    <div id = 'chatBotAns'>
+        ans :
+    </div>
+</div>
+<!-- for 2nd lifeline -->
 <div id="question_modal">
 </div>
+
 <script>
     
     x = setInterval(function() {    
@@ -245,8 +251,6 @@
         document.getElementById("option3").innerHTML = data.opt3
         document.getElementById("option4").innerHTML = data.opt4
         document.getElementById("question_number").innerHTML = data.question_number
-        
-        
     }
     
     function disableOtherBtn(lifeline_number) {
@@ -254,17 +258,16 @@
             if (i == Number(lifeline_number)) {
                 document.getElementById("lifeline"+lifeline_number+"btn").classList.add('btn-success');
             }
-                
             document.getElementById("lifeline"+i+"btn").disabled= true;
             
         }
     }
+    
 </script>
-
 <script type="text/javascript">
     // {% comment %} for lifeline activation {% endcomment %}
     
-        //for lifeline1
+        //for lifeline2
         $('#lifeline1btn').click(function() {
             var number = $('#lifeline1btn').val();
             console.log(number,'{{request.user}}')
@@ -288,6 +291,41 @@
         
 
 </script>
+
+<script type="text/javascript">
+    // {% comment %} for lifeline activation {% endcomment %}
+        //for lifeline3
+        function disableInput(){
+            document.getElementById('chatBotInput').disabled = true;
+            document.getElementById('chatBotBtn').style.display = "none";
+        }
+        $('#chatBotBtn').click(function() {
+            var chatBotInput = $('#chatBotInput').val();
+            console.log(chatBotInput, " " ,);
+            $.ajax({
+                method: 'POST',
+                url: '/lifelineActivation/',
+                data: {
+                    'chatBotInput': chatBotInput,
+                    'number' : 3,
+                    "user":'{{request.user}}',
+                    
+                },
+                success: function(data) {
+                    // Handle the response here
+                    console.log(data);
+                    var myNewDiv = '<p> ' + data.chatBotOutput + '<\p>';
+                        $('#chatBotAns').append(myNewDiv);disableInput();
+                    
+                },
+                error: function() {
+                    // Handle errors here
+                }
+            });
+        });
+        
+
+</script>
 <!-- <script>
     var disableNextBtn = document.getElementById("submit_btn");
     disableNextBtn.addEventListener("click" , ()=> {
@@ -296,6 +334,6 @@
         console.log("button clicked once")
         disableNextBtn.disabled = true;
     })
-</script> -->
+</script> --> 
 
 {% endblock "codeblock" %}

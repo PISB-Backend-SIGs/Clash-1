@@ -19,6 +19,7 @@ class Player(models.Model):
     lifelineActivationFlag = models.BooleanField(default=False)
     marksAdd=models.IntegerField(null=True,blank=True,default=4)  #marks add
     marksSubstract=models.IntegerField(null=True,blank=True,default=-2) #marks sub
+    chatBotResponse = models.TextField(blank = True) # store chatBot ques. and ans 3rd lifelinr
     
     def __str__(self) -> str:
         return f"{self.user}"
@@ -34,12 +35,10 @@ class Lifeline(models.Model):
 class Question(models.Model):
     questionID = models.IntegerField(unique=True,primary_key=True)
     questionText = models.TextField()
-
     questionOption1 = models.TextField()
     questionOption2 = models.TextField()
     questionOption3 = models.TextField()
     questionOption4 = models.TextField()
-
     questionAnswer = models.IntegerField()
 
     def __str__(self) -> str:

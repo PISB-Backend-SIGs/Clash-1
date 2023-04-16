@@ -181,6 +181,7 @@ def lifelineActivation(request):
         userr =request.POST.get("user")
         user = User.objects.get(username=userr)
         print(lifeline_id_from_frontend,"in url async")
+        player=Player.objects.get(user=user)
         if(int(lifeline_id_from_frontend)==1):
             lifeline = Lifeline.objects.get(user=user,lifelineID=lifeline_id_from_frontend)
             lifeline.isActive = True
@@ -188,7 +189,6 @@ def lifelineActivation(request):
             lifeline.save()
             return JsonResponse({"status":1})
         elif(int(lifeline_id_from_frontend)==2):
-            player=Player.objects.get(user=user)
             arr = json.loads(player.questionList)
             if not(player.questionNumber in arr):
                 arr.append(player.questionNumber)
@@ -213,7 +213,21 @@ def lifelineActivation(request):
             lifeline.lifelineCounter +=1
             lifeline.save()
             return JsonResponse({"status":1,"question":question_details})
-
+        elif(int(lifeline_id_from_frontend) == 3):
+            print(type(request.POST.get("chatBotInput")))
+            inputFromUser = request.POST.get("chatBotInput")
+            chatBotOutput = chatbot_response(inputFromUser)
+            print(chatBotOutput)
+            lifeline = Lifeline.objects.get(user=user,lifelineID=lifeline_id_from_frontend)
+            lifeline.isActive = True
+            lifeline.lifelineCounter +=1
+            lifeline.save()
+            player.chatBotResponse = json.dumps({"input" : inputFromUser , "output" : chatBotOutput})
+            player.save()
+            print(player.chatBotResponse)
+            print(type(player.chatBotResponse))
+            print(type(json.loads(player.chatBotResponse)))
+            return JsonResponse({"status":1 , "chatBotOutput" : chatBotOutput})
     else:
         return JsonResponse({"status":0})
 
