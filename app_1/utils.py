@@ -178,6 +178,8 @@ def check_lifeline_activate(user,player,submission,question):
             # life_line_array = json.loads(player.lifelineArray)
             player.save()
             flag+=1
+
+            
     if (flag<=0):
         lifeline_dict={
             "activate":False,
@@ -203,7 +205,7 @@ def check_lifeline_activate(user,player,submission,question):
 
 
 
-openai.api_key = "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"
+openai.api_key = "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"
 def chatbot_response(user_input):
     '''to give output from  CHATGPT'''
     response = openai.Completion.create(

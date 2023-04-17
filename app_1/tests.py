@@ -1,7 +1,7 @@
 from django.test import TestCase
 import openai
 # Create your tests here.
-openai.api_key = ""
+openai.api_key = "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"
 def chatbot_response(user_input):
     '''to give output from  CHATGPT'''
     response = openai.Completion.create(
@@ -16,4 +16,4 @@ def chatbot_response(user_input):
     return response["choices"][0]["text"]
 
 
-print(chatbot_response("What is 1 ?"))
+print(chatbot_response("what is error in this. 9 - 9 = 1"))

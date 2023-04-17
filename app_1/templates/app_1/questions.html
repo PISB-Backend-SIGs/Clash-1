@@ -61,14 +61,16 @@
     <h3>Lifeline activation details</h3>
     <button type="button" name="lifeline1" id="lifeline1btn" value=1 class="btn btn-primary" disabled>50/50 Lifeline1</button>
     <button type="button" name="lifeline2" id="lifeline2btn" value=2 class="btn btn-primary" disabled>Lifeline2</button>
-    <button type="button" name="lifeline3" id="lifeline3btn" value=3 class="btn btn-primary" >Lifeline3</button> 
+    <button type="button" name="lifeline3" id="lifeline3btn" value=3 class="btn btn-primary" disabled>Lifeline3</button> 
 </div>
-<div class = 'chatBotResponse' id = 'chatBotResponse' >
+<div class = 'chatBotResponse' id = 'chatBotResponse' style = "display: none">
     <label for="chatBotInput">Enter Question ?</label><br>
-    <input type="text" id="chatBotInput" name="chatBotInput"><br>
+    <textarea type="text" id="chatBotInput" name="chatBotInput" rows="4" cols="50" > {{chatBotOutput.input}}  </textarea>
+
     <input type="submit" value="Ask TARS ?" id = "chatBotBtn">
+    <!-- {{chatBotOutput.input}} -->
     <div id = 'chatBotAns'>
-        ans :
+        ans : {{chatBotOutput.output}}
     </div>
 </div>
 <!-- for 2nd lifeline -->
@@ -259,6 +261,7 @@
                 document.getElementById("lifeline"+lifeline_number+"btn").classList.add('btn-success');
             }
             document.getElementById("lifeline"+i+"btn").disabled= true;
+
             
         }
     }
@@ -295,9 +298,25 @@
 <script type="text/javascript">
     // {% comment %} for lifeline activation {% endcomment %}
         //for lifeline3
+        $('#lifeline3btn').click(()=>{
+            var btn = document.getElementById("chatBotResponse");
+            if (btn.style.display === "none") {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+
+        })
+
+        if('{{which_lifeline_is_active.lifelineID}}'==='3'){
+            console.log("enterd to deploy lifeline3")
+            disableInput();
+        }
+
         function disableInput(){
             document.getElementById('chatBotInput').disabled = true;
             document.getElementById('chatBotBtn').style.display = "none";
+            
         }
         $('#chatBotBtn').click(function() {
             var chatBotInput = $('#chatBotInput').val();
@@ -326,6 +345,7 @@
         
 
 </script>
+
 <!-- <script>
     var disableNextBtn = document.getElementById("submit_btn");
     disableNextBtn.addEventListener("click" , ()=> {

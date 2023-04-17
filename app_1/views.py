@@ -152,7 +152,12 @@ def questions(request):
 
     #To show user which lifeline are activate now for them
     try:
-        context["which_lifeline_is_active"]=Lifeline.objects.get(user=user,isActive=True)
+        which_lifeline_is_active = Lifeline.objects.get(user=user,isActive=True)
+        context["which_lifeline_is_active"]=which_lifeline_is_active
+        if (which_lifeline_is_active.lifelineID== 3): 
+            print(player.chatBotResponse)
+            print(type(json.loads(player.chatBotResponse)))
+            context["chatBotOutput"]=json.loads(player.chatBotResponse)
     except:
         pass
     context["life_line_dict"]=json.dumps(life_line_dict)
