@@ -10,9 +10,38 @@
     <div id = "test1">
 
     </div>
+
+
+    <input type="button" id="test" value="click">
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script >
+        // document.getElementById("test").addEventListener("click",(e)=>{
+        //     console.log("clicked")
+        //     e.target.disabled= true;
+        // })    
         
+        function btnss() {
+            $("#test").prop('disabled', true);
+        }
+        function btndd() {
+            $("#test").prop('disabled', false);
+        }
+        $(document).ready(function() {
+        $('#test').click(function() {
+            myFunction();
+        });
+    });
+
+
+    async function myFunction() {
+        console.log('Start');
+        btnss();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        btndd();
+        console.log('Delay');
+        console.log('End');
+        }
     </script>
 </body>
 

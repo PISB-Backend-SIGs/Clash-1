@@ -246,14 +246,37 @@
 
 </script>
 
-<script>
-    function myFunction() {
-      let text = "Press a button!\nEither OK or Cancel.";
-      if (confirm(text) == true) {
-        text = "You pressed OK!";
-      } else {
-        text = "You canceled!";
-      }
-      document.getElementById("demo").innerHTML = text;
-    }
+<script >
+    $(document).ready(function() {
+    $('#submit_btn').click(function() {
+        setTimeout(function() {
+            console.log('Delay');
+          }, 1000);
+        console.log("clicked")
+        $(this).prop('disabled', true);
+    });
+});
+
+
+function btnss() {
+    $("#submit_btn").prop('disabled', true);
+}
+function btndd() {
+    $("#submit_btn").prop('disabled', false);
+}
+$(document).ready(function() {
+$('#submit_btn').click(function() {
+    addDelay();
+});
+});
+
+
+async function addDelay() {
+console.log('Start');
+await new Promise(resolve => setTimeout(resolve, 1000));
+btnss();
+{% comment %} btndd(); {% endcomment %}
+console.log('Delay');
+console.log('End');
+}
 </script>

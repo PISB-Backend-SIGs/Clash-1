@@ -43,7 +43,6 @@ def home(request):
     return render(request,"app_1/home.html",context)
 
 
-
 #It restrict user to go back from result to question page 
 from django.views.decorators.cache import never_cache
 @never_cache

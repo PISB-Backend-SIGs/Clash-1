@@ -4,6 +4,7 @@ from django.utils import timezone
 from app_1.models import Lifeline
 from .models import Submission
 import openai
+from decouple import config
 size = 9     #size of question display to user
 rang = 53 #size of question in database
 def create_random_list(crnt_ques):
@@ -111,7 +112,7 @@ def set_time():
     start_time=timezone.now()
     dict={
         "start_time":start_time,
-        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=2),
+        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=20),
     }
     return dict
 
@@ -233,7 +234,7 @@ def check_lifeline_activate(user,player,submission,question):
 
 
 
-openai.api_key = "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"
+openai.api_key = config("OPENAI_KEY")
 def chatbot_response(user_input):
     '''to give output from  CHATGPT'''
     response = openai.Completion.create(

@@ -118,7 +118,11 @@
         },0)  
 </script>
 
-
+{% comment %} <script>
+    document.getElementById("submit_btn").addEventListener("click",(e)=>{
+        e.target.disabled= true;
+    })
+</script> {% endcomment %}
 
 
     {% include "ajax/questionsAjax.html" %}
