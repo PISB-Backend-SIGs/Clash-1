@@ -2,13 +2,15 @@ import json,random
 from datetime import datetime,timedelta
 from django.utils import timezone
 from app_1.models import Lifeline
+from .models import Submission
 import openai
-size = 10      #size of question display to user
-rang = size+1 #size of question in database
+size = 9     #size of question display to user
+rang = 53 #size of question in database
 def create_random_list(crnt_ques):
     que_list= random.sample(range(1,rang),size)
     print(que_list,"user total list",crnt_ques,"user crt ques")
-    que_list.remove(crnt_ques)
+    if crnt_ques in que_list:
+        que_list.remove(crnt_ques)
     que_list = json.dumps(que_list)
     # print(type(que_list))
     # print(que_list)
@@ -109,26 +111,44 @@ def set_time():
     start_time=timezone.now()
     dict={
         "start_time":start_time,
-        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=120),
+        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=2),
     }
     return dict
 
-
+def checkStreak(player):
+    submissions = Submission.objects.filter(player=player).all()
+    streak = 0
+    if (len(submissions)>0):
+        last3Submissions = submissions.order_by("-id")
+        # print(lifeLine1Submissions.values())
+        for i in range(len(submissions)):
+            if (last3Submissions[i].isCorrect):
+                streak+=1
+            else:
+                # if(i==0):
+                #     streak=0
+                #     break
+                # else:
+                #     break
+                break
+    return streak
+    
 
 def check_lifeline_activate(user,player,submission,question):
     '''decide the lifeline and pass its data'''
     flag=0
     opt_list=[-1]
-    streak = 0
-    if (len(submission)>=3):
-        lifeLine1Submissions = submission.order_by("-id")[:3]
-        # print(lifeLine1Submissions.values())
-        for i in range(3):
-            if (lifeLine1Submissions[i].points>0):
-                streak+=1
+    streak = checkStreak(player)
+    if streak>=3:
+        # lifeLine1Submissions = submission.order_by("-id")[:3]
+        # # print(lifeLine1Submissions.values())
+        # for i in range(3):
+        #     if (lifeLine1Submissions[i].points>0):
+        #         streak+=1
         # print("submission bool",submission[0].lifelineActivated,submission[0].lifelineActivated,submission[0].lifelineActivated)
         #condition for lifeline 1
-        if (streak == 3 and not(lifeLine1Submissions[0].lifelineActivated) and not(lifeLine1Submissions[1].lifelineActivated)  and not(lifeLine1Submissions[2].lifelineActivated)):
+        # if (streak == 3 and not(lifeLine1Submissions[0].lifelineActivated) and not(lifeLine1Submissions[1].lifelineActivated)  and not(lifeLine1Submissions[2].lifelineActivated)):
+        if (streak >= 3 ):
             # print("inside if of check lifeline")
             opt_list = [1,2,3,4]
             opt_list.remove(question.questionAnswer)
@@ -147,6 +167,14 @@ def check_lifeline_activate(user,player,submission,question):
             # life_line_array = json.loads(player.lifelineArray)
             player.save()
             flag+=1
+        else:
+            arr = json.loads(player.lifelineArray)
+            if (1 in arr):
+                arr.remove(1)
+            player.lifelineArray = json.dumps(arr)
+            # life_line_array = json.loads(player.lifelineArray)
+            player.save()
+
      #condition for lifeline 2  
     if(player.playerScore>7):
         try:
@@ -205,7 +233,7 @@ def check_lifeline_activate(user,player,submission,question):
 
 
 
-openai.api_key = "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"
+openai.api_key = "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"
 def chatbot_response(user_input):
     '''to give output from  CHATGPT'''
     response = openai.Completion.create(

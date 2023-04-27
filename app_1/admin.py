@@ -58,6 +58,6 @@ admin.site.register(Question,QuestionAdmin)
 
 class SubmissionAdmin(admin.ModelAdmin):
     list_display=[
-        "player","questionID","userOption","points","lifelineActivated"
+        "player","questionID","userOption","points","lifelineActivated","isCorrect"
     ]
 admin.site.register(Submission,SubmissionAdmin)

@@ -11,6 +11,7 @@ from datetime import datetime,timedelta
 from .decorators import *
 # Create your views here.
 
+from .addquestion import *
 #Users home page after login
 @login_required(login_url="signin")
 def home(request):
@@ -39,7 +40,7 @@ def home(request):
         else:
             messages.error(request, "Checkbox not checked")
             return redirect("home")
-    return render(request,"app_1\home.html",context)
+    return render(request,"app_1/home.html",context)
 
 
 
@@ -115,12 +116,13 @@ def questions(request):
                 player.save()
         except:
             #it is nessecory if user had not clicked any lifeline then for next lifeline lifeline 1 will be disable if it is activated
-            array=json.loads(player.lifelineArray )
-            if (1 in array):
-                submission.lifelineActivated = True
-                array.remove(1)
-            player.lifelineArray = json.dumps(array)
-            player.save()
+            # array=json.loads(player.lifelineArray )
+            # if (1 in array):
+            #     submission.lifelineActivated = True
+            #     array.remove(1)
+            # player.lifelineArray = json.dumps(array)
+            # player.save()
+            pass
             
         submission.save()
         player.save()
@@ -174,7 +176,9 @@ def questions(request):
     context["marking_scheme"]={"marks_add":player.marksAdd,"marks_sub":player.marksSubstract}
     context['player_time']=str(player.EndTime.astimezone())
     print("EndTime of user going to frontend ",player.EndTime.astimezone())
-    return render(request,"app_1\questions.html",context)
+
+    context["playerStreak"]=checkStreak(player)
+    return render(request,"app_1/questions.html",context)
 
 
 
@@ -248,10 +252,15 @@ def submit(request):
             return redirect("result")
         # u_option = request.POST.get("option")
         #To save user's responce
+
+        """When user\'s time is over test gets automatically 
+         submitted at that time there is chances that for that question users submission object is not get created 
+          so.... """
         try:
             submission = Submission.objects.get(player=player,questionID=player.questionNumber)
             u_option = submission.userOption
         except:
+            submission = Submission(player=player,questionID=player.questionNumber)
             u_option=None
 
         
@@ -290,11 +299,14 @@ def result(request):
     }
     player = Player.objects.get(user=request.user)
     context["player"]=player
-    return render(request,"app_1\\result.html",context)
+    return render(request,"app_1/result.html",context)
 
 
 
 def signin(request):
+    # add()
+    # changeOPtion()
+
     # print(player.questionList)
     # check(Question.objects.all())
     if request.method == "POST":   #For signin page only username and pass1 taken
@@ -334,7 +346,7 @@ def index(request):
     context={
         "title":"Home page"
     }
-    return render(request,"app_1\mainhome.html",context)
+    return render(request,"app_1/mainhome.html",context)
 
 # @login_required(login_url="signin")
 def signout(request):

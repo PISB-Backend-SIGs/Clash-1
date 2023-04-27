@@ -1,0 +1,259 @@
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    
+    console.log('{{which_lifeline_is_active.lifelineID}}')   //to get lifelien id
+    // const data = '{{ life_line_dict }}';
+    var data = JSON.parse("{{life_line_dict|escapejs}}");
+    console.log(data);
+    document.getElementById("marks-red").innerText = '{{marking_scheme.marks_sub}}';
+    if (data.activate){
+        for (let i = 0; i < data.lifeline_activate_number.length; i++) {
+            console.log("ddsddd","lifeline"+data.lifeline_activate_number[i]+"btn")
+            document.getElementById("lifeline"+data.lifeline_activate_number[i]+"btn").disabled = false;
+        }
+        
+        //document.getElementById("marks-red").innerText = data.marks_red;
+    }else{
+        console.log("enter in else",'{{marking_scheme.marks_sub}}')
+        // document.getElementById("marks-red").innerText = {{marking_scheme.marks_sub}}; 
+    }
+
+    //for lifeline 1
+    if('{{which_lifeline_is_active.lifelineID}}'==='1'){
+        console.log("enterd to deploy lifeline")
+        deploy_lifeline1();
+        disableOtherBtn(1);
+    }
+    //activate when user clickes lifeline1 and two options willlbe disable
+    {% comment %} document.getElementById("lifeline1btn").addEventListener("click",deploy_lifeline1); {% endcomment %}
+
+    function deploy_lifeline1() {
+        // document.getElementById("lifeline1btn").classList.add('btn-success');
+        // document.getElementById("lifeline1btn").disabled=true;
+
+        // document.getElementById("lifeline1btn").classList.remove('btn-primary');
+        disableOtherBtn(1);
+        document.getElementById("marks-red").innerText = data.marks_red;
+
+        for (let i = 0; i <2 ; i++){
+            var opt=document.getElementById("opt"+data.option_disable[i]);
+            opt.disabled = true ;
+            // opt.style.display = 'none';
+            
+        }
+        const radioInputs = document.querySelectorAll('input[type="radio"]');
+        radioInputs.forEach((input) => {
+        input.required = true;
+        
+        });
+    }
+
+    // {% comment %} for lifeline activation {% endcomment %}
+    
+        //for lifeline1
+        $('#lifeline1btn').click(function() {
+            if (confirm("Do you want to take lifeline 1 ") !=true){
+                return;
+            }
+            deploy_lifeline1();
+            var number = $('#lifeline1btn').val();
+            console.log(number,'{{request.user}}')
+            $.ajax({
+                method: 'POST',
+                url: '/lifelineActivation/',
+                data: {
+                    'number': number,
+                    "user":'{{request.user}}',
+                    
+                },
+                success: function(data) {
+                    // Handle the response here
+                    console.log(data);
+                },
+                error: function() {
+                    // Handle errors here
+                }
+            });
+        });
+
+        
+    //for lifeline2
+    let arr = JSON.parse('{{wrong_question_list}}')
+    console.log(arr,"wrong questions")
+    if (arr.length<=0){
+        document.getElementById("lifeline2btn").disabled = true;
+    }
+    document.getElementById("lifeline2btn").addEventListener("click",()=>{
+        let questionmodal = document.getElementById("question_modal");
+        for (let i = 0;i< arr.length; i++) {
+            deploy_lifeline2()
+            var button = document.createElement("button");
+            button.innerHTML = arr[i];
+            button.classList.add("ques");
+            button.classList.add("btn");
+            button.classList.add("btn-primary");
+            button.value = arr[i];
+            questionmodal.appendChild(button);
+            
+        
+            button.addEventListener("click", function(event) {
+                if (confirm("Do you want to take lifeline 2 ") !=true){
+                    return;
+                }
+                document.getElementById("question_modal").style.display = "none";
+                console.log("Button " + this.value + " clicked");
+                var number = $('#lifeline2btn').val();
+                console.log(number,'{{request.user}}',"this.value",this.value);
+                $.ajax({
+                    method: 'POST',
+                    url: '/lifelineActivation/',
+                    data: {
+                        'number': number,
+                        "user":'{{request.user}}',
+                        "ques_num":this.value
+                    },
+                    success: function(data) {
+                        // Handle the response here
+                
+                        console.log(data.question.question_title);
+                        // var tempVar = JSON.parse(data)
+                        console.log(typeof(data))
+                        // console.log(tempVar["question_title"]);
+                        // var radio = document.getElementsByName("option");
+                        // radio[data.user_answer-1].checked = true; 
+                        deploy_lifeline2(data)
+                        displayQuestions(data.question)
+                    
+
+                    },
+                    error: function() {
+                        // Handle errors here
+                    }
+                });
+
+            });
+        }
+    });
+    if('{{which_lifeline_is_active.lifelineID}}'==='2'){
+        console.log("enterd to deploy lifeline2")
+        deploy_lifeline2();
+        disableOtherBtn(2);
+    }
+    function deploy_lifeline2() {
+        // document.getElementById("lifeline2btn").classList.add('btn-success');
+        // document.getElementById("lifeline1btn").disabled = true;
+        // document.getElementById("lifeline2btn").disabled = true;
+        // document.getElementById("lifeline3btn").disabled = true;
+        disableOtherBtn(2);
+        document.getElementById("marks-red").innerText = '-6';
+
+        //if user select 2nd lifeline at last btn should not be submit it should next
+        var sub_btn = document.getElementById("submit_btn");
+        if(sub_btn.name === "nsubmit"){
+            sub_btn.name = "next";
+            sub_btn.innerHTML = "Next";
+
+        }
+
+    }
+    function displayQuestions(data){
+        document.getElementById("question_title").innerHTML = data.question_title
+        document.getElementById("option1").innerHTML = data.opt1
+        document.getElementById("option2").innerHTML = data.opt2
+        document.getElementById("option3").innerHTML = data.opt3
+        document.getElementById("option4").innerHTML = data.opt4
+        document.getElementById("question_number").innerHTML = data.question_number
+    }
+    
+
+    //this is function to dispable other btns when any lifeline is activate 
+    //for 3rd it will undisable as it is toggling btn
+    function disableOtherBtn(lifeline_number) {
+        for (let i = 1; i <= 3; i++) {
+            if (i == Number(lifeline_number)) {
+                document.getElementById("lifeline"+lifeline_number+"btn").classList.add('btn-success');
+            }
+            document.getElementById("lifeline"+i+"btn").disabled= true;
+
+            
+        }
+        if (3 == Number(lifeline_number)) {
+            document.getElementById("lifeline"+3+"btn").disabled= false;
+        }
+    }
+    
+</script>
+
+
+<script type="text/javascript">
+    // {% comment %} for lifeline activation {% endcomment %}
+        //for lifeline3
+        $('#lifeline3btn').click(()=>{
+            var btn = document.getElementById("chatBotResponse");
+            if (btn.style.display === "none") {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+
+        })
+
+        if('{{which_lifeline_is_active.lifelineID}}'==='3'){
+            console.log("enterd to deploy lifeline3")
+            disableInput();
+            disableOtherBtn(3);
+        }
+
+        function disableInput(){
+            document.getElementById('chatBotInput').disabled = true;
+            document.getElementById('chatBotBtn').style.display = "none";
+            
+        }
+        $('#chatBotBtn').click(function() {
+            
+            if (confirm("Do you want to take lifeline 3 ") !=true){
+                return;
+            }
+            var chatBotInput = $('#chatBotInput').val();
+            console.log(chatBotInput, " " ,);
+            disableInput();
+            disableOtherBtn(3);
+            $.ajax({
+                method: 'POST',
+                url: '/lifelineActivation/',
+                data: {
+                    'chatBotInput': chatBotInput,
+                    'number' : 3,
+                    "user":'{{request.user}}',
+                    
+                },
+                success: function(data) {
+                    // Handle the response here
+                    console.log(data);
+                    var myNewDiv = '<p> ' + data.chatBotOutput + '<\p>';
+                        $('#chatBotAns').append(myNewDiv);disableInput();
+                    
+                },
+                error: function() {
+                    // Handle errors here
+                    alert("Something went wrong");
+                }
+            });
+        });
+        
+
+</script>
+
+<script>
+    function myFunction() {
+      let text = "Press a button!\nEither OK or Cancel.";
+      if (confirm(text) == true) {
+        text = "You pressed OK!";
+      } else {
+        text = "You canceled!";
+      }
+      document.getElementById("demo").innerHTML = text;
+    }
+</script>
