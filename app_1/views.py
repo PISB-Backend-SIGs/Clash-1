@@ -141,8 +141,8 @@ def questions(request):
         
         
     #This may have to change as if the user used lifeline2 at last question btn visible to user is submit not next for last question
-    if len(Submission.objects.filter(player=player))>=9:
-        print("printed when submission is at 10",len(Submission.objects.filter(player=player)))
+    if len(json.loads(player.questionList))<=0:
+        print("printed when There is no question ",len(json.loads(player.questionList)))
         context["flag"]=False
 
     try:
@@ -197,10 +197,11 @@ def lifelineActivation(request):
             lifeline.save()
             return JsonResponse({"status":1})
         elif(int(lifeline_id_from_frontend)==2):
-            arr = json.loads(player.questionList)
-            if not(player.questionNumber in arr):
-                arr.append(player.questionNumber)
-                player.questionList = json.dumps(arr)
+            #This is for when user uses 2nd lifline on question that will show him after lifeline use
+            # arr = json.loads(player.questionList)
+            # if not(player.questionNumber in arr):
+            #     arr.append(player.questionNumber)
+            #     player.questionList = json.dumps(arr)
             ques_num =int(request.POST.get("ques_num"))
             print(type(ques_num)," Type of question number comming from frontend")
             player.questionIndex -=1
@@ -308,10 +309,15 @@ def signin(request):
 
     # print(player.questionList)
     # check(Question.objects.all())
+    # user=User.objects.get(username="me69")
+    # player=Player.objects.get(user=user)
+    # print(type(player.questionList))
+    # print(type(json.loads(player.questionList)))
     if request.method == "POST":   #For signin page only username and pass1 taken
         username = request.POST['username']
         pass1 = request.POST['pass1']
-        
+        isTeam = request.POST['isTeam']
+        print("isTEam ",isTeam,type(isTeam))
         user = authenticate(username=username, password= pass1)         #authenticate user here
 
         if user is not None :  #IF correct credentials given
@@ -319,7 +325,7 @@ def signin(request):
             try:
                 player = Player.objects.get(user=user)
             except:
-                player = Player(user=user)
+                player = Player(user=user,isTeam=isTeam)
                 player.save()
                 player = Player.objects.get(user=user)
             # print(player,player.isEnded)

@@ -147,7 +147,7 @@
         // document.getElementById("lifeline2btn").disabled = true;
         // document.getElementById("lifeline3btn").disabled = true;
         disableOtherBtn(2);
-        document.getElementById("marks-red").innerText = '-6';
+        document.getElementById("marks-red").innerText = '-4';
 
         //if user select 2nd lifeline at last btn should not be submit it should next
         var sub_btn = document.getElementById("submit_btn");
@@ -211,6 +211,11 @@
             document.getElementById('chatBotBtn').style.display = "none";
             
         }
+        function enableInput(){
+            document.getElementById('chatBotInput').disabled = false;
+            document.getElementById('chatBotBtn').style.display = "block";
+            
+        }
         $('#chatBotBtn').click(function() {
             
             if (confirm("Do you want to take lifeline 3 ") !=true){
@@ -239,6 +244,7 @@
                 error: function() {
                     // Handle errors here
                     alert("Something went wrong");
+                    enableInput();
                 }
             });
         });
@@ -247,7 +253,7 @@
 </script>
 
 <script >
-    $(document).ready(function() {
+    {% comment %} $(document).ready(function() {
     $('#submit_btn').click(function() {
         setTimeout(function() {
             console.log('Delay');
@@ -255,7 +261,7 @@
         console.log("clicked")
         $(this).prop('disabled', true);
     });
-});
+}); {% endcomment %}
 
 
 function btnss() {
@@ -264,11 +270,11 @@ function btnss() {
 function btndd() {
     $("#submit_btn").prop('disabled', false);
 }
-$(document).ready(function() {
+{% comment %} $(document).ready(function() {
 $('#submit_btn').click(function() {
     addDelay();
 });
-});
+}); {% endcomment %}
 
 
 async function addDelay() {

@@ -8,7 +8,8 @@ from decouple import config
 size = 9     #size of question display to user
 rang = 53 #size of question in database
 def create_random_list(crnt_ques):
-    que_list= random.sample(range(1,rang),size)
+    que_list= [x for x in range(1,rang+1)]
+    random.shuffle(que_list)
     print(que_list,"user total list",crnt_ques,"user crt ques")
     if crnt_ques in que_list:
         que_list.remove(crnt_ques)
@@ -99,7 +100,7 @@ def check_answer(u_answer,actual_answer,marks_dict,player,user):
                 score["score"]=-5
             if (lifeline.lifelineID==2):
                 # score["marks_sub_to_player"]= -5
-                score["score"]=-6
+                score["score"]=-4
         except:
             pass
     return score
@@ -193,7 +194,7 @@ def check_lifeline_activate(user,player,submission,question):
             flag+=1
 
     # LifeLine3
-    if( len(submission) > 5 and accuracy(submission) > 50):
+    if( len(submission) > 2 and accuracy(submission) > 50):
         try:
             lifeline = Lifeline.objects.get(user=user,lifelineID =3)
         except:
@@ -235,6 +236,7 @@ def check_lifeline_activate(user,player,submission,question):
 
 
 openai.api_key = config("OPENAI_KEY")
+
 def chatbot_response(user_input):
     '''to give output from  CHATGPT'''
     response = openai.Completion.create(

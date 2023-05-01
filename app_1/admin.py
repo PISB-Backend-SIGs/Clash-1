@@ -27,6 +27,7 @@ from .forms import *
 class PlayerAdmin(admin.ModelAdmin):
     list_display=[
         "user",
+        "isTeam",
         "playerScore",
         "questionList",
         "questionIndex",

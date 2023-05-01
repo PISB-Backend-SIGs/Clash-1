@@ -8,6 +8,12 @@
 
     <form action="" method="POST">
     {% csrf_token %}
+        <div>
+            <input type="radio" name="isTeam" id="Team" value="True">
+            <label for="Team">Team</label>
+            <input type="radio" name="isTeam" id="Individual" value="False" checked>
+            <label for="Individual">Individual</label>
+        </div>
         <label for="">Username</label>
         <input type="text" id="username" name="username" placeholder="Enter your username" required>
         <br>

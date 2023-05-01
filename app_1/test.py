@@ -4,8 +4,10 @@ import openai
 
 # print(random.randint(1,11))
 
-que_list= random.sample(range(1,11),10)
-que_list.remove(9)
+# que_list= random.sample(range(1,53),53)
+que_list = [x for x in range(1,54)]
+# que_list.remove(9)
+# random.shuffle(que_list)
 print(que_list)
 
 # openai.api_key = "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"

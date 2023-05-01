@@ -20,7 +20,11 @@ class Player(models.Model):
     marksAdd=models.IntegerField(null=True,blank=True,default=4)  #marks add
     marksSubstract=models.IntegerField(null=True,blank=True,default=-2) #marks sub
     chatBotResponse = models.TextField(blank = True) # store chatBot ques. and ans 3rd lifelinr
-    
+    isTeamChoices = [
+        (True,"True"),
+        (False,"False")
+    ]
+    isTeam = models.BooleanField(choices=isTeamChoices)
     def __str__(self) -> str:
         return f"{self.user}"
     
