@@ -1,17 +1,21 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+
+
 <script>
     
     console.log('{{which_lifeline_is_active.lifelineID}}')   //to get lifelien id
     // const data = '{{ life_line_dict }}';
     var data = JSON.parse("{{life_line_dict|escapejs}}");
     console.log(data);
-    document.getElementById("marks-red").innerText = '{{marking_scheme.marks_sub}}';
+    document.getElementById("neg").innerText = '{{marking_scheme.marks_sub}}';
     if (data.activate){
         for (let i = 0; i < data.lifeline_activate_number.length; i++) {
-            console.log("ddsddd","lifeline"+data.lifeline_activate_number[i]+"btn")
+            console.log("activated lifelines ","lifeline"+data.lifeline_activate_number[i]+"btn")
             document.getElementById("lifeline"+data.lifeline_activate_number[i]+"btn").disabled = false;
+            document.getElementById("lifeline"+data.lifeline_activate_number[i]+"btn").style.color = "";
+            
         }
         
         //document.getElementById("marks-red").innerText = data.marks_red;
@@ -20,9 +24,15 @@
         // document.getElementById("marks-red").innerText = {{marking_scheme.marks_sub}}; 
     }
 
+
+
+
+
+
+
     //for lifeline 1
     if('{{which_lifeline_is_active.lifelineID}}'==='1'){
-        console.log("enterd to deploy lifeline")
+        console.log("enterd to deploy lifeline one")
         deploy_lifeline1();
         disableOtherBtn(1);
     }
@@ -34,13 +44,15 @@
         // document.getElementById("lifeline1btn").disabled=true;
 
         // document.getElementById("lifeline1btn").classList.remove('btn-primary');
+        console.log("Enter in lifeline1")
         disableOtherBtn(1);
-        document.getElementById("marks-red").innerText = data.marks_red;
+        //to display negative marks for regular questions without lifelines  
+        document.getElementById("neg").innerText = data.marks_red;
 
         for (let i = 0; i <2 ; i++){
-            var opt=document.getElementById("opt"+data.option_disable[i]);
-            opt.disabled = true ;
-            // opt.style.display = 'none';
+            console.log("option ",'OPT'+data.option_disable[i]);
+            var eleg =document.getElementById('OPT'+data.option_disable[i]);
+            eleg.innerText="";
             
         }
         const radioInputs = document.querySelectorAll('input[type="radio"]');
@@ -59,7 +71,7 @@
             }
             deploy_lifeline1();
             var number = $('#lifeline1btn').val();
-            console.log(number,'{{request.user}}')
+            console.log("lifeline number ",number,"user ",'{{request.user}}')
             $.ajax({
                 method: 'POST',
                 url: '/lifelineActivation/',
@@ -70,60 +82,88 @@
                 },
                 success: function(data) {
                     // Handle the response here
+                    console.log("successfully lifeline one activatd")
                     console.log(data);
                 },
                 error: function() {
                     // Handle errors here
+                    alert("Something went wrong.....")
                 }
             });
         });
 
         
+
+
+
     //for lifeline2
     let arr = JSON.parse('{{wrong_question_list}}')
     console.log(arr,"wrong questions")
+
+    //this will diactivate btn if there is no wrong questions 
     if (arr.length<=0){
         document.getElementById("lifeline2btn").disabled = true;
+        document.getElementById("lifeline2btn").style.color = "grey";
     }
     document.getElementById("lifeline2btn").addEventListener("click",()=>{
+        console.log("Enter in 2nd lifeline ")
         let questionmodal = document.getElementById("question_modal");
+        questionmodal.innerText = "";  //to clear question modal
+        deploy_lifeline2()
+        document.getElementById("lifeline2btn").disabled= false;
         for (let i = 0;i< arr.length; i++) {
-            deploy_lifeline2()
+            
+            //on click travel it take time so wo open nahi hora to uske liye ye kiya
+            
+            //<button class="pastq" >1</button>
             var button = document.createElement("button");
             button.innerHTML = arr[i];
-            button.classList.add("ques");
-            button.classList.add("btn");
-            button.classList.add("btn-primary");
+            button.classList.add("pastq");
             button.value = arr[i];
+            //button.setAttribute('type', 'radio');
+            //button.setAttribute('name', 'backQuestionNumber');
             questionmodal.appendChild(button);
-            
-        
-            button.addEventListener("click", function(event) {
+
+            //to get values of question for 2nd lifeline
+            const wrongQuestionNumber = document.querySelectorAll(".pastq");
+            var selectedValuesOfQuestionNumber;
+          
+            wrongQuestionNumber.forEach(QuestionNumber => {
+               QuestionNumber.addEventListener("click", function() {
+                    selectedValuesOfQuestionNumber = this.value
+                console.log(selectedValuesOfQuestionNumber); // Prints the array of selected button values to the console
+                // Do something with the selectedValues array here
+              });
+            });
+        }   
+            var travelBtn = document.getElementById("travel");
+            travelBtn.addEventListener("click", function(event) {
                 if (confirm("Do you want to take lifeline 2 ") !=true){
+                    enableOtherBtn();
                     return;
                 }
-                document.getElementById("question_modal").style.display = "none";
-                console.log("Button " + this.value + " clicked");
+                document.getElementById("avoid").click();
+                console.log("Question selected by user " , selectedValuesOfQuestionNumber , " clicked","type ",typeof(selectedValuesOfQuestionNumber));
                 var number = $('#lifeline2btn').val();
-                console.log(number,'{{request.user}}',"this.value",this.value);
+                console.log(number,'{{request.user}}',"selected question number ",this.value);
                 $.ajax({
                     method: 'POST',
                     url: '/lifelineActivation/',
                     data: {
                         'number': number,
                         "user":'{{request.user}}',
-                        "ques_num":this.value
+                        "ques_num":selectedValuesOfQuestionNumber
                     },
                     success: function(data) {
                         // Handle the response here
                 
                         console.log(data.question.question_title);
                         // var tempVar = JSON.parse(data)
-                        console.log(typeof(data))
+                        console.log(data)
                         // console.log(tempVar["question_title"]);
                         // var radio = document.getElementsByName("option");
                         // radio[data.user_answer-1].checked = true; 
-                        deploy_lifeline2(data)
+                        //deploy_lifeline2()
                         displayQuestions(data.question)
                     
 
@@ -134,12 +174,12 @@
                 });
 
             });
-        }
+        
     });
     if('{{which_lifeline_is_active.lifelineID}}'==='2'){
         console.log("enterd to deploy lifeline2")
         deploy_lifeline2();
-        disableOtherBtn(2);
+        //disableOtherBtn(2);
     }
     function deploy_lifeline2() {
         // document.getElementById("lifeline2btn").classList.add('btn-success');
@@ -147,40 +187,51 @@
         // document.getElementById("lifeline2btn").disabled = true;
         // document.getElementById("lifeline3btn").disabled = true;
         disableOtherBtn(2);
-        document.getElementById("marks-red").innerText = '-4';
+        document.getElementById("neg").innerText = '-4';
 
         //if user select 2nd lifeline at last btn should not be submit it should next
-        var sub_btn = document.getElementById("submit_btn");
-        if(sub_btn.name === "nsubmit"){
-            sub_btn.name = "next";
-            sub_btn.innerHTML = "Next";
-
-        }
+        //temporary i prash commented it 
+        //var sub_btn = document.getElementById("submit_btn");
+        //if(sub_btn.name === "nsubmit"){
+        //    sub_btn.name = "next";
+        //    sub_btn.innerHTML = "Next";
+        //}
 
     }
-    function displayQuestions(data){
-        document.getElementById("question_title").innerHTML = data.question_title
-        document.getElementById("option1").innerHTML = data.opt1
-        document.getElementById("option2").innerHTML = data.opt2
-        document.getElementById("option3").innerHTML = data.opt3
-        document.getElementById("option4").innerHTML = data.opt4
-        document.getElementById("question_number").innerHTML = data.question_number
+    function displayQuestions(datal){
+        document.getElementById("question_title").innerText = datal.question_title
+        document.getElementById("opt1").innerText = datal.opt1
+        document.getElementById("opt2").innerText = datal.opt2
+        document.getElementById("opt3").innerText = datal.opt3
+        document.getElementById("opt4").innerText = datal.opt4
+        document.getElementById("questionNumber").innerText = datal.question_number
     }
     
 
     //this is function to dispable other btns when any lifeline is activate 
     //for 3rd it will undisable as it is toggling btn
     function disableOtherBtn(lifeline_number) {
-        for (let i = 1; i <= 3; i++) {
-            if (i == Number(lifeline_number)) {
-                document.getElementById("lifeline"+lifeline_number+"btn").classList.add('btn-success');
-            }
+        for (let i = 1; i <=3; i++) {
             document.getElementById("lifeline"+i+"btn").disabled= true;
+            console.log("i=",i,"lifeline_number",lifeline_number)
+            if (i === Number(lifeline_number)) {
+                console.log("lifeline number to check which is activated but color on othr btns ",lifeline_number)
+                //document.getElementById("lifeline"+lifeline_number+"btn").classList.add('btn-success');
+            } else{
+            document.getElementById("lifeline"+i+"btn").style.color = "grey";
 
-            
+            }
+
         }
-        if (3 == Number(lifeline_number)) {
+        if (3 === Number(lifeline_number)) {
             document.getElementById("lifeline"+3+"btn").disabled= false;
+        }
+    };
+    function enableOtherBtn() {
+        console.log("enavleother btn");
+        for (let i = 1; i <= 3; i++) {
+            document.getElementById("lifeline"+i+"btn").disabled= false;
+            document.getElementById("lifeline"+i+"btn").classList.remove('btn-success');
         }
     }
     
@@ -190,7 +241,7 @@
 <script type="text/javascript">
     // {% comment %} for lifeline activation {% endcomment %}
         //for lifeline3
-        $('#lifeline3btn').click(()=>{
+        {% comment %} $('#lifeline3btn').click(()=>{
             var btn = document.getElementById("chatBotResponse");
             if (btn.style.display === "none") {
                 btn.style.display = "block";
@@ -198,7 +249,7 @@
                 btn.style.display = "none";
             }
 
-        })
+        }) {% endcomment %}
 
         if('{{which_lifeline_is_active.lifelineID}}'==='3'){
             console.log("enterd to deploy lifeline3")
@@ -207,22 +258,23 @@
         }
 
         function disableInput(){
-            document.getElementById('chatBotInput').disabled = true;
-            document.getElementById('chatBotBtn').style.display = "none";
+            document.getElementById('userQuestion').disabled = true;
+            document.getElementById('my-button').style.display = "none";
             
         }
         function enableInput(){
-            document.getElementById('chatBotInput').disabled = false;
-            document.getElementById('chatBotBtn').style.display = "block";
+            document.getElementById('userQuestion').disabled = false;
+            document.getElementById('my-button').style.display = "block";
             
         }
-        $('#chatBotBtn').click(function() {
+        $('#my-button').click(function() {
             
             if (confirm("Do you want to take lifeline 3 ") !=true){
                 return;
             }
-            var chatBotInput = $('#chatBotInput').val();
-            console.log(chatBotInput, " " ,);
+            var chatBotInput = $('#userQuestion').val();
+            console.log(chatBotInput, "chatbot question " ,);
+            
             disableInput();
             disableOtherBtn(3);
             $.ajax({
@@ -237,8 +289,12 @@
                 success: function(data) {
                     // Handle the response here
                     console.log(data);
-                    var myNewDiv = '<p> ' + data.chatBotOutput + '<\p>';
-                        $('#chatBotAns').append(myNewDiv);disableInput();
+                    let chatbotPTag = document.getElementById("lorem");
+                    chatbotPTag.innerText="";
+                    chatbotPTag.innerText=data.chatBotOutput;
+                    //var myNewDiv = '<p> ' + data.chatBotOutput + '<\p>';
+                    //    $('#chatBotAns').append(myNewDiv);
+                    disableInput();
                     
                 },
                 error: function() {

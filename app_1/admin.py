@@ -53,7 +53,7 @@ admin.site.register(Lifeline,LifelineAdmin)
 
 class QuestionAdmin(admin.ModelAdmin):
     list_display=[
-        "questionID","questionAnswer"
+        "questionID","questionNumber","questionAnswer"
     ]
 admin.site.register(Question,QuestionAdmin)
 

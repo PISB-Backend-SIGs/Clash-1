@@ -28,8 +28,9 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('signout/', views.signout, name='signout'),
     path('settingwale/', views.settingwale, name='settingwale'),
-    path('test/', views.test, name='test'),
+    path('leaderboard/', views.leaderboard, name='leaderboard'),
     path('test1/', views.test1, name='test1'),
+    path('getJSLeaderboard/', views.getJSLeaderboard, name='getJSLeaderboard'),
     
 ] 
  

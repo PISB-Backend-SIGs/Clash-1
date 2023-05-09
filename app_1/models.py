@@ -12,6 +12,7 @@ class Player(models.Model):
     questionIndex = models.IntegerField(default=1)                                   #number visible to user sequentialy
     isStarted=models.BooleanField(default=False)              #to check user started quizz or not 
     isEnded=models.BooleanField(default=False)              #to check user started quizz or not 
+    rank = models.IntegerField(blank=True,null=True)
     previousQuestion = models.IntegerField(blank=True,default=0)
     startTime = models.DateTimeField(null=True,blank=True)  #actual starting time
     EndTime = models.DateTimeField(null=True,blank=True)  #game current time
@@ -24,7 +25,13 @@ class Player(models.Model):
         (True,"True"),
         (False,"False")
     ]
-    isTeam = models.BooleanField(choices=isTeamChoices)
+    isTeam = models.BooleanField(choices=isTeamChoices,default=True)
+    isJuniorChoices = [
+        (True,"True"),
+        (False,"False")
+    ]
+    isJunior = models.BooleanField(choices=isJuniorChoices,default=True)
+
     def __str__(self) -> str:
         return f"{self.user}"
     
@@ -38,13 +45,14 @@ class Lifeline(models.Model):
 
 class Question(models.Model):
     questionID = models.IntegerField(unique=True,primary_key=True)
+    questionNumber = models.IntegerField(null=True)
     questionText = models.TextField()
     questionOption1 = models.TextField()
     questionOption2 = models.TextField()
     questionOption3 = models.TextField()
     questionOption4 = models.TextField()
     questionAnswer = models.IntegerField()
-
+    forJunior = models.BooleanField(default=True)
     def __str__(self) -> str:
         return f"{self.questionID}"
 

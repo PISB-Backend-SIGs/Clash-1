@@ -1,0 +1,71 @@
+/* NavBar CSS */
+@font-face {
+    font-family: solthin;
+    src: url(solthinregular.ttf);
+  }
+  .clash-text{
+    font-family: 'solthin';
+  }
+  .wrapper{
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content:flex-end !important;
+      background: #111925;
+      background-color: #1a2433; 
+  }
+  .pisblogo{
+    float: right; 
+    margin-left: auto; 
+    overflow: hidden;
+  }
+  
+  .Navbar2{
+    height: auto;
+  }
+  
+  .logo{
+    border-right: 3px solid #D28511;
+    padding-right: 20px;
+  }
+  .profile{
+    display: flex;
+    flex-wrap: wrap;
+    width: auto;
+    align-self: center;
+    margin: 0px auto;
+  }
+  
+  .collapse{
+    display: flex;
+    justify-content: end;
+    padding: 0 20px;
+  }
+  .navbar{
+    padding: 0;
+}
+.nav-link{
+padding: auto 40px;
+margin: auto 14px;
+}
+  
+  
+  
+.navbar-dark .navbar-nav .nav-link.active, .navbar-dark .navbar-nav .show>.nav-link:hover {
+color: #c5e1f0;
+/* border: 2px solid #39035b;
+border-radius: 7px; */
+}
+#navlink:hover{
+color: aqua;
+text-shadow:2px 2px 10px #0c5c51;
+background-color: #0c2f42;
+  
+}
+.navbar-nav {
+-ms-flex-direction: row;
+flex-direction: row;
+width: 100%;
+justify-content: flex-end;
+margin-right: 20px;
+}

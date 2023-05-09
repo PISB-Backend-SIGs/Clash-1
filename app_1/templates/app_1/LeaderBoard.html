@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/LeaderBoard.css' %}">
+    <title>Leaderboard</title>
+</head>
+<body>
+    <div class="Navbar2">
+      <nav class="navbar navbar-expand-lg navbar-dark ">
+        <a href="#">
+          <img src="clashwhite.png" alt="RC" height="52px" width="102px">
+        </a>
+        <h2 class="timer1" id="countdown">0:00:00</h2>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+         
+          <a class="nav-item nav-link active" id="navlink" href="instructions.html">Instructions</a>
+          <a class="nav-item nav-link active" id="navlink" href="MCQFinal.html">MCQ page</a>
+          <a class="nav-item nav-link active " id="navlink" href="resultPage.html">Result</a>
+          <!-- <a class="nav-item nav-link active" id="navlink" href="Leaderboard3.html">Leaderboard  </a> -->
+          
+        </div>
+        <img src="#" id="ieeelogo" alt="PISB IEEE">
+        </nav>
+        
+          
+    </div>
+    <div class="Head">
+        <H1 >Leaderboard</H1>
+    </div>
+    
+    <div class="searchbar">
+      <form class="shbtn">
+        <button class="shion"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+        </svg></ion-icon></button>
+        <input type="text" id="input" placeholder="Search" onkeyup="searchElement()">
+        <label for="input" aria-placeholder="Search" ></label>
+      </form>
+      <div class="senior" id="senior">
+        <input type="radio" name="options" id="option1" value=True>
+                    <label class="labelJ label4" for="option1">Junior</label>
+        <input type="radio" name="options" id="option2" value=False>
+                    <label class="labelS label4" for="option2">Senior</label>
+      </div>
+    </div>
+  
+
+    <!-- <div class="input-group">
+      <form action="click">
+      <div class="form-outline">
+        <input type="search" placeholder="Search" id="form1" class="form-control" />
+        </form> --
+        <form class="d-flex" action="onclick">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        </form>
+      </div>
+      
+      <button type="button" class="btn" id="btns" data-toggle="collapse">
+        <i class="fas fa-search"></i>
+        <img src="https://th.bing.com/th/id/R.d54acd6d0779cf03bfed88f06d6ef15d?rik=TJ4PHSIWct46Cw&riu=http%3a%2f%2fwww.jpgroupclassic.com%2fgfx%2fsearch-classic.png&ehk=Sr983x3hvknfDLxyotNK8v2J6xHzb42gzwIItw1Mezg%3d&risl=&pid=ImgRaw&r=0" width="30px" height="30px" > 
+        <ion-icon name="search"><img src="https://unpkg.com/ionicons@5.5.2/dist/svg/search.svg" alt="" height="17px"></ion-icon>
+        <img src="https://th.bing.com/th/id/R.d03d66f16412c825cad6f8c59b8db3eb?rik=Pja5v1ZiO8UeMg&riu=http%3a%2f%2fwww.clker.com%2fcliparts%2fp%2fQ%2fi%2fK%2fZ%2fv%2fsearch-icon-hi.png&ehk=%2f7nKaBm8Ks%2bwB9Begkqo1TYrVvbkRhVAnGjN4wCteTU%3d&risl=&pid=ImgRaw&r=0" width="30px" height="30px" alt="">
+      </button> 
+    </div> 
+    <button class="refresh"><img src="https://cdn.onlinewebfonts.com/svg/img_72363.png" width="17px" height="18px"></button>
+  </div> -->
+
+    <!-- <form class="d-flex">
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+     
+    </form> -->
+
+    <div class="Heading">
+      <p class="current-user-status">Your Rank</p>
+      <!-- <p class="Reload">Page Reloads in: 0:00:00</p> -->
+      <table class="current-user-rank">
+        <thead id="current-user-rank">
+           <th>
+            Page Reloads <br>In
+           </th>
+        </thead>
+        <tbody id="current-user-rank">
+          <td>
+            0:00:00
+          </td>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="user">
+    <table class="leader-table table table-hover" >
+      <thead>
+        <tr class="usera" bgcolor="#13303E">
+          <th scope="col" class="userb">Rank</th>
+          <th scope="col" class="userb">Name</th>
+          <th scope="col" class="userb">Score</th>
+          <th scope="col" class="userb">Attempts</th>
+          {% comment %} <th scope="col" class="userb">Time</th> {% endcomment %}
+        </tr>
+      </thead>
+    <tr class="user-rank" bgcolor="1F0F0F">
+      <td class="user-status" scope="row" style="border-left:3px solid #c5e1f0; border-top-color: #c5e1f0; border-bottom-color: #c5e1f0;">{{player.rank}}</td>
+      <td class="user-status" style="border-top-color: #c5e1f0; border-bottom-color: #c5e1f0;">{{request.user}}</td>
+      <td class="user-status" style="border-top-color: #c5e1f0; border-bottom-color: #c5e1f0;">{{player.playerScore}} </td>
+      <td class="user-status" style="border-top-color: #c5e1f0; border-bottom-color: #c5e1f0;">{{player.questionIndex}} </td>
+      {% comment %} <td style="border-top-color: #c5e1f0; border-bottom-color: #c5e1f0; border-right-color: #c5e1f0;">0:21:00</td>                     {% endcomment %}
+    </tr>
+  </table>
+  </div>
+  
+ 
+     
+  <div class="Search">
+    <p class="orank">Overall Rankings</p>
+    </div>
+
+  <div class="tble">
+    <table class="leader-table table table-hover" id="myTable" bgcolor = "#2E363B">
+      <thead >
+        <tr class="usera" bgcolor="#13303E">
+          <th scope="col" class="userb">Rank</th>
+          <th scope="col" class="userb">Name</th>
+          <th scope="col" class="userb">Score</th>
+          <th scope="col" class="userb">Attempts</th>
+          {% comment %} <th scope="col" class="userb">Time</th> {% endcomment %}
+        </tr>
+      </thead>
+      <tbody id="myTable">
+        <!-- <tr>
+          <td scope="row" /*class="gold"*/ >1st</td>
+          <td /*class="gold"*/ >Mark</td>
+          <td /*class="gold"*/ >100</td>
+          <td /*class="gold"*/ >10/10</td>
+          <td /*class="gold"*/ >0:10:00</td>
+        </tr>
+        <tr >
+          <td scope="row" /*class="silver"*/ >2nd</td>
+          <td /*class="silver"*/ >Jacob</td>
+          <td /*class="silver"*/ >95</td>
+          <td /*class="silver"*/ >10/10</td>
+          <td /*class="silver"*/ >0:12:00</td>
+        </tr>
+        <tr >
+          <td scope="row" /*class="bronze"*/>3rd</td>
+          <td /*class="bronze"*/>Bob</td>
+          <td /*class="bronze"*/>91</td>
+          <td /*class="bronze"*/>10/10</td>
+          <td /*class="bronze"*/>0:15:00</td>          
+        </tr>
+    -->
+      </tbody>
+    </table>
+    </div>
+
+    <div class="Pagination">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" id="pagBtn1" onclick="previous()"  aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <div class="liDiv" id="liDiv">
+        <li class="page-item liDiv"><a class="page-link" id="firstPage">1</a></li>
+        <li class="page-item liDiv"><a class="page-link" id="secondPage">2</a></li>
+        <li class="page-item liDiv"><a class="page-link" id="thirdPage">3</a></li>
+        </div>
+        <li class="page-item">
+          <a class="page-link" id="pagBtn2" onclick="next()" aria-label="Next">
+            <span aria-hidden="trre">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- <div class="index_buttons" id="index_btn">
+      <button id="paginbtn"> |pre| </button>
+      <button class="active" id="paginbtn"> 1 </button>
+      <button id="paginbtn">  2 </button>
+      <button id="paginbtn">  3 </button>
+      <button id="paginbtn"> |>>| </button>
+    </div> -->
+  </div>
+  <div class="footer">
+    <p class="footertext">@PISB</p>
+  </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    
+<script>
+      // document.getElementById("btns").addEventListener("click",()=>{
+      //   let a =document.getElementById("form1");
+      //   a.classList.toggle("btn-hide");
+        // function validateSearch(){
+        //   var x=document.forms[""]
+        // }
+        // if ()
+        // if (a.style.display = "none"){
+
+        //   a.style.display = "block";
+        // }else{
+        //   a.style.display = "none";
+        // }
+
+      //})
+     
+
+      
+      const searchElement= () => {
+        let filter = document.getElementById('input').value.toUpperCase();
+        
+        let myTable = document.getElementById('myTable');
+
+        let tr = myTable.getElementsByTagName('tr');
+
+        for(var i=0; i<tr.length;i++){
+            let td = tr[i].getElementsByTagName('td')[1];
+
+            if(td){
+              let textValue = td.textContent || td.innerHTML;
+
+               if(textValue.toUpperCase().indexOf(filter) > -1){
+                    tr[i].style.display= "";
+               }else{
+                    tr[i].style.display = "none";
+               }
+            }
+        }
+        }
+
+        
+          
+
+        var myArray= JSON.parse('{{players|safe}}');
+        var limit = 10;
+        var totalPages = myArray.length/limit;
+        var firstPage = 1; 
+        var secondPage=2;
+        var thirdPage=3;
+{% comment %} console.log(myArray)
+console.log(myArray[0]) {% endcomment %}
+{% comment %} console.log("{{player|safe}}") {% endcomment %}
+
+  
+  {% comment %} console.log(totalPages) {% endcomment %}
+  function checkPag() {
+      if (firstPage-1 <1){
+        diablePagBtn("pagBtn1");
+      }else{
+        enablePagBtn("pagBtn1");
+      }
+      if (thirdPage+1 >totalPages){
+        diablePagBtn("pagBtn2")
+      }else{
+        enablePagBtn("pagBtn2");
+      }
+    
+  }
+  function displayLeaderboard(page) {
+    // Calculate the start and end indices for the current page
+    var startIndex = (page - 1) * limit;
+    var endIndex = startIndex + limit;
+  
+    // Slice the leaderboard data to get the data for the current page
+    var currentPageData = myArray.slice(startIndex, endIndex);
+    // console.log("array ",currentPageData)
+  
+    // Get a reference to the leaderboard table and clear any existing rows
+    var leaderboardTable = $('#myTable');
+    leaderboardTable.empty();
+  
+    // Loop through the current page data and append a new row for each item
+    for (var i = 0; i < currentPageData.length; i++) {
+      var row = $('<tr>');
+      var item = currentPageData[i];
+  
+    //   row.append($('<td>').text(item.id));
+    //   row.append($('<td>').text(item.user));
+    //   row.append($('<td>').text(item.user));
+    //   row.append($('<td>').text(item.user));
+    //   row.append($('<td>').text(item.user));
+
+
+      row.append($('<td>').text(item.rank));
+      row.append($('<td>').text(item.username));
+      row.append($('<td>').text(item.score));
+      row.append($('<td>').text(item.attempts));
+    //   row.append($('<td>').text(item.time));
+
+        {% comment %} // console.log("row  ",row); {% endcomment %}
+      leaderboardTable.append(row);
+    }
+  
+    // Update the pagination display with the current page and total pages
+    // ...
+  }
+  
+  // Function to handle pagination clicks
+  function paginate(page) {
+    // Update the current page and display the new leaderboard data
+    firstPage = page;
+    displayLeaderboard(firstPage);
+  }
+  
+  // Display the leaderboard for the first page on page load
+  displayLeaderboard(firstPage);  
+  checkPag();
+
+  function next() {
+    checkPag();
+    console.log("next ",firstPage,secondPage,thirdPage)
+
+    if(firstPage+3 <=totalPages){
+        firstPage+=3;
+    }else{
+        firstPage = "Na";
+        diablePagBtn("pagBtn2");
+    }
+    if(secondPage+3 <=totalPages){
+        secondPage+=3;
+    }else{
+        secondPage = "Na";
+        diablePagBtn("pagBtn2");
+    }
+    if(thirdPage+3 <=totalPages){
+        thirdPage+=3;
+    }else{
+        thirdPage = "Na";
+        diablePagBtn("pagBtn2");
+    }
+    displayLeaderboard(firstPage);  
+    updatePageNumber()
+    enablePagBtn("pagBtn1");
+    // console.log("after update ",firstPage,secondPage,thirdPage)
+  }
+  function previous() {
+    
+    console.log("next ",firstPage,secondPage,thirdPage)
+
+    if(firstPage-3 >0){
+        firstPage-=3;
+        secondPage = firstPage+1;
+        thirdPage = firstPage+2;
+    }else{
+        // firstPage = 1;
+        diablePagBtn("pagBtn1");
+    }
+    // if(secondPage-3 >0){
+    //     secondPage-=3;
+    // }
+    // if(thirdPage-3  >0){
+    //     thirdPage-=3;
+    // }
+    displayLeaderboard(firstPage);  
+    updatePageNumber()
+    enablePagBtn("pagBtn2");
+    checkPag();
+    // console.log("after update ",firstPage,secondPage,thirdPage)
+  }
+
+
+  function updatePageNumber() {
+    
+    document.getElementById("firstPage").innerText=firstPage;
+    document.getElementById("secondPage").innerText=secondPage;
+    document.getElementById("thirdPage").innerText=thirdPage;
+  }
+  function diablePagBtn(idn) {
+    let pagBtn = document.getElementById(idn);
+    pagBtn.classList.add("pagBtn")  ;
+    }
+    function enablePagBtn(idn) {
+        let pagBtn = document.getElementById(idn);
+        pagBtn.classList.remove("pagBtn") ;
+    }
+
+    let liElement =document.querySelectorAll("#liDiv li") 
+    liElement.forEach(element => {
+        element.addEventListener("click",(e)=>{
+            {% comment %} console.log(element.textContent) {% endcomment %}
+            console.log("1 23 clicke")
+            let liValue = element.textContent;
+            if (Number.isInteger(parseInt(liValue))){
+                displayLeaderboard(parseInt(liValue)); 
+            }
+        })
+    });
+
+
+    let ipElement =document.querySelectorAll("#senior input") 
+    ipElement.forEach(element => {
+        element.addEventListener("change",(e)=>{
+            //console.log(element.value)
+                // Code to be executed when the window has finished loading
+                    console.log("to get data",element.value)
+                    $.ajax({
+                        url: '/getJSLeaderboard/',
+                        type: 'POST',
+                        data: {
+                            "isJunior": element.value,
+                        },
+                        success: function(data) {
+                            myArray = JSON.parse(data.player);
+                            console.log(myArray) 
+                          totalPages = myArray.length/limit
+                          console.log(totalPages)
+                          document.getElementById("myTable").innerText=""
+                          displayLeaderboard(firstPage);  
+                            checkPag();
+                        }
+                      });
+                
+            
+        })
+    });
+
+  
+   
+
+
+</script>
+  
+{% comment %} <script>
+    const startingMinutes = 10;
+    let time = startingMinutes * 60;
+
+    const countdown = document.getElementById('countdown');
+    function updateCountdown(){
+        var minutes = Math.floor(time / 60);
+        let seconds = time % 60;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        document.getElementById('countdown').innerHTML = "0:"+ minutes + ":" +seconds; 
+        time--;
+    }
+
+    setInterval(updateCountdown,1000);
+
+</script> {% endcomment %}
+
+ 
+  
+  
+<script>
+  // function pageTravel(index){
+  //       current_index = parseInt(index);
+  //       highlightIndexButton
+  //   ();
+  // }
+
+  // function next(){
+  //     if (current_index < max_index){
+  //       current_index++;
+  //       highlightIndexButton
+  //   ();
+  //     }
+  
+  // }
+
+  // function previous(){
+  //   if (current_index > 1){
+  //       current_index--;
+  //       highlightIndexButton();
+  //     }
+  // }
+   
+
+  
+        
+
+</script>
+
+
+</body>
+</html>

@@ -9,6 +9,9 @@ from .utils import *
 from django.http import JsonResponse
 from datetime import datetime,timedelta
 from .decorators import *
+# from django.core.cache import cache
+from django.views.decorators.cache import never_cache
+from django.urls import reverse
 # Create your views here.
 
 from .addquestion import *
@@ -99,8 +102,9 @@ def questions(request):
 
         #To check if any lifeline is activate or not for that solved question 
         try:
+            print("******************************")
             lifeline = Lifeline.objects.get(user=user,isActive=True)
-            print(lifeline,"lifeline is activated")
+            print("lifeline is activated",lifeline)
             if (lifeline.isActive):
                 submission.lifelineActivated = True
                 lifeline.isActive = False
@@ -113,6 +117,7 @@ def questions(request):
                 print("player lifeline array after deletion",array)
                 player.lifelineArray = json.dumps(array)
                 player.save()
+                print("****************************")
         except:
             #it is nessecory if user had not clicked any lifeline then for next lifeline lifeline 1 will be disable if it is activated
             # array=json.loads(player.lifelineArray )
@@ -162,6 +167,9 @@ def questions(request):
     except:
         pass
     context["life_line_dict"]=json.dumps(life_line_dict)
+    print("**********************")
+    print("activated lifelines ",context["life_line_dict"])
+    print("*********************")
     
     # context["wrong_question_list"]=[x.questionIndex for x in Submission.objects.filter(player=player) if x.points<0]
     context["wrong_question_list"]=[x.questionIndex for x in Submission.objects.filter(player=player) if not(x.isCorrect)]
@@ -177,7 +185,8 @@ def questions(request):
     print("EndTime of user going to frontend ",player.EndTime.astimezone())
 
     context["playerStreak"]=checkStreak(player)
-    return render(request,"app_1/questions.html",context)
+    return render(request,"app_1/MCQPage.html",context)
+    # return render(request,"app_1/questions.html",context)
 
 
 
@@ -298,11 +307,14 @@ def result(request):
         "title":"Result",
     }
     player = Player.objects.get(user=request.user)
+    submission = Submission.objects.filter(player=player)
     context["player"]=player
-    return render(request,"app_1/result.html",context)
+    context["totalAttempt"]=len(submission)
+    context["rightAttempt"]=len(submission.filter(isCorrect=True))
+    return render(request,"app_1/Result.html",context)
 
 
-
+# @never_cache
 def signin(request):
     # add()
     # changeOPtion()
@@ -315,17 +327,17 @@ def signin(request):
     # print(type(json.loads(player.questionList)))
     if request.method == "POST":   #For signin page only username and pass1 taken
         username = request.POST['username']
-        pass1 = request.POST['pass1']
-        isTeam = request.POST['isTeam']
-        print("isTEam ",isTeam,type(isTeam))
-        user = authenticate(username=username, password= pass1)         #authenticate user here
+        password = request.POST['password']
+        isJunior = request.POST['isJunior']
+        print("isTEam ",isJunior,type(isJunior))
+        user = authenticate(username=username, password= password,isJunior=isJunior)         #authenticate user here
 
         if user is not None :  #IF correct credentials given
             # player = Player.objects.get(user=user)
             try:
                 player = Player.objects.get(user=user)
             except:
-                player = Player(user=user,isTeam=isTeam)
+                player = Player(user=user)
                 player.save()
                 player = Player.objects.get(user=user)
             # print(player,player.isEnded)
@@ -335,7 +347,7 @@ def signin(request):
                 # print(player.questionList)
                
                 if not(player.questionList) or (player.questionList=="")  :
-                    player.questionList = create_random_list(player.questionNumber)
+                    player.questionList = create_random_list(player.questionNumber,player.isJunior)
                     player.save()
                 return redirect("home")
             else:
@@ -345,7 +357,7 @@ def signin(request):
             messages.error(request, "Bad Credentials")
             return redirect('signin')
 
-    return render(request,"app_1/login.html")
+    return render(request,"app_1/LoginPage.html")
 
 def index(request):
     context={
@@ -372,7 +384,7 @@ def signup(request):
         email = request.POST['email']
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']  #For storing pass2
-
+        isTeam = request.POST['isTeam']
         if User.objects.filter(username=username):
             messages.error(request,"Username already exists ! PLease try Different username")
             return redirect('home')
@@ -393,7 +405,7 @@ def signup(request):
                     myuser = User.objects.create_user(username, email, pass1) #register user in backend
                     myuser.first_name = fname
                     myuser.last_name = lname
-                    player = Player(user=myuser)
+                    player = Player(user=myuser,isJunior=isTeam)
                     player.save()
                     myuser.save() #save user in database
                     
@@ -429,20 +441,40 @@ def error_404(request, exception):
 # def error_500(request, exception):
 #     return render(request, 'errors\error_404.html',{"exception":"500"})
 
-def test(request):
-    user= User.objects.get(username = "testfuck")
-    player = Player.objects.get(user=user)
-    life_line_array = json.loads(player.lifelineArray)
-    
+def leaderboard(request):
+    context ={}
     # player.lifelineArray = json.dumps([1,2])
     # life_line_array = json.loads(player.lifelineArray)
-    print(life_line_array)
-    print(type(life_line_array))
-    print(type(life_line_array))
     # submission=Submission.objects.filter(player=player).order_by("-id")[:3].values_list()
     # print(submission)
-    return render(request,"app_1/test.html")
+
+    # return render(request,"app_1/LoginPage.html")
+    # return render(request,"app_1/MCQPage.html")
+    # return render(request,"app_1/Result.html")
+    # player = Player.objects.filter(playerScore__lt = 33).order_by("-playerScore")
     
+    user = Player.objects.get(user=request.user)
+    player = Player.objects.filter(isJunior=user.isJunior).order_by("-playerScore")
+    # player = Player.objects.filter(isJunior=True).order_by("-playerScore")
+    # print(player)
+    l = json.dumps(getLeaderBoard(player))
+    context["players"]=l
+    if request.user.is_authenticated:
+        context["player"] = Player.objects.get(user=request.user)
+    
+    # return render(request,"app_1/pag.html",context)
+    return render(request,"app_1/LeaderBoard.html",context)
+
+@csrf_exempt
+def getJSLeaderboard(request):
+    if (request.method == "POST"):
+       isJunior = request.POST["isJunior"]
+    #    print("Fsdffds",isJunior)
+       player = Player.objects.filter(isJunior = isJunior).order_by("-playerScore")
+       l = json.dumps(getLeaderBoard(player))
+       return JsonResponse({"status":1,"player":l})
+
+
 @csrf_exempt
 def test1(request):
     print("in test1")

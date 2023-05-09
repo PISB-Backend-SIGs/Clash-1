@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="MCQr1.css"> -->
+    <link rel="stylesheet" href="{% static 'css/MCQPage.css' %}">
+
+     <!-- Include Bootstrap and Tailwind CSS libraries -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.7/tailwind.min.css"/>
+
+    <!--Bootstrap for 3rd lifeline-->
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+    crossorigin="anonymous"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <title>MCQ Page</title>
+</head>
+<body class="Body">
+
+<!-- NAVBAR --> 
+
+    <div class="Navbar2">
+        <nav class="navbar navbar-expand-lg  navbar-dark">
+            <a href="#">
+                <img src="{% static 'images/clashwhite.png' %}" alt="RC" height="52px" width="102px">
+            </a>
+            <h2 class="timer1" id="countdown">0:00:00</h2>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <!-- <a class="nav-item nav-link active" id="navlink" href="login.html">Log In</a> -->
+                
+                <!-- <a class="nav-item nav-link active" id="navlink" href="MCQFinal.html">MCQ page</a> -->
+                <!-- <a class="nav-item nav-link active " id="navlink" href="resultPage.html">Result</a>
+                
+                <a class="nav-item nav-link active" id="navlink" href="#">LogOut</a> -->
+            </div>
+            <img src="{% static 'images/pisblogo.png' %}" id="ieeelogo" alt="PISB IEEE" height="52px" width="102px">
+          </nav>
+    </div>
+
+
+<!-- PAGE LINKS -->
+    <div class="contain">
+          <div class="timer">
+            <button class="btn1"><a  id="navlink" href="instructions.html">Instructions</a></button>
+    <!-- Leaderboard button -->
+            <button class="btn2 "><a  id="navlink" href="{% url 'leaderboard' %}">Leaderboard </a></button>
+          </div>
+    </div>
+    
+<!-- MAIN CONTAINER -->
+
+
+<div class="quecol">
+
+ <!-- SECTION 1: Question Box and Options -->
+    <form action="" method="POST" id="Question_form">
+    {% csrf_token %}
+        
+        <div class="que">
+            <div class="Questionbox" > Q.<span id="questionNumber">{{question_number}}</span> : <span id="question_title">{{question.questionText}}</span> </div>
+
+            <!--  Creating the Option Buttons -->
+            <div class="options">
+
+                <div class="OPT1" class="disappear" id="OPT1" >
+                      <input type="radio" name="option" id="option1" value=1>
+
+                      <label class="label4" for="option1" >A</label>
+                      <p class="opt1" id="opt1">  {{question.questionOption1}}</p>
+                  </div>
+                                  
+                <div class="OPT2" id="OPT2" >
+                         <input type="radio" name="option" id="option2" value=2>
+                         <label class="label4" for="option2">B</label> 
+                         <p class="opt1" id="opt2">  {{question.questionOption2}}</p>
+                </div>
+
+                <div class="OPT3" id="OPT3" >
+                    <input type="radio" name="option" id="option3" value=3>
+                    <label class="label4" for="option3">C</label>
+                    <p class="opt1" id="opt3">  {{question.questionOption3}}</p>
+                </div>
+
+                <div class="OPT4" id="OPT4" >                   
+                    <input type="radio" name="option" id="option4" value=4>
+                    <label class="label4" for="option4" id="label4" >D</label>
+                    <p class="opt1" id="opt4">  {{question.questionOption4}}</p>
+                   </div>
+
+            </div>
+        </div>  
+        <div class="Submit">
+            {% if flag %}
+            <button type="submit" class="submit" onclick="checkValue()" id="submit_btn" name="next">Next</button>
+            {% else %}
+            <button type="submit" class="submit" onclick="checkValue()" id="submit_btn" name="nsubmit">Submit</button>
+            {% endif %}
+
+        </div>
+        <div class="Submit2">
+            
+            {% if flag %}
+            <button type="submit" class="submit" onclick="checkValue()" id="submit_btn" name="next">Next</button>
+            {% else %}
+            <button type="submit" class="submit" onclick="checkValue()" id="submit_btn" name="nsubmit">Submit</button>
+            {% endif %}        </div>
+    
+    </form>
+         
+ <!-- Section 2: Column for Statistics and Lifelines  -->
+
+    <div class="sidebar">
+        <div class="marks">
+            <div class="markingscheme">
+                <h3 class="Mark">Marking Scheme</h3>
+                    <div class="positive">
+                        <p class="posi" id="posi">+{{marking_scheme.marks_add}}</p>
+                        <p class="posi" id="neg"></p>
+                    </div>
+            </div>
+           
+            
+
+
+            <div class="rankings">   
+
+                <table class="scoretable">
+                    <thead>
+                        <tr>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{player.playerScore}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+               
+            
+                <table class="ranktable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <tr>
+                            <td>2,100</td>
+                        </tr>
+                   </tbody>
+               </table>
+
+            </div>
+           
+            <div class="markingscheme" id="currentstreak">
+                <h3 class="Mark" id="Mark2">Current Streak</h3>
+                    <div class="Streak">
+                        <p id="streak">{{playerStreak}} </p>
+                    </div>
+            </div>
+
+
+            {% comment %} <button type="button" name="lifeline1" id="lifeline1btn" value=1 class="btn btn-primary" disabled>50/50 Lifeline1</button>
+            <button type="button" name="lifeline2" id="lifeline2btn" value=2 class="btn btn-primary" disabled>Lifeline2</button>
+            <button type="button" name="lifeline3" id="lifeline3btn" value=3 class="btn btn-primary" disabled>Lifeline3</button>  {% endcomment %}
+        
+
+            <div class="rankbar">
+                <div class="lifelines">
+                    <button class="linetitle" id="lfbtn" >Lifelines</button>
+                
+                    <div class="dropdown" id="dp">
+                        {% comment %} by prash lifeline class added for id lf{% endcomment %}
+                        <button class="lifeline1 lifeline" id="lifeline1btn"  name="lifeline1" type="button" value=1 disabled>Blackhole</button>
+                        <button class="lifeline2 lifeline"  data-toggle="modal" data-target="#exampleModal" name="lifeline2" id="lifeline2btn"  type="button" value=2 disabled>Time Travel</button>
+                        <button class="lifeline3 lifeline" data-bs-toggle="modal"  data-bs-target="#L3Modal" id="lifeline3btn" name="lifeline3" type="button" value=3 disabled>Omnisecent</button>
+                        {% comment %} <button type="button" class="btn btn-info" data-bs-toggle="modal" id="lf1" data-bs-target="#L3Modal">Lifeline3</button> {% endcomment %}
+
+                    </div>
+                </div>
+                
+                <!--Lifeline 2 -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <p class="modal-msg">Choose your Destination in past: </p>
+                                <div class="pastques" id="question_modal">
+                                    {% comment %} <button class="pastq" >1</button> {% endcomment %}
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="travel-opt" id="travel">Travel</button>
+                                    <button type="button" class="travel-opt" id="avoid" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+
+
+                <!-- Lifeline3 Modal -->
+          <div class="modal fade" id="L3Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="color: black;">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ask GPT-5</h5>
+                <!-- <button type="button" class="btn-close" id="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                <!-- <p id="answerParagraph">?</p> -->
+                <icon><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                  width="50" height="50"
+                  viewBox="0 0 64 64">
+                  <linearGradient id="9yv_OTO3P9eepfu7Rtqera_kTuxVYRKeKEY_gr1" x1="32" x2="32" y1="7" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6dc7ff"></stop><stop offset=".699" stop-color="#e6abff"></stop></linearGradient><path fill="url(#9yv_OTO3P9eepfu7Rtqera_kTuxVYRKeKEY_gr1)" d="M53.27,26.96c0.28-1.05,0.42-2.11,0.42-3.17c0-6.86-5.58-12.43-12.43-12.43 c-0.77,0-1.56,0.07-2.35,0.23C36.54,8.67,33.06,7,29.28,7c-5.55,0-10.36,3.62-11.92,8.89C11.43,16.9,7.04,22.05,7.04,28.14 c0,3.45,1.43,6.72,3.93,9.07c-0.44,1.3-0.66,2.64-0.66,4c0,6.86,5.58,12.43,12.43,12.43c0.44,0,0.88-0.02,1.38-0.08 C26.5,56.39,29.93,58,33.63,58c5.88,0,10.96-4.19,12.16-9.88c6.32-0.63,11.17-5.91,11.17-12.35 C56.96,32.46,55.62,29.29,53.27,26.96z M38.25,35.88l-6.63,4l-6.5-4v-7.26l6.63-3.87l6.63,3.75L38.25,35.88z"></path><linearGradient id="9yv_OTO3P9eepfu7Rtqerb_kTuxVYRKeKEY_gr2" x1="32" x2="32" y1=".872" y2="62.679" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#1a6dff"></stop><stop offset="1" stop-color="#c822ff"></stop></linearGradient><path fill="url(#9yv_OTO3P9eepfu7Rtqerb_kTuxVYRKeKEY_gr2)" d="M53.274,26.955 c0.275-1.045,0.415-2.107,0.415-3.166c0-6.855-5.578-12.434-12.434-12.434c-0.766,0-1.553,0.079-2.35,0.235 C36.536,8.665,33.062,7,29.278,7c-5.549,0-10.353,3.622-11.913,8.891c-5.93,1.012-10.32,6.163-10.32,12.254 c0,3.448,1.424,6.715,3.93,9.07c-0.44,1.299-0.664,2.64-0.664,3.996c0,6.855,5.578,12.434,12.434,12.434 c0.433,0,0.874-0.027,1.38-0.087C26.501,56.389,29.934,58,33.633,58c5.875,0,10.96-4.192,12.152-9.878 c6.327-0.629,11.17-5.908,11.17-12.355C56.956,32.463,55.622,29.286,53.274,26.955z M51.689,23.789c0,0.646-0.07,1.293-0.193,1.937 l-12.293-7.185l-13.146,7.991v-4.91l12.814-7.972c0.813-0.191,1.615-0.295,2.383-0.295C47.008,13.355,51.689,18.036,51.689,23.789z M37.397,35.171l-5.563,3.316l-5.776-3.303v-6.311l5.465-3.322l-0.031,0.052l5.905,3.48V35.171z M29.278,9 c2.997,0,5.755,1.251,7.728,3.457l-12.948,8.054V34.04l-4.898-2.801V16.922C20.319,12.254,24.462,9,29.278,9z M9.044,28.145 c0-4.923,3.419-9.109,8.116-10.169v14.424l12.701,7.264l-5.227,3.115l-11.897-6.674C10.392,34.107,9.044,31.211,9.044,28.145z M12.311,41.211c0-0.955,0.138-1.902,0.4-2.828l11.954,6.706l12.732-7.588v6.27l-13.172,7.754c-0.57,0.078-1.043,0.12-1.48,0.12 C16.992,51.645,12.311,46.964,12.311,41.211z M33.633,56c-2.886,0-5.578-1.175-7.546-3.252l13.31-7.835V30.261l4.539,2.675V47.09 C43.192,52.173,38.773,56,33.633,56z M45.936,46.091V31.793l-6.539-3.853v-0.068h-0.115l-5.879-3.465l5.821-3.538l12.309,7.195 c2.174,1.981,3.422,4.782,3.422,7.703C54.956,41.055,51.07,45.406,45.936,46.091z"></path>
+                  </svg></icon>
+                <input type="text" id="userQuestion" placeholder="{{chatBotOutput.input}}"></input>
+                <button id="my-button" ><icon id="sent"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="cyan" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </icon></button>
+                </div>
+                <div class="chatresponse">
+                  <icon><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                    width="44" height="44"
+                    viewBox="0,0,256,256"
+                    style="fill:#000000;">
+                    <g fill="#06ea17" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.33333,5.33333)"><path d="M30.7,7.27l-2.37,1.83c-1.605,-2.067 -4.068,-3.209 -6.697,-3.092c-4.32,0.192 -7.633,3.945 -7.633,8.269v9.143l10.5,6.12l-1,1.72l-11.706,-6.827c-0.492,-0.287 -0.794,-0.813 -0.794,-1.382v-8.687c0,-6.264 5.129,-11.574 11.39,-11.357c3.279,0.113 6.29,1.656 8.31,4.263z"></path><path d="M12.861,9.833l0.4,2.967c-2.592,0.357 -4.813,1.919 -6.026,4.254c-1.994,3.837 -0.4,8.582 3.345,10.745l7.918,4.571l10.55,-6.033l0.99,1.726l-11.765,6.724c-0.494,0.282 -1.101,0.281 -1.594,-0.003l-7.523,-4.343c-5.426,-3.133 -7.46,-10.23 -4.142,-15.543c1.738,-2.784 4.58,-4.619 7.847,-5.065z"></path><path d="M6.161,26.563l2.77,1.137c-0.987,2.423 -0.745,5.128 0.671,7.346c2.326,3.645 7.233,4.638 10.977,2.476l7.918,-4.572l0.05,-12.153l1.99,0.006l-0.059,13.551c-0.002,0.569 -0.307,1.094 -0.8,1.379l-7.523,4.343c-5.425,3.132 -12.588,1.345 -15.531,-4.185c-1.541,-2.897 -1.71,-6.275 -0.463,-9.328z"></path><path d="M17.3,40.73l2.37,-1.83c1.605,2.067 4.068,3.209 6.697,3.092c4.32,-0.192 7.633,-3.945 7.633,-8.269v-9.143l-10.5,-6.12l1,-1.72l11.706,6.827c0.492,0.287 0.794,0.813 0.794,1.382v8.687c0,6.264 -5.13,11.574 -11.39,11.358c-3.279,-0.114 -6.29,-1.657 -8.31,-4.264z"></path><path d="M35.139,38.167l-0.4,-2.967c2.592,-0.357 4.813,-1.919 6.026,-4.254c1.994,-3.837 0.4,-8.582 -3.345,-10.745l-7.918,-4.571l-10.55,6.033l-0.99,-1.726l11.765,-6.724c0.494,-0.282 1.101,-0.281 1.594,0.003l7.523,4.343c5.425,3.132 7.459,10.229 4.141,15.543c-1.737,2.784 -4.579,4.619 -7.846,5.065z"></path><path d="M41.839,21.437l-2.77,-1.137c0.987,-2.423 0.745,-5.128 -0.671,-7.346c-2.326,-3.645 -7.233,-4.638 -10.977,-2.476l-7.918,4.572l-0.05,12.153l-1.99,-0.006l0.059,-13.551c0.002,-0.569 0.307,-1.094 0.8,-1.379l7.523,-4.343c5.425,-3.132 12.588,-1.345 15.531,4.185c1.541,2.897 1.71,6.275 0.463,9.328z"></path></g></g>
+                    </svg></icon>
+                  <p id="lorem">{{chatBotOutput.output}}</p>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="close" data-bs-dismiss="modal" >Close</button>
+                </div>
+            </div>
+            </div>                                                 
+        </div >
+
+
+                
+            </div>   
+    
+        </div>
+
+        
+
+    </div>
+    
+</div>
+
+<!-- Submit Button for Mobile View -->
+   
+
+<!-- FOOTER -->
+
+    <div class="footer">
+        <p class="footertext">@PISB</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    
+   <script>
+    //just to test activation of btns by prash
+    let btns = document.getElementById("lifeline1btn");
+    let btnsss = document.getElementById("lifeline2btn");
+    let btnssss = document.getElementById("lifeline3btn");
+    if(btns.disabled === true){
+        btns.style.color = "grey";
+    }
+    if(btnsss.disabled === true){
+        btnsss.style.color = "grey";
+    }
+    if(btnssss.disabled === true){
+        btnssss.style.color = "grey";
+    }
+
+   </script>
+<!-- JS Functions for selected Radio buttons (Options) --> 
+   <script>
+        function checkValue(){
+            var radios = document.getElementsByName('option');
+            for(const radio of radios){
+                if(radio.checked){
+                    console.log(radio.value + " is selected.");
+                }
+            } 
+        }
+
+    // Function for Lifeline 1
+    {% comment %} var eleg =document.getElementById('OPT1');
+    function lifelineOne(){
+        eleg.style.opacity = "0";
+        eleg.style.transition= "3s";
+        document.getElementsByName('options1').disabled = "true";
+    } {% endcomment %}
+
+    // Fuction for Lifeline 2
+
+        {% comment %} var ele = document.getElementById('pastque');
+        function lifelineTwo(){
+            let x = confirm("Do you want to use this lifeline?");
+            if(x){
+            ele.style.display="flex";
+            }
+            //  if(ele.style.display == "none"){
+            //     ele.style.display ="flex";
+            // }
+            // else if(ele.style.display=="flex"){
+            //     ele.style.display="none";
+            // }
+            
+        } {% endcomment %}
+       
+
+
+    </script>
+
+<!--JS Fuction for timer  -->
+<script>
+    
+    x = setInterval(function() {    
+        
+        const countDown = new Date('{{player_time}}').getTime();
+            const now = new Date().getTime();
+            // console.log(new Date())
+            remain = countDown - now;
+            // console.log("b time",countDown,"f time", now ) 
+            // console.log(remain);
+  
+        //   document.getElementById("days").innerText = Math.floor(distance / (day)),
+             const countdown = document.getElementById('countdown');
+
+            let seconds = Math.floor((remain / 1000) % 60);
+            let minutes = Math.floor((remain / (1000 * 60)) % 60);
+            let hours = Math.floor((remain / (1000 * 60*60)) % 60);
+            // document.getElementById("minutes").innerText = minutes;
+            // sec = toString(seconds)
+            // console.log(val_sec)
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        // console.log(hours+":"+ minutes + ":" +seconds)
+        document.getElementById('countdown').innerHTML = hours+":"+ minutes + ":" +seconds; 
+
+            // if (seconds<10 ){
+            //     document.getElementById("seconds").innerText =  "0"+seconds ;
+            // }else{
+            //     document.getElementById("seconds").innerText = seconds ;
+            // }  
+          if (remain < 0) {
+            const radioInputs = document.querySelectorAll('input[type="radio"]');
+            radioInputs.forEach((input) => {
+            input.required = false;
+            
+            });
+            // document.getElementById("hours").innerText = 0;
+            document.getElementById("minutes").innerText = 0;
+            document.getElementById("seconds").innerText = 0;
+            var sub_btn = document.getElementById("submit_btn");
+            sub_btn.name = "nsubmit";
+            sub_btn.click();
+            clearInterval(x);
+            // window.location.reload();
+          }
+          //seconds
+        },0)  
+</script>
+
+    <!-- Include Bootstrap and jQuery libraries -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+    {% include "ajax/questionsAjax.html" %}
+
+</body>
+</html>

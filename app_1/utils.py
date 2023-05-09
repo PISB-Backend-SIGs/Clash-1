@@ -1,14 +1,19 @@
 import json,random
 from datetime import datetime,timedelta
 from django.utils import timezone
-from app_1.models import Lifeline
+from app_1.models import Lifeline,Player
 from .models import Submission
 import openai
 from decouple import config
 size = 9     #size of question display to user
-rang = 53 #size of question in database
-def create_random_list(crnt_ques):
-    que_list= [x for x in range(1,rang+1)]
+rangJ = 50 #size of question in database
+rangS = 3 #size of question in database
+def create_random_list(crnt_ques,isjunior):
+    if (isjunior):
+        que_list= [x for x in range(1,rangJ+1)]
+    else:
+        que_list= [x for x in range(1,rangS+1)]
+
     random.shuffle(que_list)
     print(que_list,"user total list",crnt_ques,"user crt ques")
     if crnt_ques in que_list:
@@ -113,7 +118,7 @@ def set_time():
     start_time=timezone.now()
     dict={
         "start_time":start_time,
-        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=20),
+        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=28),
     }
     return dict
 
@@ -141,6 +146,7 @@ def check_lifeline_activate(user,player,submission,question):
     flag=0
     opt_list=[-1]
     streak = checkStreak(player)
+    print("users streak ",streak)
     if streak>=3:
         # lifeLine1Submissions = submission.order_by("-id")[:3]
         # # print(lifeLine1Submissions.values())
@@ -151,7 +157,7 @@ def check_lifeline_activate(user,player,submission,question):
         #condition for lifeline 1
         # if (streak == 3 and not(lifeLine1Submissions[0].lifelineActivated) and not(lifeLine1Submissions[1].lifelineActivated)  and not(lifeLine1Submissions[2].lifelineActivated)):
         if (streak >= 3 ):
-            # print("inside if of check lifeline")
+            print("inside 1st lifeline to check lifeline1")
             opt_list = [1,2,3,4]
             opt_list.remove(question.questionAnswer)
             opt_list.pop(1)
@@ -170,12 +176,21 @@ def check_lifeline_activate(user,player,submission,question):
             player.save()
             flag+=1
         else:
+            print("it will remove lifeline one")
             arr = json.loads(player.lifelineArray)
             if (1 in arr):
                 arr.remove(1)
             player.lifelineArray = json.dumps(arr)
             # life_line_array = json.loads(player.lifelineArray)
             player.save()
+    else:
+        print("it will remove lifeline one")
+        arr = json.loads(player.lifelineArray)
+        if (1 in arr):
+            arr.remove(1)
+        player.lifelineArray = json.dumps(arr)
+        # life_line_array = json.loads(player.lifelineArray)
+        player.save()
 
      #condition for lifeline 2  
     if(player.playerScore>7):
@@ -194,7 +209,7 @@ def check_lifeline_activate(user,player,submission,question):
             flag+=1
 
     # LifeLine3
-    if( len(submission) > 2 and accuracy(submission) > 50):
+    if( len(submission) > 5 and accuracy(submission) > 50):
         try:
             lifeline = Lifeline.objects.get(user=user,lifelineID =3)
         except:
@@ -258,4 +273,22 @@ def accuracy(submissions):
     print(accuracy)
     return accuracy
 
-
+def getLeaderBoard(playerQuery):
+    # if (user):
+    #     player = Player.objects.get(user=user)
+    lis = []
+    rank = 1
+    for i in playerQuery:
+        l ={}
+        l["rank"] = rank
+        l["username"] = i.user.username
+        l["score"] = i.playerScore
+        l["attempts"] = i.questionIndex
+        lis.append(l)
+        player = Player.objects.get(user=i.user)
+        # if (user and user == i.user.username):
+        player.rank =rank
+        player.save()
+        rank+=1
+    # print(lis)
+    return lis

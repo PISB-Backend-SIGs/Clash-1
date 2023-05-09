@@ -15,11 +15,11 @@
   </button>
     
 <div id="question_block" style="display: none;" class="container">
-    <button class="question-btn" value=1>1</button>
-    <button class="question-btn" value=2>2</button>
-    <button class="question-btn" value=3>3</button>
-    <button class="question-btn" value=4>4</button>
-
+    <button class="question-btn" id="opt1" value=1>1</button>
+    <button class="question-btn" id="opt2" value=2>2</button>
+    <button class="question-btn" id="opt3" value=3>3</button>
+    <button class="question-btn" id="opt4" value=4>4</button>
+    <button id="btn">dsjfkjf</button>
 </div>
 
   <h1>test</h1>
@@ -53,10 +53,10 @@
         console.log("btn clicked")
         document.getElementById("question_block").style.display="block";
     })
-    $(".question-btn").click(function(){
-        console.log(this.value)
-        document.getElementById("question_block").style.display="none";
-        document.getElementById("modal-btn").disabled=true;
+    $("#btn").click(function(){
+        console.log($(".question-btn").target.value)
+        // document.getElementById("question_block").style.display="none";
+        // document.getElementById("modal-btn").disabled=true;
         
     })
   </script>

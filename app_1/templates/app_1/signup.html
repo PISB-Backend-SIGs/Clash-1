@@ -15,6 +15,12 @@
 
     <form action="" method="post">
     {% csrf_token %}
+    <div>
+        <input type="radio" name="isTeam" id="Team" value="True" checked>
+        <label for="Team">Junior</label>
+        <input type="radio" name="isTeam" id="Individual" value="False" >
+        <label for="Individual">Senior</label>
+    </div>
         <label for="">Username</label>
         <input type="text" id="username" name="username" placeholder="Create a username(Only letter and number)" required>
         <br>
