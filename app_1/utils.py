@@ -292,3 +292,9 @@ def getLeaderBoard(playerQuery):
         rank+=1
     # print(lis)
     return lis
+
+
+
+
+
+

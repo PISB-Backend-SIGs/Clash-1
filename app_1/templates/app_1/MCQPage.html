@@ -340,7 +340,7 @@
             // console.log(new Date())
             remain = countDown - now;
             // console.log("b time",countDown,"f time", now ) 
-            // console.log(remain);
+            console.log("remain",remain);
   
         //   document.getElementById("days").innerText = Math.floor(distance / (day)),
              const countdown = document.getElementById('countdown');
@@ -369,8 +369,7 @@
             
             });
             // document.getElementById("hours").innerText = 0;
-            document.getElementById("minutes").innerText = 0;
-            document.getElementById("seconds").innerText = 0;
+            document.getElementById('countdown').innerHTML = "00"+":"+ "00" + ":" +"00"; 
             var sub_btn = document.getElementById("submit_btn");
             sub_btn.name = "nsubmit";
             sub_btn.click();
