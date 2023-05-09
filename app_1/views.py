@@ -252,8 +252,6 @@ def lifelineActivation(request):
     else:
         return JsonResponse({"status":0})
 
-    
-
 # @check_time
 @check_test_ended
 def submit(request):
@@ -323,6 +321,8 @@ def result(request):
     return render(request,"app_1/Result.html",context)
 
 
+
+
 @never_cache
 def signin(request):
     try:
@@ -330,6 +330,7 @@ def signin(request):
         user = User.objects.get(username=username)
         player = Player.objects.get(user=user)
         if (player.isStarted):
+            logout(request)
             messages.error(request,"You are already login")
             return redirect('signin')
     except:
