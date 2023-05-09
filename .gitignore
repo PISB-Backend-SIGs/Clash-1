@@ -1,1 +1,4 @@
 .env
+*.pyc
+venv/
+app_1/__pycache__/
