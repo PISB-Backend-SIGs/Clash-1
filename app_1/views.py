@@ -30,8 +30,8 @@ def home(request):
         return redirect("questions")
     #To check checkbox is clicked or not
     if request.method == "POST":
-        user = User.objects.get(username=request.user)
-        player = Player.objects.get(user=user)
+        # user = User.objects.get(username=request.user)
+        # player = Player.objects.get(user=user)
         checkbox = request.POST.get("checkbox") #It take value checked from frontend
         if (checkbox == "checked"):
             if not(player.isStarted):
@@ -46,7 +46,7 @@ def home(request):
         else:
             messages.error(request, "Checkbox not checked")
             return redirect("home")
-    return render(request,"app_1/home.html",context)
+    return render(request,"app_1/InstructionPage.html",context)
 
 
 #It restrict user to go back from result to question page 
@@ -309,11 +309,17 @@ def result(request):
     context={
         "title":"Result",
     }
+    
     player = Player.objects.get(user=request.user)
+    if not(player.isEnded):
+        return redirect("leaderboard")
     submission = Submission.objects.filter(player=player)
-    context["player"]=player
+    context["player"]=request.user
+    context["playerScore"]=player.playerScore
+    context["userAttempt"]=player.questionIndex
     context["totalAttempt"]=len(submission)
     context["rightAttempt"]=len(submission.filter(isCorrect=True))
+    logout(request)
     return render(request,"app_1/Result.html",context)
 
 
@@ -324,7 +330,6 @@ def signin(request):
         user = User.objects.get(username=username)
         player = Player.objects.get(user=user)
         if (player.isStarted):
-            logout(request)
             messages.error(request,"You are already login")
             return redirect('signin')
     except:
@@ -465,15 +470,21 @@ def leaderboard(request):
     # return render(request,"app_1/MCQPage.html")
     # return render(request,"app_1/Result.html")
     # player = Player.objects.filter(playerScore__lt = 33).order_by("-playerScore")
-    
-    user = Player.objects.get(user=request.user)
-    player = Player.objects.filter(isJunior=user.isJunior).order_by("-playerScore")
+    try:
+        user = Player.objects.get(user=request.user)
+        player = Player.objects.filter(isJunior=user.isJunior).order_by("-playerScore")
+    except:
+        player = Player.objects.filter(isJunior=True).order_by("-playerScore")
+
     # player = Player.objects.filter(isJunior=True).order_by("-playerScore")
     # print(player)
     l = json.dumps(getLeaderBoard(player))
     context["players"]=l
-    if request.user.is_authenticated:
-        context["player"] = Player.objects.get(user=request.user)
+    try:
+        if request.user.is_authenticated:
+            context["player"] = Player.objects.get(user=request.user)
+    except:
+        pass
     
     # return render(request,"app_1/pag.html",context)
     return render(request,"app_1/LeaderBoard.html",context)

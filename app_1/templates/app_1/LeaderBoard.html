@@ -13,22 +13,19 @@
     <div class="Navbar2">
       <nav class="navbar navbar-expand-lg navbar-dark ">
         <a href="#">
-          <img src="clashwhite.png" alt="RC" height="52px" width="102px">
+          <img src="{% static 'images/clashwhite.png' %}" alt="RC" height="52px" width="102px">
         </a>
-        <h2 class="timer1" id="countdown">0:00:00</h2>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
          
-          <a class="nav-item nav-link active" id="navlink" href="instructions.html">Instructions</a>
-          <a class="nav-item nav-link active" id="navlink" href="MCQFinal.html">MCQ page</a>
-          <a class="nav-item nav-link active " id="navlink" href="resultPage.html">Result</a>
+          <a class="nav-item nav-link active" id="navlink" href="{% url 'questions' %}">MCQ page</a>
           <!-- <a class="nav-item nav-link active" id="navlink" href="Leaderboard3.html">Leaderboard  </a> -->
           
         </div>
-        <img src="#" id="ieeelogo" alt="PISB IEEE">
+        <img src="{% static 'images/pisblogo.png' %}"  id="ieeelogo" alt="PISB IEEE" height="52px" width="102px">
         </nav>
         
           
@@ -90,7 +87,7 @@
         </thead>
         <tbody id="current-user-rank">
           <td>
-            0:00:00
+            00
           </td>
         </tbody>
       </table>
@@ -107,13 +104,15 @@
           {% comment %} <th scope="col" class="userb">Time</th> {% endcomment %}
         </tr>
       </thead>
+      {% if request.user.is_authenticated %}
     <tr class="user-rank" bgcolor="1F0F0F">
       <td class="user-status" scope="row" style="border-left:3px solid #c5e1f0; border-top-color: #c5e1f0; border-bottom-color: #c5e1f0;">{{player.rank}}</td>
-      <td class="user-status" style="border-top-color: #c5e1f0; border-bottom-color: #c5e1f0;">{{request.user}}</td>
+      <td class="user-status" style="border-top-color: #c5e1f0; border-bottom-color: #c5e1f0;">{{player.user}}</td>
       <td class="user-status" style="border-top-color: #c5e1f0; border-bottom-color: #c5e1f0;">{{player.playerScore}} </td>
       <td class="user-status" style="border-top-color: #c5e1f0; border-bottom-color: #c5e1f0;">{{player.questionIndex}} </td>
+
       {% comment %} <td style="border-top-color: #c5e1f0; border-bottom-color: #c5e1f0; border-right-color: #c5e1f0;">0:21:00</td>                     {% endcomment %}
-    </tr>
+    </tr>{% endif %}
   </table>
   </div>
   
@@ -455,32 +454,24 @@ console.log(myArray[0]) {% endcomment %}
   
   
 <script>
-  // function pageTravel(index){
-  //       current_index = parseInt(index);
-  //       highlightIndexButton
-  //   ();
-  // }
-
-  // function next(){
-  //     if (current_index < max_index){
-  //       current_index++;
-  //       highlightIndexButton
-  //   ();
-  //     }
+  //for reload timer
+  function startTimer() {
+    let count = 30;
+    let timer = setInterval(() => {
+      count--;
+      document.querySelector("#current-user-rank td").textContent = count.toString().padStart(2, "0");
+      if (count === 0) {
+        clearInterval(timer);
+        document.querySelector("#current-user-rank td").textContent = "00";
+        window.location.reload();
+        // Refresh the content of the tbody element here
+        startTimer();
+      }
+    }, 1000);
+  }
   
-  // }
-
-  // function previous(){
-  //   if (current_index > 1){
-  //       current_index--;
-  //       highlightIndexButton();
-  //     }
-  // }
-   
-
+  startTimer();
   
-        
-
 </script>
 
 

@@ -17,21 +17,17 @@
    
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <a href="#" id="clashwhite">
-        <img src="clashwhite.png" alt="RC" height="52px" width="102px">
+        <img src="{% static 'images/clashwhite.png' %}" alt="RC" height="52px" width="102px">
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-        <a class="nav-item nav-link active" id="navlink" href="login.html">Log In</a>
-        <a class="nav-item nav-link active" id="navlink" href="instructions.html">Instructions</a>
-        <a class="nav-item nav-link active" id="navlink" href="MCQFinal.html">MCQ page</a>
         <!-- <a class="nav-item nav-link active " href="resultPage.html">Result</a> -->
-        <a class="nav-item nav-link active" id="navlink" href="Leaderboard3.html">Leaderboard  </a>
         
       </div>
-      <img src="#" id="ieeelogo" alt="PISB IEEE">
+      <img src="{% static 'images/pisblogo.png' %}" id="ieeelogo" alt="PISB IEEE" height="52px" width="102px">
       </nav>
 
     <div class="container">
@@ -41,7 +37,7 @@
           </div>
           <div class="name text-center">
          
-          <p id="name">{{request.user.username}}</p>
+          <p id="name">{{player}}</p>
           {% comment %} <p id="name">Animesh Jain</p>   {% endcomment %}
           </div>
 
@@ -53,7 +49,7 @@
                   <h3 class="titlec">Question <br> Attempted</h3>
                   <center>
                     <div class="qatm2 text-center">
-                      <h3 id="qatm2">{{player.questionIndex}}/52</h3>
+                      <h3 id="qatm2">{{userAttempt}}/52</h3>
                   </div>
                   </center>
                 </div>
@@ -63,7 +59,7 @@
                   <h3 class="titlec">Final<br> Score</h3>
                   <center>
                     <div class="qatm2 text-center">
-                      <h3 id="qatm2">{{player.playerScore}}</h3>
+                      <h3 id="qatm2">{{playerScore}}</h3>
                   </div>
                   </center>
                 </div>
@@ -127,6 +123,11 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+    <script>
+      // JavaScript code
+      setTimeout(function() {
+        window.location.href = "/leaderboard/"; // Replace the URL with the desired destination
+      }, 10000); // 10 seconds in milliseconds
+      </script>
   </body>
 </html>

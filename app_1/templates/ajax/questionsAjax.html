@@ -98,7 +98,7 @@
 
     //for lifeline2
     let arr = JSON.parse('{{wrong_question_list}}')
-    console.log(arr,"wrong questions")
+    //console.log(arr,"wrong questions")
 
     //this will diactivate btn if there is no wrong questions 
     if (arr.length<=0){
@@ -143,9 +143,9 @@
                     return;
                 }
                 document.getElementById("avoid").click();
-                console.log("Question selected by user " , selectedValuesOfQuestionNumber , " clicked","type ",typeof(selectedValuesOfQuestionNumber));
+                //console.log("Question selected by user " , selectedValuesOfQuestionNumber , " clicked","type ",typeof(selectedValuesOfQuestionNumber));
                 var number = $('#lifeline2btn').val();
-                console.log(number,'{{request.user}}',"selected question number ",this.value);
+                //console.log(number,'{{request.user}}',"selected question number ",this.value);
                 $.ajax({
                     method: 'POST',
                     url: '/lifelineActivation/',
@@ -157,9 +157,9 @@
                     success: function(data) {
                         // Handle the response here
                 
-                        console.log(data.question.question_title);
+                        //console.log(data.question.question_title);
                         // var tempVar = JSON.parse(data)
-                        console.log(data)
+                        //console.log(data)
                         // console.log(tempVar["question_title"]);
                         // var radio = document.getElementsByName("option");
                         // radio[data.user_answer-1].checked = true; 
@@ -169,7 +169,7 @@
 
                     },
                     error: function() {
-                        // Handle errors here
+                        alert("Something went wrong !!!")
                     }
                 });
 
@@ -213,14 +213,16 @@
     function disableOtherBtn(lifeline_number) {
         for (let i = 1; i <=3; i++) {
             document.getElementById("lifeline"+i+"btn").disabled= true;
-            console.log("i=",i,"lifeline_number",lifeline_number)
-            if (i === Number(lifeline_number)) {
-                console.log("lifeline number to check which is activated but color on othr btns ",lifeline_number)
+            //console.log("i=",i,"lifeline_number",lifeline_number)
+            if (i !== Number(lifeline_number)) {
+                //console.log("lifeline number to check which is activated but color on othr btns ",lifeline_number)
                 //document.getElementById("lifeline"+lifeline_number+"btn").classList.add('btn-success');
-            } else{
-            document.getElementById("lifeline"+i+"btn").style.color = "grey";
-
-            }
+                document.getElementById("lifeline"+i+"btn").style.color = "grey";
+            } 
+            //else{
+              //  document.getElementById("lifeline"+i+"btn").style.color = "grey";
+    
+               // }
 
         }
         if (3 === Number(lifeline_number)) {
@@ -228,7 +230,7 @@
         }
     };
     function enableOtherBtn() {
-        console.log("enavleother btn");
+        //console.log("enavleother btn");
         for (let i = 1; i <= 3; i++) {
             document.getElementById("lifeline"+i+"btn").disabled= false;
             document.getElementById("lifeline"+i+"btn").classList.remove('btn-success');
@@ -273,7 +275,7 @@
                 return;
             }
             var chatBotInput = $('#userQuestion').val();
-            console.log(chatBotInput, "chatbot question " ,);
+            //console.log(chatBotInput, "chatbot question " ,);
             
             disableInput();
             disableOtherBtn(3);
@@ -288,7 +290,7 @@
                 },
                 success: function(data) {
                     // Handle the response here
-                    console.log(data);
+                    //console.log(data);
                     let chatbotPTag = document.getElementById("lorem");
                     chatbotPTag.innerText="";
                     chatbotPTag.innerText=data.chatBotOutput;

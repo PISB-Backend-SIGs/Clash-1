@@ -46,7 +46,7 @@
                 
                 <a class="nav-item nav-link active" id="navlink" href="#">LogOut</a> -->
             </div>
-            <img src="{% static 'images/pisblogo.png' %}" id="ieeelogo" alt="PISB IEEE" height="52px" width="102px">
+            <img src="{% static 'images/pisblogo.png' %}" class="ieeelogo" alt="PISB IEEE" height="52px" width="102px">
           </nav>
     </div>
 
@@ -54,7 +54,7 @@
 <!-- PAGE LINKS -->
     <div class="contain">
           <div class="timer">
-            <button class="btn1"><a  id="navlink" href="instructions.html">Instructions</a></button>
+            <button class="btn1"><a  id="navlink" data-bs-toggle="modal" data-bs-target="#lbModal">Instructions</a></button>
     <!-- Leaderboard button -->
             <button class="btn2 "><a  id="navlink" href="{% url 'leaderboard' %}">Leaderboard </a></button>
           </div>
@@ -155,13 +155,13 @@
                 <table class="ranktable">
                     <thead>
                         <tr>
-                            <th>Rank</th>
+                            <th>Username/Team ID</th>
                         </tr>
                     </thead>
                     
                     <tbody>
                         <tr>
-                            <td>2,100</td>
+                            <td>{{player.user}}</td>
                         </tr>
                    </tbody>
                </table>
@@ -244,9 +244,47 @@
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="close" data-bs-dismiss="modal" >Close</button>
                 </div>
+                </div>
+                </div>                                                 
+            </div >
+
+            <!-- Instruction Modal -->
+          <div class="modal fade" id="lbModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="color: black;">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                lllLorem ipsum, dolor sit amet consectetur adipisicing elit. Cum doloremque esse perferendis ab qui? Fuga incidunt explicabo harum nisi consequuntur adipisci, iure minus error eum, magni quas dolorum velit dolor ducimus molestias. Dolorum quaerat voluptatum commodi facere at ipsam quibusdam esse labore, aliquid neque alias illum est officia? Accusamus molestiae ratione, aliquam perspiciatis qui dolorem natus illo vero fuga assumenda, porro inventore suscipit libero laborum dicta. Ratione facilis, repellat modi facere corporis a atque perferendis veritatis fuga officia neque consectetur distinctio ab aspernatur adipisci veniam praesentium sunt aperiam nostrum animi? Laborum est quis ipsum, corporis ab quas sed obcaecati quidem similique voluptatum voluptatibus illum exercitationem ipsa enim eum amet fuga fugit temporibus neque, natus beatae. Alias porro facere magni dicta ex exercitationem harum itaque, ratione expedita officiis, eligendi atque excepturi enim nisi fugit in quidem! Blanditiis amet vitae quibusdam dicta eaque dolores velit porro est vero officiis, optio neque, tempora itaque exercitationem! Reprehenderit quidem quos a temporibus, voluptatum, cum tenetur veniam maiores itaque minima voluptatibus, eius incidunt? Necessitatibus in voluptatem ab. Inventore id ex sit dolores, tempora tempore ipsum aut veritatis perspiciatis laboriosam unde exercitationem incidunt quam, maiores vel repudiandae explicabo ab error sapiente. Cupiditate possimus sunt reprehenderit saepe. Officiis facilis ex animi nesciunt corrupti rerum, fugiat eius nisi repudiandae veniam temporibus laboriosam dicta sapiente magni, vel dolore numquam eaque explicabo rem maiores ab magnam exercitationem assumenda? Consectetur quam deserunt dolor provident obcaecati consequatur commodi et sint, vero quasi itaque a placeat. Voluptate praesentium nemo voluptatibus unde quis repellat excepturi maiores vel nulla nihil aut, consequuntur odio ex suscipit, placeat incidunt impedit enim magnam dolorum accusamus hic, aliquam nostrum atque! Blanditiis laudantium fuga excepturi voluptatem a in voluptatum maxime maiores laborum autem officia nisi culpa quos dolores quia magni quas, provident expedita cupiditate illo, beatae et omnis aperiam. Assumenda totam odio quos voluptas id, ipsam quas cumque eius optio dolore aperiam minus ipsa itaque placeat odit. Expedita, aut! Omnis repudiandae aut cumque architecto, molestiae labore commodi, sit eius nihil reiciendis error adipisci saepe, obcaecati ipsa incidunt vel nam iure pariatur harum ex quos eveniet? Aspernatur, sit. Animi aliquid praesentium architecto perspiciatis ab placeat eos quo omnis harum quaerat officiis, nesciunt molestias dolorem deserunt tempore illum deleniti quisquam nemo recusandae accusamus aspernatur voluptas rem? Maxime enim maiores quis ratione corrupti labore quos, aspernatur unde sapiente alias voluptate, tempore vero voluptatibus sed? Possimus ipsam, exercitationem fugit id veniam at. Quidem saepe cum enim, eligendi quae odio porro officiis veniam nihil! Modi ab a ipsam placeat soluta maiores illum, quo quidem id autem praesentium earum similique facilis architecto ut, sed adipisci animi dolore quos rerum voluptatibus. Dolorem quaerat natus voluptatibus iure, labore voluptatem animi! Aspernatur ea assumenda fugiat vitae suscipit deleniti natus sint! Magni accusamus impedit repellendus quasi hic unde cumque totam at eveniet! Minima neque libero suscipit, quo reiciendis impedit. Nostrum, molestiae deleniti officiis quis hic necessitatibus nihil nisi blanditiis eius consequuntur ullam beatae quibusdam eveniet asperiores voluptatem sunt ea ipsa ab dolores soluta. Sed, aut porro repellendus inventore blanditiis praesentium ipsa rem voluptates itaque corrupti, repellat error nesciunt eligendi, accusantium quae! Nam blanditiis tenetur possimus quae fugiat pariatur accusamus. Nulla eveniet, soluta provident tempore ad doloremque blanditiis eligendi reprehenderit debitis atque expedita ratione unde nesciunt tenetur repudiandae aspernatur excepturi rerum fugit vitae! Molestiae, esse dicta sed quo voluptatem repellendus autem veritatis culpa, neque cumque veniam tempore aspernatur aliquam distinctio iusto consequatur minus, eligendi enim. Animi, inventore? Quibusdam nisi enim ad, facere earum eius maiores nobis ipsum id iure accusantium porro omnis nesciunt ea consequatur dolores iste, vel sit suscipit dicta ratione nemo maxime odit! Sapiente incidunt nostrum doloribus modi? Doloribus, nisi amet rem dolorum esse ullam recusandae fugit quod! Fugiat eaque repudiandae molestias! Officiis hic repudiandae rerum earum ea distinctio porro explicabo quis! Error consequuntur aperiam doloremque voluptates quidem, minima laudantium non quasi maiores eaque obcaecati odio aspernatur facere impedit ut, mollitia omnis ipsam voluptatibus ad natus rerum ex asperiores. Ratione quas, iste libero error ad aliquid beatae tenetur doloribus nam, cumque sed possimus corporis perspiciatis delectus totam nihil, reiciendis unde? Libero nam eaque porro officia dolorum veniam exercitationem expedita veritatis? Aliquam repellendus, tempora veritatis odit, officia voluptate ipsa beatae veniam repellat enim eveniet deleniti delectus magnam dolorum repudiandae temporibus minima laboriosam quidem. Obcaecati debitis eveniet dolor fuga enim ducimus eaque voluptas itaque dolorem optio aut aperiam expedita sapiente consectetur placeat rerum nemo, id, culpa ipsam maiores! Libero sit voluptas corporis placeat esse earum ex nobis illum maxime repellat reiciendis repellendus explicabo dignissimos, dicta similique repudiandae provident! Eum vel quo perspiciatis veniam, sed totam rem delectus beatae esse sit blanditiis qui saepe provident et non aperiam at voluptates illo quam adipisci, debitis alias! Non labore a voluptas aperiam odit ea ipsum porro quisquam quaerat esse! Rem aperiam, eos officia voluptas obcaecati veritatis distinctio sunt laborum reprehenderit quas exercitationem? Assumenda facere doloremque, sint amet doloribus voluptas neque deserunt obcaecati sit laboriosam voluptatibus, non ipsam, aliquid quas explicabo ex! Nesciunt, id aliquam nemo maxime pariatur, reprehenderit delectus aperiam molestias eum odio culpa recusandae officia provident hic, incidunt non numquam similique quas neque exercitationem quasi? Sed rerum dolores in aperiam hic ut esse odit doloribus laudantium, veniam enim quidem quisquam laboriosam similique autem id alias odio unde ab ullam. Tempora, eum soluta. Ratione magni fugit, nisi, recusandae, debitis natus eos deleniti suscipit explicabo eum voluptates numquam laborum nostrum repellendus quos vitae doloremque. Eveniet incidunt, ad dolores quos numquam nulla voluptates neque porro earum voluptatum error temporibus quod odio. Laborum facilis perferendis maiores nam reprehenderit voluptatum voluptatem sequi nostrum, dolore repellat nihil nisi consequuntur consectetur voluptatibus velit cumque quae neque. Nostrum, unde quas consequatur autem distinctio voluptates perferendis nihil beatae doloremque quos fugiat earum sapiente provident quae eos sequi est debitis, dicta ut commodi praesentium? Beatae voluptatem possimus aliquid nam sit id ratione sint architecto, nisi unde non rem maiores dolorem aperiam officia adipisci ad, quasi atque tempore excepturi! Earum accusamus velit esse possimus accusantium, fugiat nesciunt illo quo aperiam laudantium deserunt ratione nihil alias architecto, blanditiis suscipit commodi iusto dolor repellendus ab cum repellat.
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="close" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
-            </div>                                                 
-        </div >
+            </div>
+          </div>
+
+            <!--Alert modal-->
+            <div class="modal fade" id="AlertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <p class="modal-msg">Instruction</p>
+                            <div class="pastques" id="Alert_modal">
+                                <!--question_modal <id -->
+                                {% comment %} <button class="pastq" >1</button> {% endcomment %}
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="travel-opt" id="accept">Accept</button>
+                                <button type="button" class="travel-opt" id="cancel">Cancel</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <!--<button class="btn1"><a  id="navlink" onclick="myAlert(1)">Instructions</a></button>-->
+
 
 
                 
@@ -340,7 +378,7 @@
             // console.log(new Date())
             remain = countDown - now;
             // console.log("b time",countDown,"f time", now ) 
-            console.log("remain",remain);
+            //console.log("remain",remain);
   
         //   document.getElementById("days").innerText = Math.floor(distance / (day)),
              const countdown = document.getElementById('countdown');
@@ -379,7 +417,44 @@
           //seconds
         },0)  
 </script>
-
+<script>
+    //for alert box of lifeline
+    const lifelineInstructionArray = ["1st lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas.",
+    "2nd lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas.",
+    "3rd lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas."]
+    function myAler(lifelineNumber) {
+      $('#AlertModal').modal('show');
+      // document.getElementById("close").addEventListener("click",()=>{
+      //   return false;
+      // })
+      let modal = document.getElementById("Alert_modal")
+      if (lifelineNumber === 1){
+        modal.innerText = lifelineInstructionArray[0]
+      }
+      else if (lifelineNumber === 2){
+        modal.innerText = lifelineInstructionArray[1]
+      }
+      else if (lifelineNumber === 3){
+        modal.innerText = lifelineInstructionArray[2]
+      }
+      return new Promise((resolve, reject) => {
+      document.getElementById("close").addEventListener("click", () => {
+        $('#AlertModal').modal('hide');
+        resolve("False");
+      })
+      document.getElementById("accept").addEventListener("click", () => {
+        $('#AlertModal').modal('hide');
+        resolve("True");
+      })
+})
+    }
+    async function myAlert(lifelineNumber) {
+      const x = await myAler(lifelineNumber);
+      console.log("value from modal ",x)
+      {% comment %} return Boolean(x); {% endcomment %}
+    }
+    
+  </script>
     <!-- Include Bootstrap and jQuery libraries -->
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
