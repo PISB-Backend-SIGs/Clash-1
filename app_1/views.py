@@ -16,7 +16,9 @@ from django.urls import reverse
 
 from .addquestion import *
 #Users home page after login
+@never_cache
 @login_required(login_url="signin")
+
 def home(request):
     user = User.objects.get(username=request.user)
     player = Player.objects.get(user=user)
@@ -24,7 +26,8 @@ def home(request):
         "title":"Home",
         "user":request.user
     }
-
+    if (player.isStarted):
+        return redirect("questions")
     #To check checkbox is clicked or not
     if request.method == "POST":
         user = User.objects.get(username=request.user)
@@ -314,9 +317,19 @@ def result(request):
     return render(request,"app_1/Result.html",context)
 
 
-# @never_cache
+@never_cache
 def signin(request):
-    # add()
+    try:
+        username = request.POST['username']
+        user = User.objects.get(username=username)
+        player = Player.objects.get(user=user)
+        if (player.isStarted):
+            logout(request)
+            messages.error(request,"You are already login")
+            return redirect('signin')
+    except:
+        pass
+        # add()
     # changeOPtion()
 
     # print(player.questionList)
@@ -485,3 +498,16 @@ def test1(request):
         return JsonResponse({"status":1})
     else:
         return JsonResponse({"status":0})
+    
+
+
+# def ipaddress(request):
+#     # user_ip = request.META.get('HTTP_X_FORWARDED_FOR')
+#     # if user_ip:
+#     #     ip = user_ip.split(',')[0]
+#     # else:
+#     #     ip = request.META.get('REMOTE_ADDR')
+#     user_ip = request.META.get('REMOTE_ADDR')
+    
+#     # return HttpResponse("Welcome User!<br>You are visiting from: {}".format(ip))
+#     return HttpResponse("Welcome User!<br>You are visiting from: {}".format(user_ip))
