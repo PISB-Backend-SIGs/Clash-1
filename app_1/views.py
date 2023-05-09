@@ -12,6 +12,7 @@ from .decorators import *
 # from django.core.cache import cache
 from django.views.decorators.cache import never_cache
 from django.urls import reverse
+import requests
 # Create your views here.
 
 from .addquestion import *
@@ -328,9 +329,15 @@ def signin(request):
     if request.method == "POST":   #For signin page only username and pass1 taken
         username = request.POST['username']
         password = request.POST['password']
-        isJunior = request.POST['isJunior']
-        print("isTEam ",isJunior,type(isJunior))
-        user = authenticate(username=username, password= password,isJunior=isJunior)         #authenticate user here
+        isTeam = request.POST['isTeam']
+        if isTeam == "True":
+            isTeam = True
+        else:
+            isTeam = False
+        print(isTeam, "isteam", type(isTeam))
+        
+        # print("isTEam ",isJunior,type(isJunior))
+        user = authenticate(username=username, password= password)         #authenticate user here
 
         if user is not None :  #IF correct credentials given
             # player = Player.objects.get(user=user)
@@ -353,7 +360,56 @@ def signin(request):
             else:
                 messages.error(request,"You already given the test")
 
-        else:  #If wrong credentials given
+        else:  #If wrong credentials given on local server
+            url = 'https://api.credenz.in/api/verify/user/'
+            headers = {'Content-Type': 'application/json'}
+
+            data = {
+                'username': username,
+                'password': password,
+                'event': 'clash',
+            }
+            
+            if isTeam:
+                data['is_team'] = "true"
+                print("here")
+            else:
+                data['is_team'] = None # empty string
+
+            response = requests.post(url, headers=headers, json=data)
+            
+
+            if response.status_code == 200:
+                response = response.json()
+                user = User.objects.create_user(username=username, password=password, )
+                if not isTeam:
+                    try:
+                        isJunior = not response['user']['senior']
+                        first_name = response['user']['first_name']
+                        last_name = response['user']['last_name']
+                    except:
+                        messages.error(request, "Invalid Credentials")
+                        return redirect('signin')
+                else: # if team
+                    isJunior = True
+                    first_name = response['users'][0]['first_name']
+                    last_name = response['users'][0]['last_name']
+
+                    # display name
+                    display_name = ""
+                    for user1 in response['users']:
+                        display_name += user1['username'] + " &"
+                        if user1['senior']:
+                            isJunior = False
+                    display_name = display_name[:-2]
+                    print(display_name)
+                            
+                player = Player(user=user, isJunior=isJunior)
+                player.questionList = create_random_list(player.questionNumber,player.isJunior)
+                player.save()
+                login(request, user)
+                messages.success(request, "Login Successful")
+                return redirect("home")
             messages.error(request, "Bad Credentials")
             return redirect('signin')
 
