@@ -326,7 +326,7 @@ def signin(request):
         player = Player.objects.get(user=user)
         if (player.isStarted):
             logout(request)
-            messages.error(request,"You are already login")
+            messages.error(request,"You have already started the test.")
             return redirect('signin')
     except:
         pass
