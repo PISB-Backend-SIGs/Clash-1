@@ -26,22 +26,11 @@ def chatbot_response(user_input):
     return response["choices"][0]["text"]
 
 
-# print(chatbot_responsplain BST in 10 line?"))
-
-for i in range(10):
-    print(i,"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-    print(chatbot_response("Explain BST in 10 line?"))
-    print("*************************************************************")
-
-dict ={}
-dict["key1"]="1"
-dict["key2"]="2"
-dict["key3"]="3"
-dict["key4"]="4"
-
-# print(dict)
-# print(type(dict))
-
+apiKeysList = []
+apiKeysList.append(config("KEY1"))
+apiKeysList.append(config("KEY2"))
+apiKeysList.append(config("KEY3"))
+print("apis   :" ,apiKeysList)
 
 
 

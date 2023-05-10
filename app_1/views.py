@@ -310,6 +310,16 @@ def result(request):
     }
     
     player = Player.objects.get(user=request.user)
+    if (player.tabSwitchCount >3):
+        logout(request)
+        submission = Submission.objects.filter(player=player)
+        context["player"]=request.user
+        context["playerScore"]=player.playerScore
+        context["userAttempt"]=player.questionIndex
+        context["totalAttempt"]=len(submission)
+        context["rightAttempt"]=len(submission.filter(isCorrect=True))
+        return render(request,"app_1/Result.html",context)
+
     if not(player.isEnded):
         return redirect("leaderboard")
     submission = Submission.objects.filter(player=player)
@@ -560,12 +570,14 @@ def getJSLeaderboard(request):
 def test1(request):
     print("in test1")
 
-    if request.method == "POST":
-        lid = request.POST.get("number")
-        print(lid)
-        return JsonResponse({"status":1})
-    else:
-        return JsonResponse({"status":0})
+    # if request.method == "POST":
+    #     lid = request.POST.get("number")
+    #     print(lid)
+    #     return JsonResponse({"status":1})
+    # else:
+    #     return JsonResponse({"status":0})
+    
+    return render(request,"app_1/test1.html")
     
 
 
@@ -579,3 +591,15 @@ def test1(request):
     
 #     # return HttpResponse("Welcome User!<br>You are visiting from: {}".format(ip))
 #     return HttpResponse("Welcome User!<br>You are visiting from: {}".format(user_ip))
+
+
+
+@csrf_exempt
+def windowBlurError(request):
+    username = request.POST.get("user")
+    user = User.objects.get(username=username)
+    player = Player.objects.get(user=user)
+    print(player.tabSwitchCount)
+    player.tabSwitchCount += 1
+    player.save()
+    return JsonResponse({'status':1,"tabSwitchValue":player.tabSwitchCount})

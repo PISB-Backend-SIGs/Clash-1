@@ -1,7 +1,7 @@
 import json,random
 from datetime import datetime,timedelta
 from django.utils import timezone
-from app_1.models import Lifeline,Player
+from app_1.models import Lifeline,Player, APICount
 from .models import Submission
 import openai
 from decouple import config
@@ -248,12 +248,22 @@ def check_lifeline_activate(user,player,submission,question):
         return lifeline_dict
     
 
+apiKeysList = []
+apiKeysList.append(config("KEY1"))
+apiKeysList.append(config("KEY2"))
+apiKeysList.append(config("KEY3"))
+print("apis   :" ,apiKeysList)
+def getApiKey():
+    apiCount =  APICount.objects.get(id=1)
+    print( "helooooo " ,apiCount.count)
+    openai.api_key = apiKeysList[apiCount.count % 3]
+    apiCount.count += 1
+    apiCount.save()
 
-
-openai.api_key = config("OPENAI_KEY")
 
 def chatbot_response(user_input):
     '''to give output from  CHATGPT'''
+    getApiKey()
     response = openai.Completion.create(
         engine = "text-davinci-002",
         prompt = user_input,

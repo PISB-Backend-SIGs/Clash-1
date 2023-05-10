@@ -31,6 +31,7 @@ urlpatterns = [
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     path('test1/', views.test1, name='test1'),
     path('getJSLeaderboard/', views.getJSLeaderboard, name='getJSLeaderboard'),
+    path('windowBlurError/', views.windowBlurError, name='windowBlurError'),
     # path('getip', views.ipaddress, name='ipaddress'),
     
 ] 

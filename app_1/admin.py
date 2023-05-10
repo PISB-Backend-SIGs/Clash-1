@@ -62,3 +62,10 @@ class SubmissionAdmin(admin.ModelAdmin):
         "player","questionID","userOption","points","lifelineActivated","isCorrect"
     ]
 admin.site.register(Submission,SubmissionAdmin)
+
+
+class APICountAdmin(admin.ModelAdmin):
+    list_display=[
+        "count"
+    ]
+admin.site.register(APICount,APICountAdmin)

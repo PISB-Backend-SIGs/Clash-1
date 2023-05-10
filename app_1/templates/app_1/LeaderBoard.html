@@ -243,16 +243,16 @@
         
           
 
+        {% comment %} console.log(myArray)
+        console.log(myArray[0]) {% endcomment %}
+        {% comment %} console.log("{{player|safe}}") {% endcomment %}
+        
         var myArray= JSON.parse('{{players|safe}}');
         var limit = 10;
         var totalPages = myArray.length/limit;
         var firstPage = 1; 
         var secondPage=2;
         var thirdPage=3;
-{% comment %} console.log(myArray)
-console.log(myArray[0]) {% endcomment %}
-{% comment %} console.log("{{player|safe}}") {% endcomment %}
-
   
   {% comment %} console.log(totalPages) {% endcomment %}
   function checkPag() {
@@ -474,6 +474,30 @@ console.log(myArray[0]) {% endcomment %}
   
 </script>
 
+  
 
+<script>
+  // Get the button element
+  //var button = document.getElementById('navlink');
+  
+  // Get the value of the href attribute
+  //var redirectUrl = button.getAttribute('href');
+  
+  // Log the redirect URL to the console
+  //console.log('The button will redirect to: ' + redirectUrl));
+  {% comment %} document.getElementById('navlink').addEventListener("click",()=>{
+    var button = document.getElementById('navlink');
+    var redirectUrl = button.getAttribute('href');
+    console.log(redirectUrl)
+    if (redirectUrl === "/questions/"){
+      console.log("aaaaaaa")
+      return;
+    }
+  })
+  console.log("bbbbbbbb"); {% endcomment %}
+</script>
+{% if request.user.is_authenticated %}
+{% include "ajax/test.html" %}
+{% endif %}
 </body>
 </html>

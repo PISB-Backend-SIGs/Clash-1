@@ -1,0 +1,29 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    window.blur()
+    window.addEventListener('blur', function() {
+        // count++;
+        alert("hello i am waching you")
+        $.ajax({
+            method: 'POST',
+            url: '/windowBlurError/',
+            data: {
+                "user":'{{request.user}}',
+                
+            },
+            success: function(data) {
+                // Handle the response here
+                console.log("successfully incremeneted blur")
+                //console.log(data);
+                if(data.tabSwitchValue > 3){
+                    location.href = "/result/"
+                }
+
+            },
+            error: function() {
+                // Handle errors here
+                alert("Something went wrong.....")
+            }
+        });
+    });
+    </script>

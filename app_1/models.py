@@ -31,6 +31,7 @@ class Player(models.Model):
         (False,"False")
     ]
     isJunior = models.BooleanField(choices=isJuniorChoices,default=True)
+    tabSwitchCount = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return f"{self.user}"
@@ -67,4 +68,15 @@ class Submission(models.Model):
 
     def __str__(self) -> str:
         return f"{self.player}"
+    
+
+class APICount(models.Model):
+    count = models.IntegerField(default= 0)
+
+    def __str__(self) -> str:
+        return f"{self.count}"
+
+    
+
+
     

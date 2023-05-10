@@ -45,3 +45,16 @@
     {% block scriptBlock %}{% endblock scriptBlock %}
 </body>
 </html>
+<script>
+    document.addEventListener("contextmenu", function(event){
+        event.preventDefault();
+        }, false);      
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("*").dblclick(function(e){
+            e.preventDefault();
+        });
+    })
+</script>

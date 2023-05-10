@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +9,7 @@
 </head>
 <body>
 
-    <div>
+    <!-- <div>
         <input type="radio" name="ns" id="dfsd" value="ggf">
         <label for="dfsd">sdasf</label>
     </div>
@@ -66,7 +67,12 @@
                 console.log("hello");
             }
         </script>
-    </div>
+    </div>  -->
+
+{% if request.user.is_authenticated %}
+{% include "ajax/test.html" %}
+{% endif %}
+    
 </body>
 
 
