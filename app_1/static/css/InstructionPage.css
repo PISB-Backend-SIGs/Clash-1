@@ -13,8 +13,9 @@
     background-color: #11101D;
     overflow-x: hidden;
     overflow-y: hidden;
-    
-  }
+    height: 100vh;
+    background-image: linear-gradient(#141e30,#0d1927);
+}
 
   @font-face {
     font-family: solthin;
@@ -41,6 +42,8 @@
   
   .Navbar2{
     height: auto;
+    background-image: linear-gradient(#141e30,#0d1927);
+   
   }
   
   .logo{
@@ -62,6 +65,8 @@
   }
   .navbar{
     padding: 0;
+    background-image: linear-gradient(#141e30,#0d1927);
+    height: 70px;
   }
   .nav-link{
     padding: auto 40px;
@@ -117,7 +122,7 @@
 }
   .container2 {
    margin: auto 14%;
-   height: 83vh;
+   height: 75vh;
   }
   input {
     display: none;
@@ -338,7 +343,7 @@
     /* transform-origin: bottom; */
     transform-origin: left;
     box-shadow: none;
-    border: 3px solid #08f4ac;
+    border: 3px solid #0d78b7;
     background: #031016;
   }
   
@@ -469,6 +474,15 @@ nav ul li ul li a {
   transform: rotate(-45deg);
 }
 
+.btn-success.disabled, .btn-success:disabled {
+  color: #fff;
+  background-color: #198754;
+  background: linear-gradient(#141e30,#004493);
+  margin-left: 25px;
+ 
+  border: #07074c;
+}
+
 .submitx{
   width: 80%;
   display: flex;
@@ -478,9 +492,10 @@ nav ul li ul li a {
   background-color: inherit;
   margin: auto;
   justify-self: end;
-  border: 2px solid #08f4ac;
+  border: 2px solid #0d78b7;
   border-radius: 14px;
   padding: 5px;
+  margin-left: 10px;
 }
 
 
@@ -503,7 +518,7 @@ nav ul li ul li a {
 
 
 .footer {
-  background: linear-gradient(45deg, #19638b, #011722);
+  background-image: linear-gradient(#141e30,#0d1927);
   color: #fff;
   text-align: center;
   padding: 10px;
@@ -517,6 +532,8 @@ nav ul li ul li a {
   left: 0;
   bottom: 0;
   flex-shrink: 0;
+
+  height: 55px;
   
 }
 
@@ -731,7 +748,40 @@ nav ul li ul li a {
   /* margin-left: 25px; */
 }
 
-.confirmationBtn{
-  /* margin-right: 25px; */
-  display: block;
+.confirmation{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 
 }
+
+
+.confirmation form{
+  display: flex;
+  margin-right: 65px;
+}
+
+.form-check-input[type=checkbox] {
+  border-radius: 0.25em;
+  margin-top: 10px;
+}
+
+.form-check-input[type=checkbox] {
+  border-radius: 0.25em;
+  margin-top: 10px;
+}
+
+.btn-success {
+  color: #fff;
+  /* background-color: #198754; */
+  /* border-color: #198754; */
+  background: linear-gradient(#141e30,#004493);
+  /* background: blue; */
+}
+
+.btn-success {
+  color: #fff;
+  background-color: none;
+  /* border-color: #198754; */
+}
+

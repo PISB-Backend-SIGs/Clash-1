@@ -24,6 +24,7 @@ urlpatterns = [
     path('lifelineActivation/', views.lifelineActivation, name='lifelineActivation'),
     path('quiz-submit/', views.submit, name='submit'),
     path('result/', views.result, name='result'),
+    path('LogoutClicked/', views.LogoutClicked, name='LogoutClicked'),
     path('signin/', views.signin, name='signin'),
     path('signup/', views.signup, name='signup'),
     path('signout/', views.signout, name='signout'),

@@ -7,14 +7,19 @@
   /* position: relative; */
 }
 
+btn-close{
+  background-color: white;
+}
 
 .Body {
   /* background-color: #1a2433; */
   /* background-color: rgb(26, 26, 44); */
   font-family: "Poppins", sans-serif;
   width: 100%;
+  /* height: 100vh; */
   height: 100%;
-  background: linear-gradient(#141e30,#0d1927)
+  background: linear-gradient(#141e30,#0d1927);
+  padding-bottom:10vh;
 }
 
 /* NavBar CSS */
@@ -572,10 +577,10 @@ th {
     -2px 2px 2px #c5e1f0;
   transition: 0.2s ease-out;
 }
-.modal.show .modal-dialog {
+/* .modal.show .modal-dialog {
   animation: modalmoves 2s 1 ease-in;
-  /* scale: 0.5; */
-}
+  
+} */
 
 @keyframes modalmoves {
   0% {
@@ -642,6 +647,7 @@ th {
   border: 2px solid #c5e1f0;
   background-color: #042e42;
   display: flex;
+  flex-wrap: nowrap;
   justify-content: space-evenly;
 }
 
@@ -699,7 +705,8 @@ th {
     background: linear-gradient(#141e30,#0d1927);
     font-size: larger;
     width: 100%;
-    position: relative;
+    /* position: relative; */
+    position: fixed;
     bottom: 0;
     /* font-style: italic; */
     /* font-weight: 600; */
@@ -973,7 +980,7 @@ th {
     overflow: hidden;
     background: #082934;
     color: white;
-    border: 3px solid #08f4ac;
+    border: 3px solid #0d78b7;
     margin: auto 3%;
 }
 
@@ -993,14 +1000,15 @@ th {
 .modal-body{
   display: flex;
   justify-content: space-between;
-    border-top:2px solid #00fd5e;
-    border-top:2px solid #08f4ac;
-    border-bottom:2px solid #08f4ac;
+    border-top:2px solid #0d78b7;
+    border-top:2px solid #0d78b7;
+    border-bottom:2px solid #0d78b7;
 }
 
 .modal-footer{
     border-top: 0;
     display: flex;
+    flex-wrap: nowrap;
     flex-direction: row-reverse;
     align-items: center;
     justify-content: space-evenly !important;
@@ -1014,7 +1022,7 @@ th {
     width:84%;  
     padding: 5px;
     padding-left: 11px;
-    color: #00fd5e;
+    color: #0d78b7;
     outline: none;
 }
 
@@ -1023,7 +1031,7 @@ th {
     flex-direction: row;
     justify-content: center;
     padding: 1rem;
-    border-bottom: 3px solid #08f4ac;
+    border-bottom: 3px solid #0d78b7;
     text-align: left;
 }
 .chatresponse p{
@@ -1054,19 +1062,19 @@ th {
 }
 
 ::-webkit-scrollbar-thumb:hover{
-     background: #08f4ac;
+     background: #0d78b7;
 }
 
 
 #close{
-    color: #00fd5e;
+    color: #0d78b7;
     background-color: #000000;
     border: 2px solid cyan;
     border-radius: 5px;
     align-self: center;
 }
 #close:hover{
-    box-shadow: 1px 1px 7px #00fd5e,-1px -1px 7px #00fd5e,1px 1px 7px #00fd5e;
+    box-shadow: 1px 1px 7px #0d78b7,-1px -1px 7px #0d78b7,1px 1px 7px #0d78b7;
     scale: 1.1;
 }
 #my-button{

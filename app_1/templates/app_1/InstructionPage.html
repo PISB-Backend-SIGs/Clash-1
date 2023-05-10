@@ -59,7 +59,7 @@
               ><i
                 style="
                   margin-top: -15px;
-                  border: 2px solid #08f4ac;
+                  border: 2px solid #0d78b7;
                   border-radius: 50%;
                   padding: 8px;
                 "
@@ -73,7 +73,7 @@
               ><i
                 style="
                   margin-top: -15px;
-                  border: 2px solid #08f4ac;
+                  border: 2px solid #0d78b7;
                   border-radius: 50%;
                   padding: 8px;
                   padding-left: 13px;
@@ -89,7 +89,7 @@
               ><i
                 style="
                   margin-top: -15px;
-                  border: 2px solid #08f4ac;
+                  border: 2px solid #0d78b7;
                   border-radius: 50%;
                   padding: 8px;
                   padding-left: 11px;
@@ -105,7 +105,7 @@
               ><i
                 style="
                   margin-top: -15px;
-                  border: 2px solid #08f4ac;
+                  border: 2px solid #0d78b7;
                   border-radius: 50%;
                   padding: 8px;
                   padding-left: 11px;
@@ -309,21 +309,23 @@
               maiores labore omnis corporis explicabo voluptatum placeat reprehenderit adipisci quasi?
             </li><br>
             
-            <li id="confirmation">
-                <form  method="POST">
-                    {% csrf_token %}
-                <input type="checkbox" id="instructionCheckbox" class="form-check-input" name="checkbox" value="checked"><br><br>
-                <input type="submit" class="btn btn-success confirmationBtn" id="confirmationBtn" >Proceed</input>
-                </form>
-            </li><br>
+           
+            <br>
           </ol>
                     
       </section>
-      
+
       
       </div>
-     
       
+      
+    </div>
+    <div class="confirmation">
+      <form  method="POST">
+          {% csrf_token %}
+      <input type="checkbox" id="instructionCheckbox" class="form-check-input" name="checkbox" value="checked"><br><br>
+      <input type="submit" class="btn btn-success confirmationBtn" id="confirmationBtn" >Proceed</input>
+      </form>
     </div>
   </div>
 

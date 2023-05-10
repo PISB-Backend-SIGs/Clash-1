@@ -69,3 +69,9 @@ class APICountAdmin(admin.ModelAdmin):
         "count"
     ]
 admin.site.register(APICount,APICountAdmin)
+
+class chatGPTLifeLineAdmin(admin.ModelAdmin):
+    list_display=[
+        "key","numUsed","isDepleted"
+    ]
+admin.site.register(chatGPTLifeLine,chatGPTLifeLineAdmin)

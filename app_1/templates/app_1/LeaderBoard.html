@@ -20,8 +20,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-         
+            {% if request.user.is_authenticated %}
           <a class="nav-item nav-link active" id="navlink" href="{% url 'questions' %}">MCQ page</a>
+          {% endif %}
           <!-- <a class="nav-item nav-link active" id="navlink" href="Leaderboard3.html">Leaderboard  </a> -->
           
         </div>
@@ -77,7 +78,8 @@
     </form> -->
 
     <div class="Heading">
-      <p class="current-user-status">Your Rank</p>
+      {% if request.user.is_authenticated %}
+      <p class="current-user-status">Your Rank</p>{% endif %}
       <!-- <p class="Reload">Page Reloads in: 0:00:00</p> -->
       <table class="current-user-rank">
         <thead id="current-user-rank">
@@ -496,8 +498,8 @@
   })
   console.log("bbbbbbbb"); {% endcomment %}
 </script>
-{% if request.user.is_authenticated %}
+{% comment %} {% if request.user.is_authenticated %}
 {% include "ajax/test.html" %}
-{% endif %}
+{% endif %} {% endcomment %}
 </body>
 </html>

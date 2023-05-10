@@ -27,6 +27,8 @@ body {
     background-size: 100% 100%;    */
     width: 100%;
     opacity: 100%;
+    min-height: 100vh;
+    padding-bottom: 10vh;
 }
 
 @font-face {
@@ -80,6 +82,9 @@ body {
     margin: auto 14px;
   }
   
+  img {
+    height: 42px;
+}
   
   
   .navbar-dark .navbar-nav .nav-link.active, .navbar-dark .navbar-nav .show>.nav-link {
@@ -562,19 +567,18 @@ dl, ol, ul {
     color: #fffff0;
     background-color: #292929;
 }
-.footer{
+.footer {
     display: flex;
     background: linear-gradient(45deg, #19638b, #011722);
     justify-content: center;
     background-color: #fffff0;
-    font-size: larger;
-    font-style: italic;
-    font-weight: 600;
     /* border: 1px solid #D28511; */
     max-width: -webkit-fill-available;
     bottom: 0;
-    
-    position: sticky;
+    height: 55px;
+    background: linear-gradient(#141e30,#0d1927);
+    position: fixed;
+    width: 100%;
 }
 
 .footertext{

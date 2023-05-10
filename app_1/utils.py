@@ -1,11 +1,11 @@
 import json,random
 from datetime import datetime,timedelta
 from django.utils import timezone
-from app_1.models import Lifeline,Player, APICount
+from app_1.models import Lifeline,Player, APICount,chatGPTLifeLine
 from .models import Submission
 import openai
 from decouple import config
-size = 9     #size of question display to user
+size = 9  #size of question display to user
 rangJ = 50 #size of question in database
 rangS = 3 #size of question in database
 def create_random_list(crnt_ques,isjunior):
@@ -118,7 +118,7 @@ def set_time():
     start_time=timezone.now()
     dict={
         "start_time":start_time,
-        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=28),
+        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=120),
     }
     return dict
 
@@ -129,7 +129,7 @@ def checkStreak(player):
         last3Submissions = submissions.order_by("-id")
         # print(lifeLine1Submissions.values())
         for i in range(len(submissions)):
-            if (last3Submissions[i].isCorrect):
+            if (last3Submissions[i].isCorrect and not(last3Submissions[i].lifelineActivated) ):
                 streak+=1
             else:
                 # if(i==0):
@@ -138,6 +138,9 @@ def checkStreak(player):
                 # else:
                 #     break
                 break
+        if streak > player.maxStreak:
+            player.maxStreak = streak
+            player.save()
     return streak
     
 
@@ -248,32 +251,38 @@ def check_lifeline_activate(user,player,submission,question):
         return lifeline_dict
     
 
-apiKeysList = []
-apiKeysList.append(config("KEY1"))
-apiKeysList.append(config("KEY2"))
-apiKeysList.append(config("KEY3"))
-print("apis   :" ,apiKeysList)
-def getApiKey():
-    apiCount =  APICount.objects.get(id=1)
-    print( "helooooo " ,apiCount.count)
-    openai.api_key = apiKeysList[apiCount.count % 3]
-    apiCount.count += 1
-    apiCount.save()
+# apiKeysList = []
+# apiKeysList.append(config("KEY1"))
+# # apiKeysList.append(config("KEY2"))
+# # apiKeysList.append(config("KEY3"))
+# # apiKeysList.append(config("KEY4"))
+# # apiKeysList.append(config("KEY5"))
+# # apiKeysList.append(config("KEY6"))
 
+# print("apis   :" ,apiKeysList)
+# def getApiKey():
+#     apiCount =  APICount.objects.get(id=1)
+#     print( "helooooo " ,apiCount.count)
+#     # openai.api_key = apiKeysList[apiCount.count % 0]
+#     openai.api_key = apiKeysList[0]
+#     apiCount.count += 1
+#     apiCount.save()
 
-def chatbot_response(user_input):
-    '''to give output from  CHATGPT'''
-    getApiKey()
-    response = openai.Completion.create(
-        engine = "text-davinci-002",
-        prompt = user_input,
-        temperature = 0.5,
-        max_tokens = 1024 ,
-        top_p = 1,
-        frequency_penalty = 0,
-        presence_penalty = 0
-    )
-    return response["choices"][0]["text"]
+# # openai.api_key = "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"
+# def chatbot_response(user_input):
+#     '''to give output from  CHATGPT'''
+#     getApiKey()
+    
+#     response = openai.Completion.create(
+#         engine = "text-davinci-002",
+#         prompt = user_input,
+#         temperature = 0.5,
+#         max_tokens = 1024 ,
+#         top_p = 1,
+#         frequency_penalty = 0,
+#         presence_penalty = 0
+#     )
+#     return response["choices"][0]["text"]
 
 def accuracy(submissions):
     '''to get accuracy of ans submitted'''
@@ -304,7 +313,79 @@ def getLeaderBoard(playerQuery):
     return lis
 
 
+from django.http import JsonResponse
+import requests
+import time
+def chatbot_response(userQuery):
+    try :
+        print("in L3")
+        print("======================")
+        allKeys = chatGPTLifeLine.objects.all()
+        allKeys2 = chatGPTLifeLine.objects.filter(isDepleted = False)
 
+        if len(allKeys2) == 0:
+            return json.dumps({'question': {userQuery},'answer': "Somethingwentwrong","status":0})
+            
+        isproblem = True
+
+        #==== remove loop after testing=====
+        for k in allKeys:
+            print(k.key, k.numUsed, k.isDepleted)
+        #===================================
+
+        for key in allKeys2:
+            
+            if True:
+                if key.numUsed < 3:
+                    isproblem = False
+                    key.numUsed += 1
+                    key.lastUsed = time.time()
+                    key.save()
+                    break
+                else:
+                    print("Key is depleted")
+                    key.isDepleted = True
+                    key.save()
+            else:
+                print(f"is in use: {key}")
+
+        if isproblem:
+            return json.dumps({'question': {userQuery},'answer': "Somethingwentwrong","status":0})
+        
+        answerResp = GPT_Link(userQuery, key= key)
+        return json.dumps({'question': userQuery,'answer': answerResp,"status":1})
+    except :
+        return json.dumps({'question': {userQuery},'answer': "Somethingwentwrong","status":0})
+
+
+def GPT_Link(message, key):
+    URL = "https://api.openai.com/v1/chat/completions"
+
+    print(f"using key: {key}")
+
+    payload = {
+    "model": "gpt-3.5-turbo",
+    "messages": [{"role": "user", "content": message}],
+    "temperature" : 1.0,
+    "top_p":1.0,
+    "n" : 1,
+    "stream": False,
+    "presence_penalty":0,
+    "frequency_penalty":0,
+    }
+
+    headers = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {key}"
+    }
+
+    response = requests.post(URL, headers=headers, json=payload, stream=False)
+    print("Here==========",response.content)
+
+    # if "choices" not in json.loads(response.content):
+    #     return "Somethingwentwrong"
+    
+    return (json.loads(response.content)["choices"][0]['message']['content'])
 
 
 

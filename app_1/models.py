@@ -32,6 +32,8 @@ class Player(models.Model):
     ]
     isJunior = models.BooleanField(choices=isJuniorChoices,default=True)
     tabSwitchCount = models.IntegerField(default=0)
+    maxStreak = models.IntegerField(default = 0)
+
 
     def __str__(self) -> str:
         return f"{self.user}"
@@ -75,6 +77,17 @@ class APICount(models.Model):
 
     def __str__(self) -> str:
         return f"{self.count}"
+    
+
+class chatGPTLifeLine(models.Model):
+    key = models.CharField(max_length=1000)
+    numUsed = models.IntegerField(default=0)
+    lastUsed = models.FloatField(blank=True,null=True)
+    isDepleted = models.BooleanField(default=False)
+    
+    
+    def __str__(self):
+        return self.key
 
     
 

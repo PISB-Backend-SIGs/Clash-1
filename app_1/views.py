@@ -180,7 +180,7 @@ def questions(request):
 
     print("Users Wrong questions ",context["wrong_question_list"])
 
-    context["question"]=Question.objects.get(questionID=player.questionNumber)
+    context["question"]=Question.objects.get(questionNumber=player.questionNumber,forJunior=player.isJunior)
     context["question_number"]=player.questionIndex
     
     context["player"]=player
@@ -238,18 +238,19 @@ def lifelineActivation(request):
         elif(int(lifeline_id_from_frontend) == 3):
             print(type(request.POST.get("chatBotInput")))
             inputFromUser = request.POST.get("chatBotInput")
-            chatBotOutput = chatbot_response(inputFromUser)
-            print(chatBotOutput)
+            chatBotOutput = json.loads(chatbot_response(inputFromUser))
+            if (chatBotOutput["status"]==0):
+                return JsonResponse({"status":0 , "chatBotOutput" : chatBotOutput["answer"]})
             lifeline = Lifeline.objects.get(user=user,lifelineID=lifeline_id_from_frontend)
             lifeline.isActive = True
             lifeline.lifelineCounter +=1
             lifeline.save()
-            player.chatBotResponse = json.dumps({"input" : inputFromUser , "output" : chatBotOutput})
+            player.chatBotResponse = json.dumps({"input" : inputFromUser , "output" : chatBotOutput["answer"]})
             player.save()
             print(player.chatBotResponse)
             print(type(player.chatBotResponse))
             print(type(json.loads(player.chatBotResponse)))
-            return JsonResponse({"status":1 , "chatBotOutput" : chatBotOutput})
+            return JsonResponse({"status":1 , "chatBotOutput" : chatBotOutput["answer"]})
     else:
         return JsonResponse({"status":0})
 
@@ -308,8 +309,9 @@ def result(request):
     context={
         "title":"Result",
     }
-    
     player = Player.objects.get(user=request.user)
+    player.playerScore += player.maxStreak
+    player.save()
     if (player.tabSwitchCount >3):
         logout(request)
         submission = Submission.objects.filter(player=player)
@@ -318,6 +320,11 @@ def result(request):
         context["userAttempt"]=player.questionIndex
         context["totalAttempt"]=len(submission)
         context["rightAttempt"]=len(submission.filter(isCorrect=True))
+        if (player.isJunior):
+            context["TotalQuestions"]=len(Question.objects.filter(forJunior=True))
+        else:
+            context["TotalQuestions"]=len(Question.objects.filter(forJunior=False))
+
         return render(request,"app_1/Result.html",context)
 
     if not(player.isEnded):
@@ -331,8 +338,13 @@ def result(request):
     logout(request)
     return render(request,"app_1/Result.html",context)
 
-
-
+@login_required(login_url="signin")
+def LogoutClicked(request):
+    user = User.objects.get(username=request.user)
+    player = Player.objects.get(user=user)
+    player.isEnded = True
+    player.save()
+    return redirect('result')
 
 @never_cache
 def signin(request):
@@ -437,7 +449,7 @@ def signin(request):
                 player.questionList = create_random_list(player.questionNumber,player.isJunior)
                 player.save()
                 login(request, user)
-                messages.success(request, "Login Successful")
+                # messages.success(request, "Login Successful")
                 return redirect("home")
             messages.error(request, "Bad Credentials")
             return redirect('signin')
@@ -520,11 +532,6 @@ def settingwale(request):
 
 
 
-#To handle 404 error if user try to access diff page
-def error_404(request, exception):
-    return render(request, 'errors\error_404.html',{"exception":"404"})
-# def error_500(request, exception):
-#     return render(request, 'errors\error_404.html',{"exception":"500"})
 
 def leaderboard(request):
     context ={}
@@ -603,3 +610,16 @@ def windowBlurError(request):
     player.tabSwitchCount += 1
     player.save()
     return JsonResponse({'status':1,"tabSwitchValue":player.tabSwitchCount})
+
+
+#To handle 404 error if user try to access diff page
+def error_404(request, exception):
+    return redirect('signin')
+def error_500(request):
+    return redirect('signin')
+def error_400(request,exception):
+    return redirect('signin')
+def error_403(request, exception):
+    return redirect('signin')
+
+

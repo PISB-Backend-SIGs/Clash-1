@@ -159,6 +159,10 @@ body {
 .scorecard:hover{
     color: #ffffff;
 } */
+img {
+  height: 42px;
+}
+
 
 .name{
     /* background-color: antiquewhite; */

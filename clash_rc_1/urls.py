@@ -20,5 +20,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app_1.urls')),
 ]
+
+from django.conf.urls import handler400, handler403, handler404, handler500
+# 404 not found error
 handler404 = 'app_1.views.error_404'
+# 500 internal server error
 # handler500 = 'app_1.views.error_500'
+# # 400 bad request error
+# handler400 = 'app_1.views.error_400'
+# # 403 permission denied error
+# handler403 = 'app_1.views.error_403'

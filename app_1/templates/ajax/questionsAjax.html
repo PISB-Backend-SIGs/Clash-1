@@ -65,10 +65,11 @@
     // {% comment %} for lifeline activation {% endcomment %}
     
         //for lifeline1
-        $('#lifeline1btn').click(function() {
-            if (confirm("Do you want to take lifeline 1 ") !=true){
-                return;
-            }
+        function LifelineOne(){
+        //$('#lifeline1btn').click(function() {
+            //if (confirm("Do you want to take lifeline 1 ") !=true){
+            //    return;
+            //}
             deploy_lifeline1();
             var number = $('#lifeline1btn').val();
             console.log("lifeline number ",number,"user ",'{{request.user}}')
@@ -90,7 +91,7 @@
                     alert("Something went wrong.....")
                 }
             });
-        });
+        };
 
         
 
@@ -105,7 +106,10 @@
         document.getElementById("lifeline2btn").disabled = true;
         document.getElementById("lifeline2btn").style.color = "grey";
     }
-    document.getElementById("lifeline2btn").addEventListener("click",()=>{
+    {% comment %} document.getElementById("lifeline2btn").addEventListener("click",()=>{ {% endcomment %}
+    function LifelineTwo(){
+        $('#exampleModal').modal('show');
+
         console.log("Enter in 2nd lifeline ")
         let questionmodal = document.getElementById("question_modal");
         questionmodal.innerText = "";  //to clear question modal
@@ -138,10 +142,11 @@
         }   
             var travelBtn = document.getElementById("travel");
             travelBtn.addEventListener("click", function(event) {
-                if (confirm("Do you want to take lifeline 2 ") !=true){
-                    enableOtherBtn();
-                    return;
-                }
+                //if (confirm("Do you want to take lifeline 2 ") !=true){
+                //    enableOtherBtn();
+                //    return;
+                //}
+                $('#exampleModal').modal('hide');
                 document.getElementById("avoid").click();
                 //console.log("Question selected by user " , selectedValuesOfQuestionNumber , " clicked","type ",typeof(selectedValuesOfQuestionNumber));
                 var number = $('#lifeline2btn').val();
@@ -175,7 +180,11 @@
 
             });
         
-    });
+            var avoidBtn = document.getElementById("avoid");
+            avoidBtn.addEventListener("click", function(event){
+                $('#exampleModal').modal('hide');
+            });
+    };
     if('{{which_lifeline_is_active.lifelineID}}'==='2'){
         console.log("enterd to deploy lifeline2")
         deploy_lifeline2();
@@ -237,10 +246,72 @@
         }
     }
     
-</script>
+    //it is for alert box 
+    const lifelineInstructionArray = ["1st lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas.",
+    "2nd lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas.",
+    "3rd lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas."]
+    var LifeLineNumber;
+    function myAler(lifelineNumber) {
+        
+        LifeLineNumber = LifeLineNumber;
+      $('#AlertModal').modal('show');
+      // document.getElementById("close").addEventListener("click",()=>{
+      //   return false;
+      // })
+      let modal = document.getElementById("Alert_modal")
+      if (lifelineNumber === 0){
+        modal.innerText = "Something went wrong"
+      }
+      if (lifelineNumber === 1){
+        modal.innerText = lifelineInstructionArray[0]
+      }
+      else if (lifelineNumber === 2){
+        modal.innerText = lifelineInstructionArray[1]
+      }
+      else if (lifelineNumber === 3){
+        modal.innerText = lifelineInstructionArray[2]
+      }
+      }
+    
+    function myAlert(lifelineFlag) {
+        if (lifelineFlag){
+            if(LifeLineNumber===1){
+                LifelineOne();
+            }else if(LifeLineNumber === 2){
+                LifelineTwo();
+            }else if(LifeLineNumber === 3){
+                lifelineThree();
+            }else{
+                alert("something went wrong")
+            }
+            $('#AlertModal').modal('hide');
+        }else{
+            $('#AlertModal').modal('hide');
+        }
+      //const x =  myAler(lifelineNumber);
+      //console.log("value from modal ",x)
+    }
+
+    $("#lifeline1btn").click(()=>{
+        $('#AlertModal').modal('show');
+        myAler(1);
+        LifeLineNumber = 1;
+    })
+    $("#lifeline2btn").click(()=>{
+        $('#AlertModal').modal('show');
+        myAler(2);
+        LifeLineNumber = 2;
+    })
+    $("#lifeline3btn").click(()=>{
+        $('#AlertModal').modal('show');
+        myAler(3);
+        LifeLineNumber = 3;
+    })
+    {% comment %} function openAlertModal(){
+    } {% endcomment %}
 
 
-<script type="text/javascript">
+
     // {% comment %} for lifeline activation {% endcomment %}
         //for lifeline3
         {% comment %} $('#lifeline3btn').click(()=>{
@@ -269,11 +340,15 @@
             document.getElementById('my-button').style.display = "block";
             
         }
+        function lifelineThree(){
+            $("#L3Modal").modal("show");
+        }
         $('#my-button').click(function() {
-            
-            if (confirm("Do you want to take lifeline 3 ") !=true){
-                return;
-            }
+            //function lifelineThree(){
+                
+            //if (confirm("Do you want to take lifeline 3 ") !=true){
+            //    return;
+            //}
             var chatBotInput = $('#userQuestion').val();
             //console.log(chatBotInput, "chatbot question " ,);
             
@@ -301,16 +376,15 @@
                 },
                 error: function() {
                     // Handle errors here
-                    alert("Something went wrong");
+                    //alert("Something went wrong");
+                    myAler(0);
                     enableInput();
                 }
             });
         });
         
 
-</script>
 
-<script >
     {% comment %} $(document).ready(function() {
     $('#submit_btn').click(function() {
         setTimeout(function() {

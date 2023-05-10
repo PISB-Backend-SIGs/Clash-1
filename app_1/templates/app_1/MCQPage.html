@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" href="MCQr1.css"> -->
+    {% comment %} <link rel="stylesheet" href="MCQr1.css"> {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/MCQPage.css' %}">
 
      <!-- Include Bootstrap and Tailwind CSS libraries -->
@@ -57,6 +57,7 @@
             <button class="btn1"><a  id="navlink" data-bs-toggle="modal" data-bs-target="#lbModal">Instructions</a></button>
     <!-- Leaderboard button -->
             <button class="btn2 "><a  id="navlink" href="{% url 'leaderboard' %}">Leaderboard </a></button>
+            <button class="btn2 "><a  id="navlink" href="{% url 'LogoutClicked' %}" >Logout </a></button>
           </div>
     </div>
     
@@ -188,8 +189,10 @@
                     <div class="dropdown" id="dp">
                         {% comment %} by prash lifeline class added for id lf{% endcomment %}
                         <button class="lifeline1 lifeline" id="lifeline1btn"  name="lifeline1" type="button" value=1 disabled>Blackhole</button>
-                        <button class="lifeline2 lifeline"  data-toggle="modal" data-target="#exampleModal" name="lifeline2" id="lifeline2btn"  type="button" value=2 disabled>Time Travel</button>
-                        <button class="lifeline3 lifeline" data-bs-toggle="modal"  data-bs-target="#L3Modal" id="lifeline3btn" name="lifeline3" type="button" value=3 disabled>Omnisecent</button>
+                        <button class="lifeline2 lifeline"  name="lifeline2" id="lifeline2btn"  type="button" value=2 disabled>Time Travel</button>
+                        {% comment %} <button class="lifeline2 lifeline"  data-toggle="modal" data-target="#exampleModal" name="lifeline2" id="lifeline2btn"  type="button" value=2 disabled>Time Travel</button>
+                        <button class="lifeline3 lifeline" data-bs-toggle="modal"  data-bs-target="#L3Modal" id="lifeline3btn" name="lifeline3" type="button" value=3 disabled>Omnisecent</button> {% endcomment %}
+                        <button class="lifeline3 lifeline"  id="lifeline3btn" name="lifeline3" type="button" value=3 disabled>Omnisecent</button>
                         {% comment %} <button type="button" class="btn btn-info" data-bs-toggle="modal" id="lf1" data-bs-target="#L3Modal">Lifeline3</button> {% endcomment %}
 
                     </div>
@@ -277,13 +280,13 @@
                                 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="travel-opt" id="accept">Accept</button>
-                                <button type="button" class="travel-opt" id="cancel">Cancel</button>
+                                <button type="button" class="travel-opt" id="accept" onclick="myAlert(true)">Accept</button>
+                                <button type="button" class="travel-opt" id="cancel" onclick="myAlert(false)">Cancel</button>
                             </div>
                         </div>
                 </div>
             </div>
-            <!--<button class="btn1"><a  id="navlink" onclick="myAlert(1)">Instructions</a></button>-->
+            {% comment %} <button class="btn1"><a  id="a" >Instructions</a></button> {% endcomment %}
 
 
 
@@ -417,7 +420,7 @@
           //seconds
         },0)  
 </script>
-<script>
+<!-- <script>
     //for alert box of lifeline
     const lifelineInstructionArray = ["1st lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas.",
     "2nd lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas.",
@@ -448,13 +451,17 @@
       })
 })
     }
-    async function myAlert(lifelineNumber) {
-      const x = await myAler(lifelineNumber);
+    function myAlert(lifelineNumber) {
+      const x =  myAler(lifelineNumber);
       console.log("value from modal ",x)
       {% comment %} return Boolean(x); {% endcomment %}
     }
+
+    function openAlertModal(){
+        $('#AlertModal').modal('show');
+    }
     
-  </script>
+  </script> -->
     <!-- Include Bootstrap and jQuery libraries -->
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -462,7 +469,7 @@
 
 
     {% include "ajax/questionsAjax.html" %}
-    {% comment %} {% include "ajax/test.html" %}  {% endcomment %}
+    {% include "ajax/test.html" %} 
     
 </body>
 </html>
