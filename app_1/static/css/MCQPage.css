@@ -571,7 +571,11 @@ th {
   background-color: inherit;
   box-shadow: 2px 2px 10px #032021;
 }
-
+.pastqFocus:focus{
+  color: black;
+  background-color: aqua;
+  font-size: 12px;
+}
 .pastq:hover {
   box-shadow: 2px 2px 7px #c5e1f0, -2px -2px 7px #c5e1f0, 2px -2px 2px #09eaf2,
     -2px 2px 2px #c5e1f0;
@@ -1091,4 +1095,11 @@ th {
     border-radius: 2px;
     padding: 6px;
     
+}
+
+
+
+.AlertForerror{
+  justify-content: center;
+  height: 100px;
 }

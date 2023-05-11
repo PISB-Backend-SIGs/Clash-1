@@ -88,7 +88,7 @@
                 },
                 error: function() {
                     // Handle errors here
-                    alert("Something went wrong.....")
+                    $("#AlertModalForErrorMessage").modal("show")
                 }
             });
         };
@@ -123,6 +123,7 @@
             var button = document.createElement("button");
             button.innerHTML = arr[i];
             button.classList.add("pastq");
+            button.classList.add("pastqFocus");
             button.value = arr[i];
             //button.setAttribute('type', 'radio');
             //button.setAttribute('name', 'backQuestionNumber');
@@ -146,6 +147,7 @@
                 //    enableOtherBtn();
                 //    return;
                 //}
+                document.getElementById("neg").innerText = '-4';
                 $('#exampleModal').modal('hide');
                 document.getElementById("avoid").click();
                 //console.log("Question selected by user " , selectedValuesOfQuestionNumber , " clicked","type ",typeof(selectedValuesOfQuestionNumber));
@@ -168,13 +170,13 @@
                         // console.log(tempVar["question_title"]);
                         // var radio = document.getElementsByName("option");
                         // radio[data.user_answer-1].checked = true; 
-                        //deploy_lifeline2()
+                        deploy_lifeline2()
                         displayQuestions(data.question)
                     
 
                     },
                     error: function() {
-                        alert("Something went wrong !!!")
+                        $("#AlertModalForErrorMessage").modal("show")
                     }
                 });
 
@@ -196,7 +198,7 @@
         // document.getElementById("lifeline2btn").disabled = true;
         // document.getElementById("lifeline3btn").disabled = true;
         disableOtherBtn(2);
-        document.getElementById("neg").innerText = '-4';
+        
 
         //if user select 2nd lifeline at last btn should not be submit it should next
         //temporary i prash commented it 
@@ -377,7 +379,7 @@
                 error: function() {
                     // Handle errors here
                     //alert("Something went wrong");
-                    myAler(0);
+                    $("#AlertModalForErrorMessage").modal("show")
                     enableInput();
                 }
             });
@@ -417,4 +419,7 @@ btnss();
 console.log('Delay');
 console.log('End');
 }
+
+
+
 </script>

@@ -129,7 +129,7 @@
                 <h3 class="Mark">Marking Scheme</h3>
                     <div class="positive">
                         <p class="posi" id="posi">+{{marking_scheme.marks_add}}</p>
-                        <p class="posi" id="neg"></p>
+                        <p class="posi" style="color:red" id="neg"></p>
                     </div>
             </div>
            
@@ -193,7 +193,7 @@
                         {% comment %} <button class="lifeline2 lifeline"  data-toggle="modal" data-target="#exampleModal" name="lifeline2" id="lifeline2btn"  type="button" value=2 disabled>Time Travel</button>
                         <button class="lifeline3 lifeline" data-bs-toggle="modal"  data-bs-target="#L3Modal" id="lifeline3btn" name="lifeline3" type="button" value=3 disabled>Omnisecent</button> {% endcomment %}
                         <button class="lifeline3 lifeline"  id="lifeline3btn" name="lifeline3" type="button" value=3 disabled>Omnisecent</button>
-                        {% comment %} <button type="button" class="btn btn-info" data-bs-toggle="modal" id="lf1" data-bs-target="#L3Modal">Lifeline3</button> {% endcomment %}
+                        {% comment %} <button type="button" class="btn btn-info" data-bs-toggle="modal"  data-bs-target="#AlertModalForErrorMessage">Lifeline3</button> {% endcomment %}
 
                     </div>
                 </div>
@@ -202,7 +202,7 @@
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                <p class="modal-msg">Choose your Destination in past: </p>
+                                <p class="modal-msg" style="margin-bottom: 0;">Choose your Destination in past: </p>
                                 <div class="pastques" id="question_modal">
                                     {% comment %} <button class="pastq" >1</button> {% endcomment %}
                                     
@@ -273,15 +273,33 @@
             <div class="modal fade" id="AlertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                            <p class="modal-msg">Instruction</p>
+                            <p class="modal-msg" style="margin-bottom: 0;">Instruction</p>
                             <div class="pastques" id="Alert_modal">
                                 <!--question_modal <id -->
                                 {% comment %} <button class="pastq" >1</button> {% endcomment %}
                                 
                             </div>
-                            <div class="modal-footer">
+                            <div class="modal-footer" style="flex-wrap: nowrap;">
                                 <button type="button" class="travel-opt" id="accept" onclick="myAlert(true)">Accept</button>
                                 <button type="button" class="travel-opt" id="cancel" onclick="myAlert(false)">Cancel</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+            <!--Alert modal-->
+            <div class="modal fade" id="AlertModalForErrorMessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <p class="modal-msg" style="margin-bottom: 0;">Alert</p>
+                            <div class="pastques AlertForerror" id="Alert_modal">
+                                <!--question_modal <id -->
+                                {% comment %} <button class="pastq" >1</button> {% endcomment %}
+                                Something went wrong......
+                                
+                            </div>
+                            <div class="modal-footer" style="flex-wrap: nowrap;">
+                                <button type="button" class="travel-opt" id="cancel" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </div>
                 </div>
