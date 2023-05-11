@@ -81,7 +81,7 @@ def questions(request):
         #To get previous answer and its actual answer to give marks accordingly
         try:
             previous_answer = Submission.objects.get(player=player,questionID=player.previousQuestion).userOption
-            actual_ans_prev_que= Question.objects.get(questionID=player.previousQuestion).questionAnswer  #to get actual answer of prev question
+            actual_ans_prev_que= Question.objects.get(id=player.previousQuestion).questionAnswer  #to get actual answer of prev question
         except:
             previous_answer=None
             actual_ans_prev_que=None
@@ -91,7 +91,7 @@ def questions(request):
         #check in utils
         marks_dict=get_question(json.loads(player.questionList),player.previousQuestion,previous_answer,actual_ans_prev_que)  
         #check in utils 
-        user_answer_status=check_answer(u_option , Question.objects.get(questionID=player.questionNumber),marks_dict,player,user)  #it checks ans of crnt question
+        user_answer_status=check_answer(u_option , Question.objects.get(id=player.questionNumber),marks_dict,player,user)  #it checks ans of crnt question
         
         #To save in player object
         player.playerScore += user_answer_status["score"]
@@ -156,7 +156,7 @@ def questions(request):
 
     try:
         previous_submitions = Submission.objects.filter(player=player).all()
-        life_line_dict = check_lifeline_activate(user,player,previous_submitions,Question.objects.get(questionID=player.questionNumber))
+        life_line_dict = check_lifeline_activate(user,player,previous_submitions,Question.objects.get(id=player.questionNumber))
     except:
         life_line_dict = {"activate":False}
 
@@ -219,7 +219,7 @@ def lifelineActivation(request):
             print(type(ques_num)," Type of question number comming from frontend")
             player.questionIndex -=1
             submission = Submission.objects.get(player=player,questionIndex=ques_num)
-            question = Question.objects.get(questionID=submission.questionID)
+            question = Question.objects.get(id=submission.questionID)
             player.questionNumber=submission.questionID
             player.save()
             question_details={
@@ -278,13 +278,13 @@ def submit(request):
         
         try:
             previous_answer = Submission.objects.get(player=player,questionID=player.previousQuestion).userOption
-            actual_ans_prev_que= Question.objects.get(questionID=player.previousQuestion).questionAnswer  #to get actual anser of prev question
+            actual_ans_prev_que= Question.objects.get(id=player.previousQuestion).questionAnswer  #to get actual anser of prev question
         except:
             previous_answer=None
             actual_ans_prev_que=None
         
         marks_dict=get_question(json.loads(player.questionList),player.previousQuestion,previous_answer,actual_ans_prev_que)
-        user_answer_status=check_answer(u_option,Question.objects.get(questionID=player.questionNumber),marks_dict,player,user)
+        user_answer_status=check_answer(u_option,Question.objects.get(id=player.questionNumber),marks_dict,player,user)
         player.playerScore +=user_answer_status["score"]
         player.questionList=json.dumps(marks_dict["ques_list"])
         player.previousQuestion =  player.questionNumber 

@@ -71,7 +71,7 @@
     {% csrf_token %}
         
         <div class="que">
-            <div class="Questionbox" id="questionBoxForCopyDisable"> Q.<span id="questionNumber">{{question_number}}</span> : <span id="question_title">{{question.questionText}}</span> </div>
+            <div class="Questionbox" id="questionBoxForCopyDisable"> Q.<span id="questionNumber">{{question_number}}</span> : <textarea id="question_title" readonly>{{question.questionText}}</textarea> </div>
 
             <!--  Creating the Option Buttons -->
             <div class="options">
@@ -489,9 +489,19 @@
     {% include "ajax/questionsAjax.html" %}
     {% comment %} {% include "ajax/test.html" %}  {% endcomment %}
     
-    
+    <script>
+        console.log("{{playerStreak}}",typeof(parseInt("{{playerStreak}}")))
+        if (parseInt("{{playerStreak}}") >=3){
+            const fireEmoji = document.createElement("span");
+            fireEmoji.className = "fireemoji";
+            fireEmoji.textContent = "🔥";
+            document.getElementById("streak").appendChild(fireEmoji);
+            // document.getElementById("fireEmoji").appendChild(<span class="fireemoji">&#128293;</span> )
+        }
+    </script>
 </body>
 </html>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     // Right Click Disable

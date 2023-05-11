@@ -2,7 +2,7 @@ import json,random
 from datetime import datetime,timedelta
 from django.utils import timezone
 from app_1.models import Lifeline,Player, APICount,chatGPTLifeLine
-from .models import Submission
+from .models import Submission, Question
 import openai
 from decouple import config
 size = 9  #size of question display to user
@@ -10,9 +10,11 @@ rangJ = 49 #size of question in database
 rangS = 3 #size of question in database
 def create_random_list(crnt_ques,isjunior):
     if (isjunior):
-        que_list= [x for x in range(1,rangJ+1)]
+        ques = Question.objects.filter(forJunior = True)
+        que_list= [x.questionNumber for x in ques]
     else:
-        que_list= [x for x in range(1,rangS+1)]
+        ques = Question.objects.filter(forJunior = False)
+        que_list= [x.questionNumber for x in ques]
 
     random.shuffle(que_list)
     print(que_list,"user total list",crnt_ques,"user crt ques")

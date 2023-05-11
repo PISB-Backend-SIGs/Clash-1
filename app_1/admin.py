@@ -53,7 +53,7 @@ admin.site.register(Lifeline,LifelineAdmin)
 
 # class QuestionAdmin(admin.ModelAdmin):
 #     list_display=[
-#         "questionID","questionNumber","questionAnswer"
+#         "id","questionNumber","questionAnswer"
 #     ]
 # admin.site.register(Question,QuestionAdmin)
 
@@ -82,7 +82,12 @@ from .models import Question
 
 @admin.register(Question)
 class QuestionAdmin(ImportExportModelAdmin):
-     class Meta:
+    
+    class Meta:
+        
         model = Question
         fields = ('questionNumber', 'questionText', 'questionOption1', 'questionOption2', 'questionOption3', 'questionOption4', 'questionAnswer', 'forJunior')
+        
         import_id_fields = ['questionID']
+
+    list_display = ('questionNumber', 'questionText', 'questionAnswer', 'forJunior')

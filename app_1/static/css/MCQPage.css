@@ -420,6 +420,7 @@ btn-close{
   background-color: #061c03;
   border: 2px solid #0991f2;
   border-radius: 5px;
+  width: max-content;
 }
 
 .Streak {
@@ -1102,4 +1103,32 @@ th {
 .AlertForerror{
   justify-content: center;
   height: 100px;
+}
+
+#question_title{
+    width: -webkit-fill-available;
+    resize: vertical;
+    height: -webkit-fill-available;
+    /* overflow-y: hidden; */
+    background-color: transparent;
+
+}
+
+.fireemoji {
+  position: relative;
+  right: -8px;
+  animation: fireAnimation 2s ease 0s  infinite normal forwards ;
+}
+
+@keyframes fireAnimation {
+	0%,
+	50%,
+	100% {
+		opacity: 1;
+	}
+
+	25%,
+	75% {
+		opacity: 0;
+	}
 }

@@ -47,7 +47,7 @@ class Lifeline(models.Model):
 
 
 class Question(models.Model):
-    questionID = models.IntegerField(unique=True,primary_key=True)
+    #id = models.IntegerField(unique=True,primary_key=True)
     questionNumber = models.IntegerField(null=True)
     questionText = models.TextField()
     questionOption1 = models.TextField()
@@ -57,7 +57,7 @@ class Question(models.Model):
     questionAnswer = models.IntegerField()
     forJunior = models.BooleanField(default=True)
     def __str__(self) -> str:
-        return f"{self.questionID}"
+        return f"{self.id}"
 
 class Submission(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
