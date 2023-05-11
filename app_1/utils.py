@@ -6,7 +6,7 @@ from .models import Submission
 import openai
 from decouple import config
 size = 9  #size of question display to user
-rangJ = 50 #size of question in database
+rangJ = 49 #size of question in database
 rangS = 3 #size of question in database
 def create_random_list(crnt_ques,isjunior):
     if (isjunior):
@@ -196,7 +196,7 @@ def check_lifeline_activate(user,player,submission,question):
         player.save()
 
      #condition for lifeline 2  
-    if(player.playerScore>7):
+    if(player.playerScore>7 and accuracy(submission) > 50):
         try:
             lifeline = Lifeline.objects.get(user=user,lifelineID =2)
         except:
