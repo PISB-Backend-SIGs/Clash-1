@@ -1,0 +1,24 @@
+version: '3.2'
+
+services:
+  backend:
+    # restart: always
+    ports:
+      - "8000:8000"
+    container_name: clashR1
+    command: gunicorn clash_rc_1.wsgi:application --bind 0.0.0.0:8000 --timeout 1800
+    # command: python3 manage.py runserver
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - static_files:/user/src/app/staticfiles/
+      - .:/user/src/app/
+  
+    env_file:
+      - ./.env
+
+  
+
+volumes:
+  static_files:
