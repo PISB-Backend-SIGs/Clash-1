@@ -89,15 +89,15 @@ def check_answer(u_answer,actual_answer,marks_dict,player,user):
     elif int(u_answer) == actual_answer.questionAnswer:
         # score["streak"]=True
         score["score"]=marks_dict["marks_add"]
-        score["marks_add_to_player"]=4    #to get marks for next question
-        score["marks_sub_to_player"]=-2
+        score["marks_add_to_player"] = 4    #to get marks for next question
+        score["marks_sub_to_player"] = -2
         score["isCorrect"]=True
     else:
         # score["streak"]=False
         score["score"]=marks_dict["marks_redu"]
-        score["marks_add_to_player"]= 2    #to get marks for next question
-        score["marks_sub_to_player"]= -1
-        score["isCorrect"]=False
+        score["marks_add_to_player"] = 2    #to get marks for next question
+        score["marks_sub_to_player"] = -1
+        score["isCorrect"] = False
         try:
             lifeline = Lifeline.objects.get(user=user,isActive=True)
             if (lifeline.lifelineID==1):
@@ -118,7 +118,7 @@ def set_time():
     start_time=timezone.now()
     dict={
         "start_time":start_time,
-        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=120),
+        "end_time":start_time.astimezone(timezone.utc)+timedelta(minutes=28),
     }
     return dict
 
@@ -336,7 +336,7 @@ def chatbot_response(userQuery):
         for key in allKeys2:
             
             if True:
-                if key.numUsed < 3:
+                if key.numUsed < 20:
                     isproblem = False
                     key.numUsed += 1
                     key.lastUsed = time.time()

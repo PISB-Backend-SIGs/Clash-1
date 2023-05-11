@@ -51,11 +51,11 @@ class LifelineAdmin(admin.ModelAdmin):
     ]
 admin.site.register(Lifeline,LifelineAdmin)
 
-class QuestionAdmin(admin.ModelAdmin):
-    list_display=[
-        "questionID","questionNumber","questionAnswer"
-    ]
-admin.site.register(Question,QuestionAdmin)
+# class QuestionAdmin(admin.ModelAdmin):
+#     list_display=[
+#         "questionID","questionNumber","questionAnswer"
+#     ]
+# admin.site.register(Question,QuestionAdmin)
 
 class SubmissionAdmin(admin.ModelAdmin):
     list_display=[
@@ -75,3 +75,14 @@ class chatGPTLifeLineAdmin(admin.ModelAdmin):
         "key","numUsed","isDepleted"
     ]
 admin.site.register(chatGPTLifeLine,chatGPTLifeLineAdmin)
+
+
+from import_export.admin import ImportExportModelAdmin
+from .models import Question
+
+@admin.register(Question)
+class QuestionAdmin(ImportExportModelAdmin):
+     class Meta:
+        model = Question
+        fields = ('questionNumber', 'questionText', 'questionOption1', 'questionOption2', 'questionOption3', 'questionOption4', 'questionAnswer', 'forJunior')
+        import_id_fields = ['questionID']

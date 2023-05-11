@@ -33,6 +33,7 @@ urlpatterns = [
     path('test1/', views.test1, name='test1'),
     path('getJSLeaderboard/', views.getJSLeaderboard, name='getJSLeaderboard'),
     path('windowBlurError/', views.windowBlurError, name='windowBlurError'),
+    path('webadmin/', views.webadmin, name='webadmin'),
     # path('getip', views.ipaddress, name='ipaddress'),
     
 ] 

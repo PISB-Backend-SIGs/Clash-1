@@ -324,6 +324,7 @@ def result(request):
             context["TotalQuestions"]=len(Question.objects.filter(forJunior=True))
         else:
             context["TotalQuestions"]=len(Question.objects.filter(forJunior=False))
+        print("dsafsdf",context["TotalQuestions"])
 
         return render(request,"app_1/Result.html",context)
 
@@ -335,6 +336,11 @@ def result(request):
     context["userAttempt"]=player.questionIndex
     context["totalAttempt"]=len(submission)
     context["rightAttempt"]=len(submission.filter(isCorrect=True))
+    if (player.isJunior):
+        context["TotalQuestions"]=len(Question.objects.filter(forJunior=True))
+    else:
+        context["TotalQuestions"]=len(Question.objects.filter(forJunior=False))
+
     logout(request)
     return render(request,"app_1/Result.html",context)
 
@@ -623,3 +629,33 @@ def error_403(request, exception):
     return redirect('signin')
 
 
+def webadmin(request) :
+    
+    if request.method == 'POST':
+        superusername = request.POST['superusername']
+        superpwd = request.POST['pass1']
+
+        username = request.POST['username']
+        timeIncrese = int(request.POST['time'])
+
+        superuser = authenticate(username = superusername, password = superpwd)
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request,"user is not present")
+            return redirect("webadmin")
+
+        if superuser is not None and superuser.is_superuser:
+            profile = Player.objects.get(user = user)
+            profile.EndTime += timedelta(minutes=timeIncrese)
+
+            profile.save()
+
+            messages.success(request, "Updated")
+            return render(request, "app_1/AdminPage.html")
+
+        else:
+            messages.error(request, "Bad Credentials")
+            return render(request, "app_1/AdminPage.html")
+        
+    return render (request, "app_1/AdminPage.html")

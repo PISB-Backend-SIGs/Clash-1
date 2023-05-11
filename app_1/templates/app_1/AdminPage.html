@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript">
+        window.history.forward();
+        function noback(){
+          window.history.forward();
+        }
+    </script>
+</head>
+<body>
+    <h3>ADMIN PAGE</h3>
+
+    {% for message in messages %} 
+    <div class = "alert alert -{{ message.tags }} alert-dismissible fade show" role = "alert">
+        <strong>Message:</strong> {{ message }}
+            <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
+                <span aria-hidden = "true">×</span>
+            </button>
+    </div>
+    {% endfor %}
+
+    <form action = "/webadmin/" method = "post">
+        {% csrf_token %}
+            <label for="">SuperUsername</label>
+            <input type="text" id = "superusername" name = "superusername" placeholder="Enter SuperUsername" Required>
+            <br>
+
+            <label for="">SuperUser Password</label>
+            <input type="password" id = "pass1" name = "pass1" placeholder="Enter your password" Required>
+            <br>
+
+            <br>
+
+            <label for="">Username</label>
+            <input type="text" id = "username" name = "username" placeholder="Enter Username" Required>
+            <br>
+
+            
+
+            <label for="">Increase minutes</label>
+            <input type="number" id = "time" name = "time" placeholder="Enter your password" Required>
+            <br>
+
+            <br>
+            <br>
+
+            <button type = "submit">Update</button>
+    </form>    
+</body>
+</html>

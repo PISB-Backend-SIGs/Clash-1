@@ -71,7 +71,7 @@
     {% csrf_token %}
         
         <div class="que">
-            <div class="Questionbox" > Q.<span id="questionNumber">{{question_number}}</span> : <span id="question_title">{{question.questionText}}</span> </div>
+            <div class="Questionbox" id="questionBoxForCopyDisable"> Q.<span id="questionNumber">{{question_number}}</span> : <span id="question_title">{{question.questionText}}</span> </div>
 
             <!--  Creating the Option Buttons -->
             <div class="options">
@@ -487,7 +487,28 @@
 
 
     {% include "ajax/questionsAjax.html" %}
-    {% include "ajax/test.html" %} 
+    {% comment %} {% include "ajax/test.html" %}  {% endcomment %}
+    
     
 </body>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Right Click Disable
+    document.addEventListener("contextmenu", function(event){
+        event.preventDefault();
+        }, false); 
+    //DOuble Click Disable
+    $(document).ready(function(){
+        $("*").dblclick(function(e){
+            e.preventDefault();
+        });
+    })
+    $(document).ready(function() {
+        $('#questionBoxForCopyDisable').bind('cut copy paste', function(e) {
+            e.preventDefault();
+          });
+      });
+
+</script>
+
