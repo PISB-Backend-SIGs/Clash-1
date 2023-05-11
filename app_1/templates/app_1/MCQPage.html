@@ -487,7 +487,7 @@
 
 
     {% include "ajax/questionsAjax.html" %}
-    {% comment %} {% include "ajax/test.html" %}  {% endcomment %}
+    {% include "ajax/test.html" %} 
     
     <script>
         console.log("{{playerStreak}}",typeof(parseInt("{{playerStreak}}")))
@@ -514,11 +514,25 @@
             e.preventDefault();
         });
     })
-    $(document).ready(function() {
-        $('#questionBoxForCopyDisable').bind('cut copy paste', function(e) {
-            e.preventDefault();
-          });
-      });
+
+    // Disable right-click
+    {% comment %} document.addEventListener('contextmenu', (e) => e.preventDefault()); {% endcomment %}
+    
+    function ctrlShiftKey(e, keyCode) {
+      return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+    }
+    
+    document.onkeydown = (e) => {
+      // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+      if (
+        event.keyCode === 123 ||
+        ctrlShiftKey(e, 'I') ||
+        ctrlShiftKey(e, 'J') ||
+        ctrlShiftKey(e, 'C') ||
+        (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))
+      )
+        return false;
+    };
 
 </script>
 

@@ -24,12 +24,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'css/InstructionPage.css' %}" />
+    <link rel="stylesheet" href="/app_1/static/css/InstructionPage.css">
   </head>
 
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <a href="#" id="clashlogo">
-        <img src="clashwhite.png" alt="RC" height="52px" width="102px">
+        <img src="{% static 'images/clashwhite.png' %}" alt="RC" height="52px" width="102px">
       </a>
       <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span> -->
@@ -40,7 +41,7 @@
         <a class="nav-item nav-link active" id="navlink" href="Leaderboard3.html">Leaderboard  </a>
         <a class="nav-item nav-link active" id="navlink" href="#">LogOut</a>
       </div> -->
-      <img src="#" class="ieeelogo" alt="PISB IEEE" id="ieeelogo">
+      <img src="{% static 'images/pisblogo.png' %}" class="ieeelogo" alt="PISB IEEE" id="ieeelogo">
       </nav>
   
    <div class="wrapper">
@@ -323,6 +324,7 @@
     <div class="confirmation">
       <form  method="POST">
           {% csrf_token %}
+          <!-- <p>I agree to all Conditions</p> -->
       <input type="checkbox" id="instructionCheckbox" class="form-check-input" name="checkbox" value="checked"><br><br>
       <input type="submit" class="btn btn-success confirmationBtn" id="confirmationBtn" value="Proceed"></input>
       </form>

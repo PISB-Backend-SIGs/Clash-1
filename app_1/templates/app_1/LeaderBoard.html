@@ -498,12 +498,10 @@
   })
   console.log("bbbbbbbb"); {% endcomment %}
 </script>
-{% comment %} {% if request.user.is_authenticated %}
-{% include "ajax/test.html" %}
-{% endif %} {% endcomment %}
+ {% if request.user.is_authenticated %}
+   {% include "ajax/test.html" %}
+{% endif %} 
+
 </body>
 </html>
 
-<script>
-  
-  <script>
