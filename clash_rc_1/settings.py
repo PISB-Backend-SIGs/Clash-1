@@ -29,7 +29,7 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 # DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['clash.credenz.in', 'www.clash.credenz.in', 'loaclhost', '127.0.0.1']
 # ALLOWED_HOSTS = ['192.168.209.139' , '127.0.0.1' , 'localhost',"*"]
 
 # ALLOWED_HOSTS = ['*']
