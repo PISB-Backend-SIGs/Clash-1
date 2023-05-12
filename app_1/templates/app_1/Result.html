@@ -49,7 +49,7 @@
                   <h3 class="titlec">Question <br> Attempted</h3>
                   <center>
                     <div class="qatm2 text-center">
-                      <h3 id="qatm2">{{userAttempt}}/{{TotalQuestions}}</h3>
+                      <h3 id="qatm2">{{userAttempt}}</h3>
                   </div>
                   </center>
                 </div>
@@ -59,7 +59,7 @@
                   <h3 class="titlec">Final<br> Score</h3>
                   <center>
                     <div class="qatm2 text-center">
-                      <h3 id="qatm2">{{playerScore}}</h3>
+                      <h3 id="qatm2">{{playerMarks}} + {{maxStreak}}🔥 = {{playerScore}} </h3>
                   </div>
                   </center>
                 </div>
@@ -126,8 +126,8 @@
    <script>
       // JavaScript code
       setTimeout(function() {
-        window.location.href = "/leaderboard/"; // Replace the URL with the desired destination
-      }, 30000); // 10 seconds in milliseconds
+        window.location.href = "/signin/"; // Replace the URL with the desired destination
+      }, 5*60*1000); // 10 seconds in milliseconds
       </script> 
   </body>
 </html>
