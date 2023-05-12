@@ -1,12 +1,9 @@
 <script>
 
     $("#submit_btn").on( "click" ,function () {
-        console.log("btn click")        
         var user_option = $("input[name=option]:checked").val();
-        {% comment %} console.log(user_option); {% endcomment %}
 
         let csr = $("input[name=csrfmiddlewaretoken]").val();
-        // console.log(uname);
 
         mydata ={user_option:user_option,csrfmiddlewaretoken:csr};
         {% comment %} $.ajax({
@@ -14,7 +11,6 @@
             method : "POST",
             data:mydata,
             success : function(data){
-                console.log(data.status);
                 if (uname !=""){
                     if (data.status == 0){
                         // $("#msg").text("Username is not available"); if input and commented small tag are each after each 

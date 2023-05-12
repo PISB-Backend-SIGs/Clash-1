@@ -71,7 +71,7 @@
     {% csrf_token %}
         
         <div class="que">
-            <div class="Questionbox" id="questionBoxForCopyDisable"> Q.<span id="questionNumber">{{question_number}}</span> : <textarea id="question_title" readonly>{{question.questionText}}</textarea> </div>
+            <div class="Questionbox" id="questionBoxForCopyDisable"> Q.<span id="questionNumber">{{question_number}}</span> : <textarea id="question_title" readonly onmousedown='return false;' onselectstart='return false;'>{{question.questionText}}</textarea> </div>
 
             <!--  Creating the Option Buttons -->
             <div class="options">
@@ -105,18 +105,18 @@
         </div>  
         <div class="Submit">
             {% if flag %}
-            <button type="submit" class="submit" onclick="checkValue()" id="submit_btn" name="next">Next</button>
+            <button type="submit" class="submit"  id="submit_btn" name="next">Next</button>
             {% else %}
-            <button type="submit" class="submit" onclick="checkValue()" id="submit_btn" name="nsubmit">Submit</button>
+            <button type="submit" class="submit"  id="submit_btn" name="nsubmit">Submit</button>
             {% endif %}
 
         </div>
         <div class="Submit2">
             
             {% if flag %}
-            <button type="submit" class="submit" onclick="checkValue()" id="submit_btn" name="next">Next</button>
+            <button type="submit" class="submit"  id="submit_btn" name="next">Next</button>
             {% else %}
-            <button type="submit" class="submit" onclick="checkValue()" id="submit_btn" name="nsubmit">Submit</button>
+            <button type="submit" class="submit"  id="submit_btn" name="nsubmit">Submit</button>
             {% endif %}        </div>
     
     </form>
@@ -156,7 +156,7 @@
                 <table class="ranktable">
                     <thead>
                         <tr>
-                            <th>Username/Team ID</th>
+                            <th>Username</th>
                         </tr>
                     </thead>
                     
@@ -188,11 +188,11 @@
                 
                     <div class="dropdown" id="dp">
                         {% comment %} by prash lifeline class added for id lf{% endcomment %}
-                        <button class="lifeline1 lifeline" id="lifeline1btn"  name="lifeline1" type="button" value=1 disabled>Blackhole</button>
-                        <button class="lifeline2 lifeline"  name="lifeline2" id="lifeline2btn"  type="button" value=2 disabled>Time Travel</button>
+                        <button class="lifeline1 lifeline" id="lifeline1btn"  name="lifeline1" type="button" value=1 disabled>BLACKHOLE</button>
+                        <button class="lifeline2 lifeline"  name="lifeline2" id="lifeline2btn"  type="button" value=2 disabled>Back To The Future</button>
                         {% comment %} <button class="lifeline2 lifeline"  data-toggle="modal" data-target="#exampleModal" name="lifeline2" id="lifeline2btn"  type="button" value=2 disabled>Time Travel</button>
                         <button class="lifeline3 lifeline" data-bs-toggle="modal"  data-bs-target="#L3Modal" id="lifeline3btn" name="lifeline3" type="button" value=3 disabled>Omnisecent</button> {% endcomment %}
-                        <button class="lifeline3 lifeline"  id="lifeline3btn" name="lifeline3" type="button" value=3 disabled>Omnisecent</button>
+                        <button class="lifeline3 lifeline"  id="lifeline3btn" name="lifeline3" type="button" value=3 disabled>ASK TARS</button>
                         {% comment %} <button type="button" class="btn btn-info" data-bs-toggle="modal"  data-bs-target="#AlertModalForErrorMessage">Lifeline3</button> {% endcomment %}
 
                     </div>
@@ -221,7 +221,7 @@
             <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ask GPT-5</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Ask TARS</h5>
                 <!-- <button type="button" class="btn-close" id="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
@@ -260,7 +260,49 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                lllLorem ipsum, dolor sit amet consectetur adipisicing elit. Cum doloremque esse perferendis ab qui? Fuga incidunt explicabo harum nisi consequuntur adipisci, iure minus error eum, magni quas dolorum velit dolor ducimus molestias. Dolorum quaerat voluptatum commodi facere at ipsam quibusdam esse labore, aliquid neque alias illum est officia? Accusamus molestiae ratione, aliquam perspiciatis qui dolorem natus illo vero fuga assumenda, porro inventore suscipit libero laborum dicta. Ratione facilis, repellat modi facere corporis a atque perferendis veritatis fuga officia neque consectetur distinctio ab aspernatur adipisci veniam praesentium sunt aperiam nostrum animi? Laborum est quis ipsum, corporis ab quas sed obcaecati quidem similique voluptatum voluptatibus illum exercitationem ipsa enim eum amet fuga fugit temporibus neque, natus beatae. Alias porro facere magni dicta ex exercitationem harum itaque, ratione expedita officiis, eligendi atque excepturi enim nisi fugit in quidem! Blanditiis amet vitae quibusdam dicta eaque dolores velit porro est vero officiis, optio neque, tempora itaque exercitationem! Reprehenderit quidem quos a temporibus, voluptatum, cum tenetur veniam maiores itaque minima voluptatibus, eius incidunt? Necessitatibus in voluptatem ab. Inventore id ex sit dolores, tempora tempore ipsum aut veritatis perspiciatis laboriosam unde exercitationem incidunt quam, maiores vel repudiandae explicabo ab error sapiente. Cupiditate possimus sunt reprehenderit saepe. Officiis facilis ex animi nesciunt corrupti rerum, fugiat eius nisi repudiandae veniam temporibus laboriosam dicta sapiente magni, vel dolore numquam eaque explicabo rem maiores ab magnam exercitationem assumenda? Consectetur quam deserunt dolor provident obcaecati consequatur commodi et sint, vero quasi itaque a placeat. Voluptate praesentium nemo voluptatibus unde quis repellat excepturi maiores vel nulla nihil aut, consequuntur odio ex suscipit, placeat incidunt impedit enim magnam dolorum accusamus hic, aliquam nostrum atque! Blanditiis laudantium fuga excepturi voluptatem a in voluptatum maxime maiores laborum autem officia nisi culpa quos dolores quia magni quas, provident expedita cupiditate illo, beatae et omnis aperiam. Assumenda totam odio quos voluptas id, ipsam quas cumque eius optio dolore aperiam minus ipsa itaque placeat odit. Expedita, aut! Omnis repudiandae aut cumque architecto, molestiae labore commodi, sit eius nihil reiciendis error adipisci saepe, obcaecati ipsa incidunt vel nam iure pariatur harum ex quos eveniet? Aspernatur, sit. Animi aliquid praesentium architecto perspiciatis ab placeat eos quo omnis harum quaerat officiis, nesciunt molestias dolorem deserunt tempore illum deleniti quisquam nemo recusandae accusamus aspernatur voluptas rem? Maxime enim maiores quis ratione corrupti labore quos, aspernatur unde sapiente alias voluptate, tempore vero voluptatibus sed? Possimus ipsam, exercitationem fugit id veniam at. Quidem saepe cum enim, eligendi quae odio porro officiis veniam nihil! Modi ab a ipsam placeat soluta maiores illum, quo quidem id autem praesentium earum similique facilis architecto ut, sed adipisci animi dolore quos rerum voluptatibus. Dolorem quaerat natus voluptatibus iure, labore voluptatem animi! Aspernatur ea assumenda fugiat vitae suscipit deleniti natus sint! Magni accusamus impedit repellendus quasi hic unde cumque totam at eveniet! Minima neque libero suscipit, quo reiciendis impedit. Nostrum, molestiae deleniti officiis quis hic necessitatibus nihil nisi blanditiis eius consequuntur ullam beatae quibusdam eveniet asperiores voluptatem sunt ea ipsa ab dolores soluta. Sed, aut porro repellendus inventore blanditiis praesentium ipsa rem voluptates itaque corrupti, repellat error nesciunt eligendi, accusantium quae! Nam blanditiis tenetur possimus quae fugiat pariatur accusamus. Nulla eveniet, soluta provident tempore ad doloremque blanditiis eligendi reprehenderit debitis atque expedita ratione unde nesciunt tenetur repudiandae aspernatur excepturi rerum fugit vitae! Molestiae, esse dicta sed quo voluptatem repellendus autem veritatis culpa, neque cumque veniam tempore aspernatur aliquam distinctio iusto consequatur minus, eligendi enim. Animi, inventore? Quibusdam nisi enim ad, facere earum eius maiores nobis ipsum id iure accusantium porro omnis nesciunt ea consequatur dolores iste, vel sit suscipit dicta ratione nemo maxime odit! Sapiente incidunt nostrum doloribus modi? Doloribus, nisi amet rem dolorum esse ullam recusandae fugit quod! Fugiat eaque repudiandae molestias! Officiis hic repudiandae rerum earum ea distinctio porro explicabo quis! Error consequuntur aperiam doloremque voluptates quidem, minima laudantium non quasi maiores eaque obcaecati odio aspernatur facere impedit ut, mollitia omnis ipsam voluptatibus ad natus rerum ex asperiores. Ratione quas, iste libero error ad aliquid beatae tenetur doloribus nam, cumque sed possimus corporis perspiciatis delectus totam nihil, reiciendis unde? Libero nam eaque porro officia dolorum veniam exercitationem expedita veritatis? Aliquam repellendus, tempora veritatis odit, officia voluptate ipsa beatae veniam repellat enim eveniet deleniti delectus magnam dolorum repudiandae temporibus minima laboriosam quidem. Obcaecati debitis eveniet dolor fuga enim ducimus eaque voluptas itaque dolorem optio aut aperiam expedita sapiente consectetur placeat rerum nemo, id, culpa ipsam maiores! Libero sit voluptas corporis placeat esse earum ex nobis illum maxime repellat reiciendis repellendus explicabo dignissimos, dicta similique repudiandae provident! Eum vel quo perspiciatis veniam, sed totam rem delectus beatae esse sit blanditiis qui saepe provident et non aperiam at voluptates illo quam adipisci, debitis alias! Non labore a voluptas aperiam odit ea ipsum porro quisquam quaerat esse! Rem aperiam, eos officia voluptas obcaecati veritatis distinctio sunt laborum reprehenderit quas exercitationem? Assumenda facere doloremque, sint amet doloribus voluptas neque deserunt obcaecati sit laboriosam voluptatibus, non ipsam, aliquid quas explicabo ex! Nesciunt, id aliquam nemo maxime pariatur, reprehenderit delectus aperiam molestias eum odio culpa recusandae officia provident hic, incidunt non numquam similique quas neque exercitationem quasi? Sed rerum dolores in aperiam hic ut esse odit doloribus laudantium, veniam enim quidem quisquam laboriosam similique autem id alias odio unde ab ullam. Tempora, eum soluta. Ratione magni fugit, nisi, recusandae, debitis natus eos deleniti suscipit explicabo eum voluptates numquam laborum nostrum repellendus quos vitae doloremque. Eveniet incidunt, ad dolores quos numquam nulla voluptates neque porro earum voluptatum error temporibus quod odio. Laborum facilis perferendis maiores nam reprehenderit voluptatum voluptatem sequi nostrum, dolore repellat nihil nisi consequuntur consectetur voluptatibus velit cumque quae neque. Nostrum, unde quas consequatur autem distinctio voluptates perferendis nihil beatae doloremque quos fugiat earum sapiente provident quae eos sequi est debitis, dicta ut commodi praesentium? Beatae voluptatem possimus aliquid nam sit id ratione sint architecto, nisi unde non rem maiores dolorem aperiam officia adipisci ad, quasi atque tempore excepturi! Earum accusamus velit esse possimus accusantium, fugiat nesciunt illo quo aperiam laudantium deserunt ratione nihil alias architecto, blanditiis suscipit commodi iusto dolor repellendus ab cum repellat.
+                    The quiz consists of multiple choice questions each having a maximum one correct choice.
+                    Please make sure to read the questions carefully and mark the appropriate choice. <br>
+                    <br>
+                    The marking scheme varies according to your gameplay which would be reflected on the screen.Marking scheme is as follows:<br>
+                    1. +4 -2(If previous question is correct)<br>
+                    2. +2 -1(If previous question is wrong)<br>
+                    3. -1(If question not attempted)<br>
+                    4. The marking scheme wil vary for lifelines. (Its explained in individual lifeline)<br><br>
+                    The LifeLine Information is as follows:
+                    <br><br>
+                    1. Black Hole
+                    <br>
+                    Are you unsure about option A or B? Don't worry, this lifeline will erase the two wrong options and increase your probability of getting the correct answer.
+                    <br>
+                    But the Twist is - You must have a streak of 3 or more correct answers to use this up!
+                    <br>
+                    Note that your streak will reset once you use this lifeline.
+                    The marking scheme on using this lifeline will be -5 if you get the question wrong.
+                    <br><br>
+                    2. Back to the Future<br>
+                    Oh no! You made a mistake in the last question . Use this lifeline to rewind the time and go back to the previous question and get a chance to correct it .<br>
+
+                    Precondition is that you have total score of least 7 to use this up and accuracy must be greater than or equal to 50%.<br>
+
+                    The marking scheme on using this lifeline will be -4 if you get the answer wrong.<br><br>
+                    3.Ask TARS<br>
+                    AI is taking all over the world, then why not use it in coding contests? We bring to you TARS Assistance, an AI based assistance that answers your every question and helps you out when you need it .
+                    <br>
+                    This assistance will assist you only once and only if you solve more than 5 questions .
+                    <br>
+                    There is no change in the marking shceme for this lifeline.
+                    <br><br>
+                    In case of any technical difficulties during the quiz, please contact:<br>
+                    <br>Nishant Tanksale : 9890690552<br>
+                    Prasad Khatake: 8767039196<br>
+                    Devraj Shetake: 8208566305<br>
+                    All the Best !
+
+
+
+
+
+
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="close" data-bs-dismiss="modal">Close</button>
@@ -350,44 +392,7 @@
 
    </script>
 <!-- JS Functions for selected Radio buttons (Options) --> 
-   <script>
-        function checkValue(){
-            var radios = document.getElementsByName('option');
-            for(const radio of radios){
-                if(radio.checked){
-                    console.log(radio.value + " is selected.");
-                }
-            } 
-        }
-
-    // Function for Lifeline 1
-    {% comment %} var eleg =document.getElementById('OPT1');
-    function lifelineOne(){
-        eleg.style.opacity = "0";
-        eleg.style.transition= "3s";
-        document.getElementsByName('options1').disabled = "true";
-    } {% endcomment %}
-
-    // Fuction for Lifeline 2
-
-        {% comment %} var ele = document.getElementById('pastque');
-        function lifelineTwo(){
-            let x = confirm("Do you want to use this lifeline?");
-            if(x){
-            ele.style.display="flex";
-            }
-            //  if(ele.style.display == "none"){
-            //     ele.style.display ="flex";
-            // }
-            // else if(ele.style.display=="flex"){
-            //     ele.style.display="none";
-            // }
-            
-        } {% endcomment %}
-       
-
-
-    </script>
+   
 
 <!--JS Fuction for timer  -->
 <script>
@@ -487,7 +492,7 @@
 
 
     {% include "ajax/questionsAjax.html" %}
-    {% comment %} {% include "ajax/test.html" %}  {% endcomment %}
+    {% include "ajax/test.html" %} 
     
     <script>
         console.log("{{playerStreak}}",typeof(parseInt("{{playerStreak}}")))
@@ -514,11 +519,25 @@
             e.preventDefault();
         });
     })
-    $(document).ready(function() {
-        $('#questionBoxForCopyDisable').bind('cut copy paste', function(e) {
-            e.preventDefault();
-          });
-      });
+
+    // Disable right-click
+    {% comment %} document.addEventListener('contextmenu', (e) => e.preventDefault()); {% endcomment %}
+    
+    function ctrlShiftKey(e, keyCode) {
+      return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+    }
+    
+    document.onkeydown = (e) => {
+      // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+      if (
+        event.keyCode === 123 ||
+        ctrlShiftKey(e, 'I') ||
+        ctrlShiftKey(e, 'J') ||
+        ctrlShiftKey(e, 'C') ||
+        (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))
+      )
+        return false;
+    };
 
 </script>
 

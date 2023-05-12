@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 import app_1.views 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('wadhivv/', admin.site.urls),
     path('', include('app_1.urls')),
 ]
 

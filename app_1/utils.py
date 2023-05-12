@@ -199,12 +199,15 @@ def check_lifeline_activate(user,player,submission,question):
 
      #condition for lifeline 2  
     if(player.playerScore>7 and accuracy(submission) > 50):
+        print("2nd lifeline")
+        print(accuracy(submission))
         try:
             lifeline = Lifeline.objects.get(user=user,lifelineID =2)
         except:
             lifeline = Lifeline(user=user,lifelineID=2)
             lifeline.save()
         if (lifeline.lifelineCounter<2):
+            print("2nd  activate")
             arr = json.loads(player.lifelineArray)
             if not(2 in arr):
                 arr.append(2)
@@ -215,21 +218,35 @@ def check_lifeline_activate(user,player,submission,question):
 
     # LifeLine3
     if( len(submission) > 5 and accuracy(submission) > 50):
+        print("3rd lifeline")
         try:
             lifeline = Lifeline.objects.get(user=user,lifelineID =3)
         except:
             lifeline = Lifeline(user=user,lifelineID=3)
             lifeline.save()
         if (lifeline.lifelineCounter < 1):
+            print("3rd  activate")
+
             arr = json.loads(player.lifelineArray)
             if not(3 in arr):
                 arr.append(3)
             player.lifelineArray = json.dumps(arr)
+            print(player.lifelineArray)
             # life_line_array = json.loads(player.lifelineArray)
             player.save()
             flag+=1
+        else:
+            arr = json.loads(player.lifelineArray)
+            if (3 in arr and lifeline.isActive != True):
+                arr.remove(3)
+            player.lifelineArray = json.dumps(arr)
+            print(player.lifelineArray)
+            # life_line_array = json.loads(player.lifelineArray)
+            player.save()
 
-            
+
+    print(opt_list)
+    print(flag)
     if (flag<=0):
         lifeline_dict={
             "activate":False,

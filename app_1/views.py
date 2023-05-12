@@ -310,16 +310,19 @@ def result(request):
         "title":"Result",
     }
     player = Player.objects.get(user=request.user)
-    player.playerScore += player.maxStreak
-    player.save()
+    
     if (player.tabSwitchCount >3):
         logout(request)
         submission = Submission.objects.filter(player=player)
         context["player"]=request.user
-        context["playerScore"]=player.playerScore
         context["userAttempt"]=player.questionIndex
         context["totalAttempt"]=len(submission)
         context["rightAttempt"]=len(submission.filter(isCorrect=True))
+        context["maxStreak"]=player.maxStreak
+        context["playerMarks"]=player.playerScore
+        player.playerScore += player.maxStreak
+        player.save()
+        context["playerScore"]=player.playerScore
         if (player.isJunior):
             context["TotalQuestions"]=len(Question.objects.filter(forJunior=True))
         else:
@@ -336,6 +339,11 @@ def result(request):
     context["userAttempt"]=player.questionIndex
     context["totalAttempt"]=len(submission)
     context["rightAttempt"]=len(submission.filter(isCorrect=True))
+    context["maxStreak"]=player.maxStreak
+    context["playerMarks"]=player.playerScore
+    player.playerScore += player.maxStreak
+    player.save()
+    context["playerScore"]=player.playerScore
     if (player.isJunior):
         context["TotalQuestions"]=len(Question.objects.filter(forJunior=True))
     else:
@@ -462,18 +470,14 @@ def signin(request):
 
     return render(request,"app_1/LoginPage.html")
 
-def index(request):
-    context={
-        "title":"Home page"
-    }
-    return render(request,"app_1/mainhome.html",context)
+
 
 # @login_required(login_url="signin")
 def signout(request):
     if request.user.is_authenticated:
         logout(request)
         messages.success(request, "Logged out successfully!")
-        return redirect("index")
+        return redirect("signin")
     else:
         return redirect('signin')
 
@@ -527,14 +531,6 @@ def signup(request):
     return render(request,"app_1/signup.html")
 
 
-@login_required(login_url='login')
-def settingwale(request):
-    context={}
-    players = Player.objects.all()
-    # users = User.objects.all()
-    context["players"]=players
-    # context["users"]=users
-    return render(request,"app_1/settingwale.html",context)
 
 
 
@@ -579,18 +575,7 @@ def getJSLeaderboard(request):
        return JsonResponse({"status":1,"player":l})
 
 
-@csrf_exempt
-def test1(request):
-    print("in test1")
 
-    # if request.method == "POST":
-    #     lid = request.POST.get("number")
-    #     print(lid)
-    #     return JsonResponse({"status":1})
-    # else:
-    #     return JsonResponse({"status":0})
-    
-    return render(request,"app_1/test1.html")
     
 
 
@@ -621,12 +606,12 @@ def windowBlurError(request):
 #To handle 404 error if user try to access diff page
 def error_404(request, exception):
     return redirect('signin')
-def error_500(request):
-    return redirect('signin')
-def error_400(request,exception):
-    return redirect('signin')
-def error_403(request, exception):
-    return redirect('signin')
+# def error_500(request):
+#     return redirect('signin')
+# def error_400(request,exception):
+#     return redirect('signin')
+# def error_403(request, exception):
+#     return redirect('signin')
 
 
 def webadmin(request) :

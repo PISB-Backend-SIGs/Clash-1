@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/LeaderBoard.css' %}">
+    
+
+    <!--from mcq-->
+    {% comment %} <link rel="stylesheet" href="{% static 'css/MCQPage.css' %}"> {% endcomment %}
+
     <title>Leaderboard</title>
 </head>
 <body >
@@ -195,13 +200,34 @@
   <div class="footer">
     <p class="footertext">@PISB</p>
   </div>
+
+  {% comment %} <script>
+
+    // blur the window when the page loses focus
+window.addEventListener('blur', () => {
+  window.blur();
+  alert("Fsd")
+});</script> {% endcomment %}
+
+
+{% if request.user.is_authenticated %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+{% include "ajax/test.html" %}
+{% endif %} 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     
+    
+      
+
+    
+   
 <script>
+  
       // document.getElementById("btns").addEventListener("click",()=>{
       //   let a =document.getElementById("form1");
       //   a.classList.toggle("btn-hide");
@@ -245,9 +271,6 @@
         
           
 
-        {% comment %} console.log(myArray)
-        console.log(myArray[0]) {% endcomment %}
-        {% comment %} console.log("{{player|safe}}") {% endcomment %}
         
         var myArray= JSON.parse('{{players|safe}}');
         var limit = 10;
@@ -256,7 +279,6 @@
         var secondPage=2;
         var thirdPage=3;
   
-  {% comment %} console.log(totalPages) {% endcomment %}
   function checkPag() {
       if (firstPage-1 <1){
         diablePagBtn("pagBtn1");
@@ -277,7 +299,6 @@
   
     // Slice the leaderboard data to get the data for the current page
     var currentPageData = myArray.slice(startIndex, endIndex);
-    // console.log("array ",currentPageData)
   
     // Get a reference to the leaderboard table and clear any existing rows
     var leaderboardTable = $('#myTable');
@@ -301,7 +322,6 @@
       row.append($('<td>').text(item.attempts));
     //   row.append($('<td>').text(item.time));
 
-        {% comment %} // console.log("row  ",row); {% endcomment %}
       leaderboardTable.append(row);
     }
   
@@ -322,7 +342,6 @@
 
   function next() {
     checkPag();
-    console.log("next ",firstPage,secondPage,thirdPage)
 
     if(firstPage+3 <=totalPages){
         firstPage+=3;
@@ -345,11 +364,9 @@
     displayLeaderboard(firstPage);  
     updatePageNumber()
     enablePagBtn("pagBtn1");
-    // console.log("after update ",firstPage,secondPage,thirdPage)
   }
   function previous() {
     
-    console.log("next ",firstPage,secondPage,thirdPage)
 
     if(firstPage-3 >0){
         firstPage-=3;
@@ -369,7 +386,6 @@
     updatePageNumber()
     enablePagBtn("pagBtn2");
     checkPag();
-    // console.log("after update ",firstPage,secondPage,thirdPage)
   }
 
 
@@ -391,8 +407,6 @@
     let liElement =document.querySelectorAll("#liDiv li") 
     liElement.forEach(element => {
         element.addEventListener("click",(e)=>{
-            {% comment %} console.log(element.textContent) {% endcomment %}
-            console.log("1 23 clicke")
             let liValue = element.textContent;
             if (Number.isInteger(parseInt(liValue))){
                 displayLeaderboard(parseInt(liValue)); 
@@ -404,9 +418,6 @@
     let ipElement =document.querySelectorAll("#senior input") 
     ipElement.forEach(element => {
         element.addEventListener("change",(e)=>{
-            //console.log(element.value)
-                // Code to be executed when the window has finished loading
-                    console.log("to get data",element.value)
                     $.ajax({
                         url: '/getJSLeaderboard/',
                         type: 'POST',
@@ -415,9 +426,7 @@
                         },
                         success: function(data) {
                             myArray = JSON.parse(data.player);
-                            console.log(myArray) 
                           totalPages = myArray.length/limit
-                          console.log(totalPages)
                           document.getElementById("myTable").innerText=""
                           displayLeaderboard(firstPage);  
                             checkPag();
@@ -450,7 +459,7 @@
 
     setInterval(updateCountdown,1000);
 
-</script> {% endcomment %}
+</scrip> {% endcomment %}
 
  
   
@@ -477,33 +486,9 @@
 </script>
 
   
+ 
 
-<script>
-  // Get the button element
-  //var button = document.getElementById('navlink');
-  
-  // Get the value of the href attribute
-  //var redirectUrl = button.getAttribute('href');
-  
-  // Log the redirect URL to the console
-  //console.log('The button will redirect to: ' + redirectUrl));
-  {% comment %} document.getElementById('navlink').addEventListener("click",()=>{
-    var button = document.getElementById('navlink');
-    var redirectUrl = button.getAttribute('href');
-    console.log(redirectUrl)
-    if (redirectUrl === "/questions/"){
-      console.log("aaaaaaa")
-      return;
-    }
-  })
-  console.log("bbbbbbbb"); {% endcomment %}
-</script>
-{% comment %} {% if request.user.is_authenticated %}
-{% include "ajax/test.html" %}
-{% endif %} {% endcomment %}
+
 </body>
 </html>
 
-<script>
-  
-  <script>
