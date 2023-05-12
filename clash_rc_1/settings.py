@@ -31,8 +31,9 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['clash.credenz.in', 'www.clash.credenz.in', 'localhost', '127.0.0.1']
 # ALLOWED_HOSTS = ['192.168.209.139' , '127.0.0.1' , 'localhost',"*"]
-
+CSRF_TRUSTED_ORIGINS = ['https://clash.credenz.in', 'https://*.credenz.in']
 # ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
