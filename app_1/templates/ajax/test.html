@@ -1,4 +1,4 @@
-<body>
+
 <div class="modal fade" id="AlertModalintest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -16,7 +16,7 @@
             </div>
     </div>
 </div>
-</body>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     window.blur()
@@ -34,9 +34,9 @@
             },
             success: function(data) {
                 // Handle the response here
-                console.log("successfully incremeneted blur")
+                console.log("successfully blur")
                 //console.log(data);
-                modal.innerText = "After 3 tab switch you will be eliminated \n and your tab switch : "+data.tabSwitchValue;
+                modal.innerText = "After 3 tab switch you will be eliminated \n: "+data.tabSwitchValue;
                 if(data.tabSwitchValue > 3){
                     location.href = "/result/"
                 }

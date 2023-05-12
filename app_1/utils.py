@@ -237,7 +237,7 @@ def check_lifeline_activate(user,player,submission,question):
             flag+=1
         else:
             arr = json.loads(player.lifelineArray)
-            if (3 in arr):
+            if (3 in arr and lifeline.isActive != True):
                 arr.remove(3)
             player.lifelineArray = json.dumps(arr)
             print(player.lifelineArray)

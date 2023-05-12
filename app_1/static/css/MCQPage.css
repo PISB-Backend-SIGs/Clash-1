@@ -608,10 +608,10 @@ th {
 
 .pastques {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
+  /* align-items: center; */
+  justify-content: center;
   border: 2px solid #1ffca7;
   border-radius: inherit;
   background-color: #033031;
@@ -619,6 +619,7 @@ th {
   overflow-y: scroll;
   position: relative;
   top: 0;
+  text-align: center;
 }
 
 #examplemodal {

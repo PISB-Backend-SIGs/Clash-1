@@ -5,23 +5,17 @@
 
 <script>
     
-    console.log('{{which_lifeline_is_active.lifelineID}}')   //to get lifelien id
     // const data = '{{ life_line_dict }}';
     var data = JSON.parse("{{life_line_dict|escapejs}}");
-    console.log(data);
     document.getElementById("neg").innerText = '{{marking_scheme.marks_sub}}';
     if (data.activate){
         for (let i = 0; i < data.lifeline_activate_number.length; i++) {
-            console.log("activated lifelines ","lifeline"+data.lifeline_activate_number[i]+"btn")
             document.getElementById("lifeline"+data.lifeline_activate_number[i]+"btn").disabled = false;
             document.getElementById("lifeline"+data.lifeline_activate_number[i]+"btn").style.color = "";
             
         }
         
         //document.getElementById("marks-red").innerText = data.marks_red;
-    }else{
-        console.log("enter in else",'{{marking_scheme.marks_sub}}')
-        // document.getElementById("marks-red").innerText = {{marking_scheme.marks_sub}}; 
     }
 
 
@@ -32,7 +26,6 @@
 
     //for lifeline 1
     if('{{which_lifeline_is_active.lifelineID}}'==='1'){
-        console.log("enterd to deploy lifeline one")
         deploy_lifeline1();
         disableOtherBtn(1);
     }
@@ -44,13 +37,11 @@
         // document.getElementById("lifeline1btn").disabled=true;
 
         // document.getElementById("lifeline1btn").classList.remove('btn-primary');
-        console.log("Enter in lifeline1")
         disableOtherBtn(1);
         //to display negative marks for regular questions without lifelines  
         document.getElementById("neg").innerText = data.marks_red;
 
         for (let i = 0; i <2 ; i++){
-            console.log("option ",'OPT'+data.option_disable[i]);
             var eleg =document.getElementById('OPT'+data.option_disable[i]);
             eleg.innerText="";
             
@@ -72,7 +63,6 @@
             //}
             deploy_lifeline1();
             var number = $('#lifeline1btn').val();
-            console.log("lifeline number ",number,"user ",'{{request.user}}')
             $.ajax({
                 method: 'POST',
                 url: '/lifelineActivation/',
@@ -83,8 +73,7 @@
                 },
                 success: function(data) {
                     // Handle the response here
-                    console.log("successfully lifeline one activatd")
-                    console.log(data);
+                    console.log("Done")
                 },
                 error: function() {
                     // Handle errors here
@@ -110,7 +99,6 @@
     function LifelineTwo(){
         $('#exampleModal').modal('show');
 
-        console.log("Enter in 2nd lifeline ")
         let questionmodal = document.getElementById("question_modal");
         questionmodal.innerText = "";  //to clear question modal
         deploy_lifeline2()
@@ -136,7 +124,7 @@
             wrongQuestionNumber.forEach(QuestionNumber => {
                QuestionNumber.addEventListener("click", function() {
                     selectedValuesOfQuestionNumber = this.value
-                console.log(selectedValuesOfQuestionNumber); // Prints the array of selected button values to the console
+                //console.log(selectedValuesOfQuestionNumber); // Prints the array of selected button values to the console
                 // Do something with the selectedValues array here
               });
             });
@@ -150,9 +138,7 @@
                 document.getElementById("neg").innerText = '-4';
                 $('#exampleModal').modal('hide');
                 document.getElementById("avoid").click();
-                //console.log("Question selected by user " , selectedValuesOfQuestionNumber , " clicked","type ",typeof(selectedValuesOfQuestionNumber));
                 var number = $('#lifeline2btn').val();
-                //console.log(number,'{{request.user}}',"selected question number ",this.value);
                 $.ajax({
                     method: 'POST',
                     url: '/lifelineActivation/',
@@ -188,7 +174,6 @@
             });
     };
     if('{{which_lifeline_is_active.lifelineID}}'==='2'){
-        console.log("enterd to deploy lifeline2")
         deploy_lifeline2();
         //disableOtherBtn(2);
     }
@@ -249,9 +234,9 @@
     }
     
     //it is for alert box 
-    const lifelineInstructionArray = ["1st lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas.",
-    "2nd lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas.",
-    "3rd lifeline Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias voluptatibus fugiat praesentium ipsum illum natus, molestias commodi tenetur, id reiciendis repellendus perferendis? Necessitatibus, sequi non? Cum animi iusto officia quas."]
+    const lifelineInstructionArray = ["Are you sure you want to use LifeLine 1 ?\nMarking Scheme for this lifeline:-5 on getting the answer wrong\n ",
+    "Are you sure you want to use LifeLine 2 ?\nMarking Scheme for this lifeline:-4on getting the answer wrong\n",
+    "Are you sure you want to use LifeLine 3 ?\nNo change in marking scheme for this llifeline.\nYou can only use it once.\n"]
     var LifeLineNumber;
     function myAler(lifelineNumber) {
         
@@ -290,8 +275,6 @@
         }else{
             $('#AlertModal').modal('hide');
         }
-      //const x =  myAler(lifelineNumber);
-      //console.log("value from modal ",x)
     }
 
     $("#lifeline1btn").click(()=>{
@@ -327,7 +310,6 @@
         }) {% endcomment %}
 
         if('{{which_lifeline_is_active.lifelineID}}'==='3'){
-            console.log("enterd to deploy lifeline3")
             disableInput();
             disableOtherBtn(3);
         }
@@ -352,7 +334,6 @@
             //    return;
             //}
             var chatBotInput = $('#userQuestion').val();
-            //console.log(chatBotInput, "chatbot question " ,);
             
             disableInput();
             disableOtherBtn(3);
@@ -367,7 +348,6 @@
                 },
                 success: function(data) {
                     // Handle the response here
-                    console.log(data);
                     let chatbotPTag = document.getElementById("lorem");
                     chatbotPTag.innerText="";
                     chatbotPTag.innerText=data.chatBotOutput;
@@ -387,15 +367,7 @@
         
 
 
-    {% comment %} $(document).ready(function() {
-    $('#submit_btn').click(function() {
-        setTimeout(function() {
-            console.log('Delay');
-          }, 1000);
-        console.log("clicked")
-        $(this).prop('disabled', true);
-    });
-}); {% endcomment %}
+    
 
 
 function btnss() {
@@ -412,12 +384,9 @@ $('#submit_btn').click(function() {
 
 
 async function addDelay() {
-console.log('Start');
 await new Promise(resolve => setTimeout(resolve, 1000));
 btnss();
 {% comment %} btndd(); {% endcomment %}
-console.log('Delay');
-console.log('End');
 }
 
 

@@ -684,3 +684,202 @@ dl, ol, ul {
    
     pointer-events: none;
 }
+
+
+
+/* for alert in leaderboard */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+/* @import url("font-family: 'Quicksand', sans-serif;"); */
+* {
+  margin: 0;
+  padding: 0;
+  color: #fdfdfd;
+  /* position: relative; */
+}
+
+/* NavBar CSS */
+@font-face {
+  font-family: solthin;
+  src: url(solthinregular.ttf);
+}
+
+/* Container CSS */
+
+/* Question Box CSS */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 25px;
+  border: 2px solid #2d696b;
+}
+::-webkit-scrollbar-thumb {
+  margin: 12px;
+  background: #c5e1f0;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6ae1e6;
+}
+
+/* #OPT1{
+    display: none;
+} */
+
+/* Lifelines */
+
+.pastq {
+  margin: 20px 30px;
+  padding: 10px 20px;
+  border: 2px solid #c5e1f0;
+  border-radius: 7px;
+  background-color: inherit;
+  box-shadow: 2px 2px 10px #032021;
+}
+.pastq:hover {
+  box-shadow: 2px 2px 7px #c5e1f0, -2px -2px 7px #c5e1f0, 2px -2px 2px #09eaf2,
+    -2px 2px 2px #c5e1f0;
+  transition: 0.2s ease-out;
+}
+/* .modal.show .modal-dialog {
+  animation: modalmoves 2s 1 ease-in;
+  
+} */
+
+.pastques {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  border: 2px solid #1ffca7;
+  border-radius: inherit;
+  background-color: #033031;
+  height: 300px;
+  overflow-y: scroll;
+  position: relative;
+  top: 0;
+}
+
+.modal-msg {
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+  color: #c5e1f0;
+  background-color: #032021;
+  text-shadow: 1px 1px 10px #c5e1f0;
+  font-size: 1.4rem;
+  border: 2px solid #1ffca7;
+}
+
+.travel-opt {
+  margin: 5px 70px !important;
+  margin-bottom: 5px;
+  padding: 10px 20px;
+  color: #c5e1f0;
+  background-color: #042e42;
+  border: 2px solid #c5e1f0;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px #032021;
+}
+
+.modal-footer {
+  border: 2px solid #c5e1f0;
+  background-color: #042e42;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+}
+
+/* .footer {
+    background: linear-gradient(45deg, #19638b, #011722);
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    /* border-top: solid 1px white; 
+    justify-content: space-evenly;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    flex-shrink: 0;
+  } */
+
+
+@media (max-width: 600px) {
+
+  /* .marks{
+        display: none;
+    } */
+
+  /* #dp{
+        z-index: 0;
+    } */
+  .travel-opt{
+    margin: 5px 35px!important;
+  }
+  
+}
+
+
+
+/* lifeline 3 */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins',sans-serif;
+}
+
+
+@font-face {
+    font-family: solthin;
+    src: url(solthinregular.ttf);
+  }
+  
+
+
+
+
+
+
+
+
+/* The Close Button */
+
+.modal-footer{
+    border-top: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-evenly !important;
+}
+
+
+::-webkit-scrollbar{
+    width: 6px;
+    height: 2px;
+}
+
+::-webkit-scrollbar-track{
+    border-radius: 25px;
+    border: 2px solid #2d696b;
+}
+::-webkit-scrollbar-thumb{
+    margin: 12px ;
+    /* background: rgb(135, 71, 224); */
+    border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+     background: #0d78b7;
+}

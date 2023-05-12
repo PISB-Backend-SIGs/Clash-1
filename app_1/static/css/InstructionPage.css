@@ -785,3 +785,7 @@ nav ul li ul li a {
   /* border-color: #198754; */
 }
 
+.form-check-input:checked {
+  background-color: transparent;
+  /* border-color: #0d6efd; */
+}

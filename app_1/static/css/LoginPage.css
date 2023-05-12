@@ -551,3 +551,6 @@ label span:before {
   border: 1px solid #D28511;
   max-width: -webkit-fill-available;
 } */
+.header nav{
+  width: 100%;
+}
