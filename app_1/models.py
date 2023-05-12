@@ -33,7 +33,10 @@ class Player(models.Model):
     isJunior = models.BooleanField(choices=isJuniorChoices,default=True)
     tabSwitchCount = models.IntegerField(default=0)
     maxStreak = models.IntegerField(default = 0)
-
+    def save(self, *arg, **kwargs):
+        if not self.pk:
+            self.questionNumber = Question.objects.filter(forJunior = self.isJunior).first().questionNumber
+        super().save()
 
     def __str__(self) -> str:
         return f"{self.user}"
