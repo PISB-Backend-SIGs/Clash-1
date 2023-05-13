@@ -30,7 +30,7 @@
 
     <div class="Navbar2">
         <nav class="navbar navbar-expand-lg  navbar-dark">
-            <a href="#">
+            <a href="https://credenz.in/">
                 <img src="{% static 'images/clashwhite.png' %}" alt="RC" height="52px" width="102px">
             </a>
             <h2 class="timer1" id="countdown">0:00:00</h2>
@@ -492,7 +492,7 @@
 
 
     {% include "ajax/questionsAjax.html" %}
-    {% include "ajax/test.html" %} 
+    {% comment %} {% include "ajax/test.html" %}  {% endcomment %}
     
     <script>
         console.log("{{playerStreak}}",typeof(parseInt("{{playerStreak}}")))

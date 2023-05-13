@@ -316,10 +316,15 @@ def getLeaderBoard(playerQuery):
     #     player = Player.objects.get(user=user)
     lis = []
     rank = 1
+    # print(playerQuery)
     for i in playerQuery:
         l ={}
         l["rank"] = rank
         l["username"] = i.user.username
+        # if (i.isTeam):
+        #     l["username"] = i.user.first_name + " & " + i.user.last_name
+        # else:
+        #     l["username"] = i.user.first_name
         l["score"] = i.playerScore
         l["attempts"] = i.questionIndex
         lis.append(l)
@@ -332,79 +337,45 @@ def getLeaderBoard(playerQuery):
     return lis
 
 
-from django.http import JsonResponse
 import requests
-import time
-def chatbot_response(userQuery):
-    try :
-        print("in L3")
-        print("======================")
-        allKeys = chatGPTLifeLine.objects.all()
-        allKeys2 = chatGPTLifeLine.objects.filter(isDepleted = False)
-
-        if len(allKeys2) == 0:
-            return json.dumps({'question': {userQuery},'answer': "Somethingwentwrong","status":0})
-            
-        isproblem = True
-
-        #==== remove loop after testing=====
-        for k in allKeys:
-            print(k.key, k.numUsed, k.isDepleted)
-        #===================================
-
-        for key in allKeys2:
-            
-            if True:
-                if key.numUsed < 20:
-                    isproblem = False
-                    key.numUsed += 1
-                    key.lastUsed = time.time()
-                    key.save()
-                    break
-                else:
-                    print("Key is depleted")
-                    key.isDepleted = True
-                    key.save()
-            else:
-                print(f"is in use: {key}")
-
-        if isproblem:
-            return json.dumps({'question': {userQuery},'answer': "Somethingwentwrong","status":0})
-        
-        answerResp = GPT_Link(userQuery, key= key)
-        return json.dumps({'question': userQuery,'answer': answerResp,"status":1})
-    except :
-        return json.dumps({'question': {userQuery},'answer': "Somethingwentwrong","status":0})
-
-
-def GPT_Link(message, key):
+from django.db.models import F
+def chatbot_response(key, message):
     URL = "https://api.openai.com/v1/chat/completions"
 
-    print(f"using key: {key}")
-
     payload = {
-    "model": "gpt-3.5-turbo",
-    "messages": [{"role": "user", "content": message}],
-    "temperature" : 1.0,
-    "top_p":1.0,
-    "n" : 1,
-    "stream": False,
-    "presence_penalty":0,
-    "frequency_penalty":0,
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": message}],
+        "temperature" : 1.0,
+        "top_p":1.0,
+        "n" : 1,
+        "stream": False,
+        "presence_penalty":0,
+        "frequency_penalty":0,
     }
 
     headers = {
-    "Content-Type": "application/json",
-    "Authorization": f"Bearer {key}"
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {key}"
     }
 
     response = requests.post(URL, headers=headers, json=payload, stream=False)
-    print("Here==========",response.content)
-
-    # if "choices" not in json.loads(response.content):
-    #     return "Somethingwentwrong"
-    
     return (json.loads(response.content)["choices"][0]['message']['content'])
+
+def AskTheTars(flag, userInput):
+    keys = chatGPTLifeLine.objects.all()
+    key = keys[flag % len(keys)]
+    print("key ",key)
+    if flag > len(keys) - 1:
+        return "KeyError"
+    
+    try:
+        ans = chatbot_response(key.key, userInput)
+        chatGPTLifeLine.objects.filter(key=key.key).update(numUsed=F('numUsed') + 1)
+        print("used Key ",key)
+        return ans
+    except:
+        chatGPTLifeLine.objects.filter(key=key.key).update(isDepleted=True)
+        return AskTheTars(flag + 1, userInput)
 
 
 
