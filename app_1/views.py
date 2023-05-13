@@ -176,7 +176,8 @@ def questions(request):
     print("*********************")
     
     # context["wrong_question_list"]=[x.questionIndex for x in Submission.objects.filter(player=player) if x.points<0]
-    context["wrong_question_list"]=[x.questionIndex for x in Submission.objects.filter(player=player) if not(x.isCorrect)]
+    context["wrong_question_list"]=[x.questionIndex for x in Submission.objects.filter(player=player) if (not(x.isCorrect) and not(x.lifelineActivated))]
+    print("question dict ",context["wrong_question_list"])
 
     print("Users Wrong questions ",context["wrong_question_list"])
 
@@ -238,19 +239,19 @@ def lifelineActivation(request):
         elif(int(lifeline_id_from_frontend) == 3):
             print(type(request.POST.get("chatBotInput")))
             inputFromUser = request.POST.get("chatBotInput")
-            chatBotOutput = json.loads(chatbot_response(inputFromUser))
-            if (chatBotOutput["status"]==0):
-                return JsonResponse({"status":0 , "chatBotOutput" : chatBotOutput["answer"]})
+            chatBotOutput = AskTheTars(0,inputFromUser)
+            if (chatBotOutput=="KeyError"):
+                return JsonResponse({"status":0 , "chatBotOutput" : "Something Went Wrong.."})
             lifeline = Lifeline.objects.get(user=user,lifelineID=lifeline_id_from_frontend)
             lifeline.isActive = True
             lifeline.lifelineCounter +=1
             lifeline.save()
-            player.chatBotResponse = json.dumps({"input" : inputFromUser , "output" : chatBotOutput["answer"]})
+            player.chatBotResponse = json.dumps({"input" : inputFromUser , "output" : chatBotOutput})
             player.save()
             print(player.chatBotResponse)
             print(type(player.chatBotResponse))
             print(type(json.loads(player.chatBotResponse)))
-            return JsonResponse({"status":1 , "chatBotOutput" : chatBotOutput["answer"]})
+            return JsonResponse({"status":1 , "chatBotOutput" : chatBotOutput})
     else:
         return JsonResponse({"status":0})
 
@@ -432,12 +433,13 @@ def signin(request):
                 data['is_team'] = None # empty string
 
             response = requests.post(url, headers=headers, json=data)
-            
+            print(response)
 
             if response.status_code == 200:
                 response = response.json()
                 user = User.objects.create_user(username=username, password=password, )
                 if not isTeam:
+                    print("user by dev indiv ",response)
                     try:
                         isJunior = not response['user']['senior']
                         first_name = response['user']['first_name']
@@ -446,9 +448,13 @@ def signin(request):
                         messages.error(request, "Invalid Credentials")
                         return redirect('signin')
                 else: # if team
+                    print("team ",response)
                     isJunior = True
                     first_name = response['users'][0]['first_name']
-                    last_name = response['users'][0]['last_name']
+                    last_name = response['users'][0]['first_name']
+                    # user.first_name = first_name
+                    # # user.last_name = last_name
+                    # user.save()
 
                     # display name
                     display_name = ""
@@ -456,8 +462,8 @@ def signin(request):
                         display_name += user1['username'] + " &"
                         if user1['senior']:
                             isJunior = False
-                    display_name = display_name[:-2]
                     print(display_name)
+                    display_name = display_name[:-2]
                             
                 player = Player(user=user, isJunior=isJunior)
                 player.questionList = create_random_list(player.questionNumber,player.isJunior)

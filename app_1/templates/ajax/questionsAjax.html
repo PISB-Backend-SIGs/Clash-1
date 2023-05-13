@@ -337,6 +337,8 @@
             
             disableInput();
             disableOtherBtn(3);
+            let chatbotPTag = document.getElementById("lorem");
+            chatbotPTag.innerText="Wait...";
             $.ajax({
                 method: 'POST',
                 url: '/lifelineActivation/',
