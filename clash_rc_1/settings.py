@@ -26,8 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-1@!r!e7wyj_zhyku(_tujimc#+(cnjlpk&v7t!-z&6zil0!4dj"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['clash.credenz.in', 'www.clash.credenz.in', 'localhost', '127.0.0.1']
 # ALLOWED_HOSTS = ['192.168.209.139' , '127.0.0.1' , 'localhost',"*"]
