@@ -21,7 +21,7 @@ urlpatterns = [
     path('', include('app_1.urls')),
 ]
 
-from django.conf.urls import handler400, handler403, handler404, handler500
+# from django.conf.urls import handler400, handler403, handler404, handler500
 # 404 not found error
 handler404 = 'app_1.views.error_404'
 # 500 internal server error
